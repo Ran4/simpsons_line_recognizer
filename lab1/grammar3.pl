@@ -11,7 +11,7 @@ np --> det(Genus, Pluralitet, Def), jj(Genus, Pluralitet, Def), n(Genus, Plurali
 % n, s, m -> n-ord (utrum), t-ord (neutrum), maskulinum
 % s, p -> singularis, pluralis
 % i, d -> indefinit form, definit form
-% o, g -> nominativ, genitiv (finns enbart på substantiven, n/6)
+% n, g -> nominativ, genitiv (finns enbart på substantiven, n/6)
 det(n,s,i) --> [ en ].
 det(t,s,i) --> [ ett ].
 det(n,s,d) --> [ den ].
