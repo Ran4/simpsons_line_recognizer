@@ -13,6 +13,7 @@ np --> det,n,pp.
 
 vp --> v,np.
 vp --> v,np,pp.
+% vp --> v,pp.
 
 pp --> prep,np.
 

@@ -8,7 +8,7 @@ np --> det(Genus, Pluralitet, Def), jj(Genus, Pluralitet, Def), n(Genus, Plurali
 
           
 % Lexikon
-% n, s, m -> n-ord (utrum), t-ord (neutrum), maskulinum
+% n, t, m -> n-ord (utrum), t-ord (neutrum), maskulinum
 % s, p -> singularis, pluralis
 % i, d -> indefinit form, definit form
 % n, g -> nominativ, genitiv (finns enbart på substantiven, n/6)
@@ -19,13 +19,13 @@ det(m,s,d) --> [ den ].
 det(t,s,d) --> [ det ].
 det(n,p,i) --> [ några ].
 det(t,p,i) --> [ några ].
-det(m,p,i) --> [ någre ].
+%det(m,p,i) --> [ någre ].
 det(_,p,d) --> [ de ].
 % det(t,p,d) --> [ de ]. % är onödig
 
 jj(n,s,i) --> [ gammal ].
 jj(t,s,i) --> [ gammalt ].
-% jj(m,_,d) --> [ gamle ].   % nej inte gamle i pluralis
+% jj(m,_,d) --> [ gamle ].   % nej inte gamle i pluralis, enligt rättningskoden
 jj(m,s,d) --> [ gamle ].
 jj(_,_,d) --> [ gamla ].
 % jj(m,p,i) --> [ gamle ]. % ???????????????????? ska vi ha denna?  "några gamle män". nej inte gamle i pluralis alls
