@@ -23,19 +23,34 @@ denna kurs används en speciell version av Stava som kan ge lite mer information
             på några sammansatta ord,
             på några (regelbundet) böjda sammansatta ord. 
         Hitta ett treledssammansatt substantiv i bestämd form plural. Vilken suffixregel används? Vad betyder den? Läs om hur suffixreglerna byggs upp
-        på http://www.nada.kth.se/stava/suffixregler.html.
+        på http://www.nada.kth.se/stava/suffixregler.html. -- läderfotbollarna "arna @, en, ar"
+        
     Programmet genstava som anropas från http://www.nada.kth.se/stava/genstava.html är ett bra hjälpmedel när man utvecklar och finjusterar
     suffixregler till Stava. Man skickar en suffixregel till programmet och får som svar alla ordformer som Stava skulle godkänna med den
     suffixregeln. Därigenom kan man se vilka felaktiga ord som skulle godkännas av regeln.
+
         Vad betyder följande regel? Hur många ord genereras av den? Vilken ordklass har orden?
-        (dj|mm)@ a, ande, ~anden, ~ade
+        -- (dj|mm)@ a, ande, ~anden, ~ade -- att alla ord som slutar på a och ande, ska finnas även utan dessa ändelser, med undantag för ord som slutar
+        på ~anden och ~ade samt undantagit ord som har formen: ...djande, ...dja, ...mmande, ...mma
+        ex av ord som exkluderas: skummande, skum, glädjande, glädja, smak(ade), smak(ande)
+        - 443 ord genereras
+        
         Ord som slutar på -alitet, till exempel serialitet och fundamentalitet godkänns inte av Stava. Hitta på två regler som fixar detta. (Ledning:
         både adjektiv- och adverbformerna av dessa substantiv finns i ordlistan.)
         Kolla med genstava vilka ord som genereras av dina regler men inte borde genereras. Tänk på att vissa ord som genereras kanske aldrig har
         använts men ändå borde anses korrekta (eller åtminstone rättstavade - om skribenten skrivit ordet är det inte Stavas sak att underkänna det)
         eftersom det är skapat på ett regelbundet sätt. Alltså, antalet studenter på kursen som själva använt orden "hortikulturalitet" och
         "bronkialitet" är nog få, men till skillnad från till exempel "uttalitet" är de bildade på det sätt som avsågs.
-        -
+        -- alitet ell                  - sardell, rondell
+        -- [^bd]alitet ell              - fixar sardell rondell men: gasalitet (gasell), kantaralitet (kantarell), karusalitet (karusell)
+        -- [^bd]alitet ell, ~ellen      - fixar ovanstående
+        -- alitet ell, ~ellen           - [^bd] ej längre nödvändigt ty ~ellen tar bort rondell och sardell
+        (-- [uitnm]alitet ell, ~ellen)
+        -- alitet al, ~a, ~en           - nygammalitet (nygammal), nyvalitet (nyval), omkörningssignalitet, omvalitet, arsenalitet (arsenal),  know-how-avtalitet (know-how-avtal), sjakalitet (sjakal)
+        -- alitet al ~en                - ~a var överflödig och behöll en massa felaktiga ord såsom: arsenalitet ("arsenal" och "arsenalen" finns men inte "arsenala") men återintroducerar "samtalitet"
+        (-- alitet al, ~(en|a|et))
+        -- alitet al, ~ala              - vi blir i varje fall av med samtalitet
+
         Fixa reglerna så att Stava inte accepterar de felaktiga orden men fortfarande accepterar alla korrekta ord. Försök till exempel att hitta
         någon böjningsform som finns i ordlistan och som är gemensam för många felaktiga ord men inte för korrekta. Extra svårt är kanske att se till
         att ordet gammalitet inte genereras, men det går.
