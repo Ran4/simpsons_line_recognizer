@@ -1,0 +1,129 @@
+Laboration: Statistisk Lexikal Semantik: Random Indexing
+
+Syftet med laborationen är se att man kan utvinna oklassificerade semantiska relationer ur fritextdata. Din uppgift är att undersöka hur man med hjälp av ett datorprogram kan försöka lösa en del av "synonymtestet" ORD som ingår som en del i Högskoleprovet. Tävling om vem som kan få flest rätt uppmuntras.
+
+Ögna först igenom hela labbpeket innan du börjar, i synnerhet det sista avsnittet, "Redovising".
+Bakgrund
+
+Random Indexing (RI) är ett sätt att utvinna relaterade ord ur fritext. Varje ord associeras med en slumpvektor, en mångdimensionell vektor (t.ex. 1800 dimensioner) med några få slumpvis utvalda nollskilda element, t.ex. fyra -1:or och fyra 1:or. Metoden skapar sedan en kontextvektor för varje ord genom att gå igenom en textmängd ord för ord (indexering). Kring varje ord upprätthåller metoden ett kontextfönster på t.ex. fyra ord före och fyra ord efter. Då ett ord befinner sig i fokus (med kontextfönstret runt omkring sig) adderar man till dess kontextvektor de omkringliggande ordens slumpvektorer. Man använder ett viktningsschema för att vikta orden olika beroende på t.ex. avstånd till fokusordet eller någon annan egenskap hos kontextordet (oftast vill man att de ord som står närmast fokusordet ska bidra mest till dess kontextvektor.) Två ord som förekommer i liknande kontexter, d.v.s. tillsammans med liknande ord, kommer härigenom att få liknande kontextvektorer. Man avgör deras likhet genom att jämföra kontextvektorerna med ett avstånds- eller likhetsmått, t.ex. det kartesiska avståndet mellan dem.
+
+För mer information om RI se An Introduction to Random Indexing (pdf) och övriga texter på sidan för föreläsningen om statistisk lexikal semantik.
+
+I denna labb ska vi använda RI för att svara på frågor ur ORD-delen på högskoleprovet (ett synonymtest). Varje fråga består av ett ord och fyra närbesläktade ord. Testdeltagaren ska ange vilket ord som är närmast i betydelse (det som är mest synonymt).
+
+Javaprogrammet OrdHP.java tränar ett RI på en träningsmängd och provar dess förmåga att gissa rätt på orden i en fil med frågor (testmängd).
+Testmängd
+Börja med att kopiera Random Indexing-paketet till din hemkatalog:
+cp -r /info/sprakt10/ri/randomindexing/ .
+
+Gå sedan in i Random Indexing-katalogen i din hemkatalog:
+cd randomindexing/
+
+De frågor du ska jobba med finns i filerna test1.dat och test2.dat. Titta gärna i dem. Första ordet på varje rad är frågeordet, sedan följer svarsalternativen. Siffran sist på varje rad anger vilket alternativ som är det rätta (vi börjar räkna på 0). Till exempel:
+
+ansats|sammanfattning|syfte|fortsättning|försök|granskning|3
+Här frågas efter synonymen till ordet "ansats". Alternativen är "sammanfattning", "syfte", "fortsättning", "försök" och "granskning". Rätt alternativ är nr 3, d.v.s. "försök".
+Träningsmängder
+För att träningen ska ge någonting måste textmängden innehålla orden i testet. Därför har vi laddat ned sådana sidor från nätet. I /info/sprakt10/ri/ri_dataset1/ finns snippetar (de korta textsnuttar som Google ger under varje länk) för orden. För att prova tidskrävande saker har vi också gjort ri_dataset0/ som bara innehåller några få filer.
+
+I ri_dataset2/ finns hela texter som också hämtats med Google. ri_dataset3/ innehåller länkar till båda textmängderna och kan därför användas som en ännu större mängd.
+
+Vi har också lemmatiserat alla ord för att de olika formerna inte ska anses vara olika ord. Titta på några av texterna i ri_dataset1/ och ri_dataset2/. Som du kan se har vi inte tagit bort all engelsk text och alla adresser, men det borde inte spela någon större roll.
+
+För att få riktigt bra resultat måste man ha bra och stora träningsmängder. Då tar emellertid indexeringen för lång tid för att det ska vara rimligt att prova några olika faktorer under ett laborationspass.
+Testa programmet
+
+Kör nu programmet OrdHP med träningsmängd ri_dataset1/ och testfilen test1.dat:
+java -Xmx1000m -cp lib:RI:OrdHP OrdHP /info/sprakt10/ri/ri_dataset1/ test1.dat
+
+eller om du gör labben i Windowsmiljö (t.ex. hemma, förutsatt att du kopierat även textmängderna):
+java -Xmx1000m -cp lib;RI;OrdHP OrdHP ../ri_dataset1/ test1.dat
+
+Hur många rätt blev det?
+Hur många rätt hade det blivit om man chansat?
+
+I katalogen results/ ligger nu en fil i vilken resultatet finns att läsa. Varje gång du kör OrdHP generaras en ny unik sådan fil. De är bra att ha kvar när du ska jämföra resultatet för olika inställningar (se nedan). Öppna filen och bekanta dig med resultatet.
+
+Överst i filen finns information om hur träningen gick till (mer om det senare). Sedan följer resultaten. Först antal rätt och fel och sedan vilka ord som blev rätt och fel. Med "Correct" menas de ord som programmet gett rätt svar på, med "Missed" menas de som det inte gjorde rätt på och med "Insufficient" menas de ord som träningsmängden inte gav tillräckligt med information om.
+
+Orden presenteras så här:
+
+konstituera => inrätta [inrätta(0.205) avgöra(0.105) bekräfta(0.089) kritisera(0.071) slutföra(0.065)],
+Först kommer ordet man söker synonym till, sedan den rätta synonymen och därefter inom hakparenteser hur lika programmet tyckte att alternativen var frågeordet (i fallande ordning). I det här exemplet har programmet alltså rätt!
+Parametrar
+Den första provkörning du gjorde ovan under "För att komma igång" hade specifika inställningar. Dessa är angivna i filen TrainHP.properties. Det du ska göra är att ändra dessa och se om du kan få bättre resultat.
+
+De parametrar i TrainHP.properties som du kan ändra på är:
+
+    dimensionality = 1800
+    Dimensionen på vektorerna som representerar ordet (både Random Labels och kontextvektorer har denna dimension).
+    random_degree = 8
+    Antalet 1:or och -1:or i en Random Label.
+    seed = 710225
+    Slumpfrö. Eftersom RI slumpar fram Random Labels kan slumpen påverka resultatet.
+    left_window_size = 4
+    Antalet ord till vänster om fokusordet som används för att uppdatera kontextvektorn.
+    right_window_size = 4
+    Antalet ord till höger om fokusordet som används för att uppdatera kontextvektorn.
+    weighting_scheme = moj.ri.weighting.MangesWS
+    Viktningsschema. Mer om det i Extrauppgiften nedan.
+    stoplist = False
+    Om stopplista ska användas eller inte (se nedan).
+    stoplist_name = Stoplist.txt
+    Namnet på en eventuell stopplista.
+    shortest_word = 3
+    Kortare ord än det angivna värdet används inte vid indexeringen.
+    longest_word = 25
+    Längre ord än det angivna värdet används inte vid indexeringen.
+    minimum_words_per_file = 2
+    Lägsta antalet ord en fil måste innehålla för att indexeras.
+
+Uppgifter
+Gör följande tre uppgifter.
+
+    Stopplista
+    Ändra från "False" till "True" för parametern stoplist i TrainHP.properties och kör igen på ri_dataset1/. Orden i stopplistan kommer nu inte att tas med i indexeringen. Vad ger detta för resultat? Varför tror du?
+
+    Ändra parametrar
+    På vilket sätt tror du att de olika parametrarna kan påverka resultatet? (Du behöver inte resonera om alla.)
+
+    Välj minst två parametrar att prova (stoplist räknas inte). Prova minst ett annat värde än det som var från början. Får du bättre resultat?
+
+    På vilket sätt tror du att de olika parametrarna spelar olika roll beroende på vilken textmängd man använder?
+    (Om du har tid: prova om du kan hitta någon parameter som verkar ha olika inverkan då du kör på ri_dataset1/ respektive ri_dataset2/.) 
+
+    Egna synonymer
+    Gör ett eget synonymtest i en fil som följer formatet i testfilerna (du kan ha hur många synonymförslag som helst till varje fråga). Prova t.ex. om programmet tycker att funktionsord (som t.ex. "och" och "men") är mer lika varandra än de som finns i någon av de ursprungliga testfilerna. Då kan du behålla några av dessa i din nya fil. Kom ihåg att bara använda ord i grundform (lemma)!
+
+    Tänk efter så att inställningarna inte gör det omöjligt för programmet att lyckas (om du vill prova ordet "du" måste du t.ex. ha shortest_word = 2). Dessutom kan det vara så att andra inställningar är bättre för att lösa just ditt synonymtest, men det hinner du nog inte undersöka så noga.
+
+    Var också medveten om att det finns en möjlighet att de ord du är intresserad av inte finns med i träningsmängderna. De är ju framtagna för det ursprungliga testet. Det är alltså en fördel om du väljer rätt vanligt förekommande ord som har en rimlig chans att förekomma i träningsmänderna. 
+
+Frivillig uppgift:
+
+    Eget viktningsschema (kräver Java-vana.)
+    Det viktningsschema som använts hittills i labben (MangesWS.java) finns tillsammans med ett par andra exempelklasser (MartinsWS.java och RosellsWS.java) i katalogen RI/moj/ri/weighting/.
+
+    Gör ett eget viktningsschema genom att kopiera någon av exempelklasserna och döpa om dem. Modifera sedan viktningsmetoderna applyLeftWeighting() och applyRightWeighting(). De beskriver hur ett av orden i kontextfönstret adderas till kontextvektorn för fokusordet.
+        focusLabel är fokusordets representation
+        focusContext är fokusordets kontextvektor
+        distance är avståndet till det ord vars Random Label ska adderas
+        xyzContextLabel är representationen för det ord som ska adderas till fokusordet (där xyz är left eller right)
+        negs och poss tilldelas arrayer med positioner för de nollskilda elementen i Random Label för ordet som ska adderas. 
+
+    Läs i dokumentationen för RI-paketet (javadoc-format) som finns i doc-katalogen i labbpaketet. Där kan du se vad som är möjligt att göra. Naturligtvis finns det information om viktningsschemana där också.
+
+    Kom ihåg att kompilera ditt viktningsschema efter det att du skapat det. Om du står i katalogen randomindexing/RI/moj/ri/weighting/ när du kompilerar kan det t.ex. ske på följande vis:
+    javac -classpath ../../../ DittAlldelesEgnaWS.java
+
+    För att använda ditt viktningsschema måste du också ändra parametern för weighting_scheme i TrainHP.properties. Sedan kan du köra som vanligt. En bra ide är att prova att det funkar på en liten träningsmängd först, innan man ger på någon av de större.
+
+    Kan du få fler rätt med ditt viktningsschema än med något av de vi redan skrivit? 
+
+Redovisning
+Redovisa gör man för någon av assistenterna under labbpasset genom att muntligen svara på de frågor som ställts i detta labbpek och redogöra för de försök man genomfört (gärna genom att visa resultatfilerna). Frågorna är till största delen av resonerande karaktär och egentligen omöjliga att svara på genom att prova sig fram på så kort tid, men vi vill ändå höra ett ärligt försök. Spekulera!
+
+Ju fortare man redovisar desto mer förväntas man ha gjort.
+OBS!
+Om du under labben får felmeddelandet: java: Command not found. eller motsvarande, så är du tvungen att lägga till Java med kommandot:
+module add jdk
