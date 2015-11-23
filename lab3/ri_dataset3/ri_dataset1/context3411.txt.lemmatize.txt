@@ -1,0 +1,1 @@
+. vid sida av beräkning av livstabell med varierande beskrivande statistik och kaplan-meier 

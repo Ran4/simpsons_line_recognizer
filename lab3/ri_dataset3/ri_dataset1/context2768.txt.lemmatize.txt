@@ -1,0 +1,1 @@
+. basbandsmodulering nästa steg i att skapa en optisk kommunikationssystem vara att modulera basband och det vara här vi börja kompromissa . . 

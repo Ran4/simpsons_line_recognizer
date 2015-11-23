@@ -1,0 +1,1 @@
+. page 5 . mattias meldert , 5 5 kalkera bitmapp när man ha importera en pixelbild till flash så kunna man omvandla bild till vektorgrafik . . 

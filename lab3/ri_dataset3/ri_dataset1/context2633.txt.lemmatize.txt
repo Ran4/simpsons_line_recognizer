@@ -1,0 +1,1 @@
+tidsintervall . litteratur . larman , avsnitt 4711 innehåll . hur modellera data som bara vara giltig under en begränsad tidsintervall ? . 

@@ -1,0 +1,1 @@
+. problem . karaktärsmall . namn : ålder : kön : utseende : sinne : ( hur vampyren vara , argsint , metodisk etc ) bakgrund : styrka : snabbhet . 

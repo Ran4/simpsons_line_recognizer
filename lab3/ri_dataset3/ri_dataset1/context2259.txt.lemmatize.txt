@@ -1,0 +1,1 @@
+. 5 . nu kunna mac-användare mäta sin surfhastighet . med bandbreddstestet tptest kunna du mäta hur snabb din internetanslutning vara . . 

@@ -1,0 +1,1 @@
+. acer scan2web 3300u . formfaktor : desktop , max gråton - djup : 12-bit grey | 16-bit ( 64k grey levels ) , max färg - djup : 36-bit colour | 48-bit colour , scannertyp . 

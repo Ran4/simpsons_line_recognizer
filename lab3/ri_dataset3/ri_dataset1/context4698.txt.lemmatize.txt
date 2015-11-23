@@ -1,0 +1,1 @@
+. en spelare kunna bli skadad och bli då otillgänglig under en antal match framöver . spelare kunna även bli otillgänglig för spel pågrundav avstängningar . . 

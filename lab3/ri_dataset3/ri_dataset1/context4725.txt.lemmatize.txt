@@ -1,0 +1,1 @@
+. knop : 5 . bogport akterport . passagerare : 5 . bil : 5 . lastbil : 5 . systerfartyg:c arola . dana scarlett . . detta kunna man äta och dricka ombord på 

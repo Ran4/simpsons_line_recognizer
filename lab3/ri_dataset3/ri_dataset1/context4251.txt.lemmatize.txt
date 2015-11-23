@@ -1,0 +1,1 @@
+. the following table show the default system prompt and superuser prompt fara the c shell , bourne shell , and korn shell . table p 5 shell prompts . shell . prompt . . 

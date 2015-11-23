@@ -1,0 +1,1 @@
+. du kunna modulera vcf-resonansen = 2e du kunna modulera hur mycken dco2 ska modulera filter frekvens = 2e du kunna morfa dco2ans vågform mellan sågtand och triangel . 

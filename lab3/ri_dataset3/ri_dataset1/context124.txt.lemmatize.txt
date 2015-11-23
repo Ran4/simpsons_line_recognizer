@@ -1,0 +1,1 @@
+. return argument . ärbra (); } public boolean välja ( int antalför , int antalemot ){ return antalföra 

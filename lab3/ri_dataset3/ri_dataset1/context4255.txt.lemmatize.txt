@@ -1,0 +1,1 @@
+settings to bypass the logi prompt every time groupwise is opened . each time you start the groupwise client you are prompted to write your e-mail password . . 

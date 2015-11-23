@@ -1,0 +1,1 @@
+. stoppa fil . textfilen , som vara helt ofarlig att öppna och läsa , heta viruswarningxx . txt där xx vara en tvåsiffrig nummer . i . 
