@@ -1,0 +1,1 @@
+. mål att med hjälp av kartexcerpter lokalisera känd depåfynd av silver och ämnesjärn samt därefter med hjälp av metalldetektor försöka återfinna . 

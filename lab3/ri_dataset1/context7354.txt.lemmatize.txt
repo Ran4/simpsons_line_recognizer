@@ -1,0 +1,1 @@
+. hackad vidare ( filserverinstallation av notes r6 , synkning mellan personalregistret ( i någon obskyr stordatormiljö ) och notes ( i någon obskyr notesmiljö )) . . 

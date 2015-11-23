@@ -1,0 +1,1 @@
+. två envelope generatorer av adsr typ kunna modulera exempelvis filter och förstärkare , en annan 8-steg envelope kunna modulera vågformsvalet och ytterligt . 

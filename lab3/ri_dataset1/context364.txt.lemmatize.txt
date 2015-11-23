@@ -1,0 +1,1 @@
+. syntaxen vara alltså : prompt ( uppmaning , text i ruta ) inom första par citationstecken skriva man den text som ska stå direkt på prompt - fönster ( i . 

@@ -1,0 +1,1 @@
+sap ha aldrig vara flexibel . glömma den traditionell sap-miljö där respektive modul vara knuten till en specifik server , där . 

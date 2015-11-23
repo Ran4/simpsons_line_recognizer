@@ -1,0 +1,1 @@
+. som tillhöra brandväsendet 5 . fordon som tillhöra annan räddningstjänst 5 . fordon som tillhöra försvarsmakt 5 . fordon som uteslutande använda för . 

@@ -1,0 +1,1 @@
+min försök - enkel och sekundsnabb uppdatering av försök . den bestå av två funktion : en personligt anpassad försökslista . 

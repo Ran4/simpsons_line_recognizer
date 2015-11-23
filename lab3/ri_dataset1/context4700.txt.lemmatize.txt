@@ -1,0 +1,1 @@
+. när fel uppstå under dagtid komma de att avhjälpa enligt följande turordning : 1 . högprioritera fel om tjänst vara otillgänglig för flertal . 

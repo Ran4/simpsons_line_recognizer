@@ -1,0 +1,1 @@
+. set path =(~/ bi / usr / local / bi / usr / ucb / bi / usr / bi / usr / hosts \ / usr / local / x11 / usr / etc / usr / sbin \ / usr / local / mh / bi $ syspath . ) if ($ ? prompt ) then # true . 

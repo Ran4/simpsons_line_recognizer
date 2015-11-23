@@ -1,0 +1,1 @@
+. tabell plagg : tabell plagg-anställd : anummer = främmande nyckel för anställd(nummer) knummer = främmande nyckel för klädesplagg ( nummer ) tabell . 

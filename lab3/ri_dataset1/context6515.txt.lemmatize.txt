@@ -1,0 +1,1 @@
+. om man skal ändra när någon skal ske under en tidsintervall ( förutom hourly finnas også daily , weekly og monthly ) så gå man in under kolumn element . 

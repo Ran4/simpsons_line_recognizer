@@ -1,0 +1,1 @@
+. testmetod för att bedöma kemisk resistens ( pr 5 ) mål vara att skapa metod för att bra kunna bedöma den kemisk resistensen hos modern glas . . 
