@@ -1,1 +1,0 @@
-. postadress . kontaktperson . postnr . ort . typ av rapport . avvikelse . reklamation . godsmottagning . förbättring . miljö . det kunna hända . beskriva avvikelse . . 

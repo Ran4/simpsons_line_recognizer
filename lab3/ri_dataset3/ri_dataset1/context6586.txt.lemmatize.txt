@@ -1,1 +1,0 @@
-. slutligen ska vi se på funktion , en område som du känna igen från gymnasietid . 1 . kongruens ( mod n ) . låta n vara en positiv heltal . . 

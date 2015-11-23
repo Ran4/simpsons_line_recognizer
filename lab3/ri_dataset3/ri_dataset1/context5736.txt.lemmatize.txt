@@ -1,1 +1,0 @@
-. uppåt : att använda slackware linux . tillbaka : att hantera fil och . att styra process . . man få styra all process , man själv ha starta . . 

@@ -1,1 +1,0 @@
-. säkerhetskorrigering för windows media player 4711 : känslig för asx-buffertöverskridningar . microsoft ha giva ut en korrigering . 

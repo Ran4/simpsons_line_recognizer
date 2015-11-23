@@ -1,1 +1,0 @@
-. skriva själv upp crank-nicolsons metod som du få genom att integrera varje ekvation i ( 5 ) över en tidsintervall och approximera integralerna med . 

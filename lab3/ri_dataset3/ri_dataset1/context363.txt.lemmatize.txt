@@ -1,1 +1,0 @@
-. nu ska vi göra något som vara lite mycket avancerad . jag vilja nu skapa en prompt - ruta där besökare uppmana att skriva in sin ålder . . 

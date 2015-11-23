@@ -1,1 +1,0 @@
-. underordnad del i namn ska kunna särskilja genom typografisk konvention , där punkt avgränsa överordnad och underordnad organisationsnamn och . 

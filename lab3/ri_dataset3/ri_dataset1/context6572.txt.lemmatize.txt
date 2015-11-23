@@ -1,1 +1,0 @@
-. rettungswagens = ambulans = ambulanses ; reue = ånger = ångern = ångerns = ångers ; reuevoll = ångerfull = ångerfull = ångerfull ; reuevolle . 

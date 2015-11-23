@@ -1,1 +1,0 @@
-. angestrahltes = fasadbelyst ; angestrengt = anstängat = ansträngd = ansträngt = frestad = fresta = tröttad = tröttat ; angestrengte = ansträngd . 

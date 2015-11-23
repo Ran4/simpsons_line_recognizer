@@ -1,1 +1,0 @@
-. bildtext vä . bildtext hö . bildtext vä 1 . bildtext hö 1 . . 

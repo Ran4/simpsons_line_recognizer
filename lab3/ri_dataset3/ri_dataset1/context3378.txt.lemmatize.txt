@@ -1,1 +1,0 @@
-. variant av specialisering . specialisering , uttömmande , ej multipel . . specialisering , ej uttömmande , multipel . specialisering , uttömmande , multipel . . 

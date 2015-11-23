@@ -1,1 +1,0 @@
-. snabbt som möjligt . spelare få bara flytta en spelpjäs per drag och varje spelpjäs ha sin bunden rörelseschema . med hjälp . 

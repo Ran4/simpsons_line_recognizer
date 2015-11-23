@@ -1,1 +1,0 @@
-. visa antal bokningar uppdelad per status inom en given tidsintervall . . visa en tabell med antal bokningar per resurs och status för vald tidsintervall . . 

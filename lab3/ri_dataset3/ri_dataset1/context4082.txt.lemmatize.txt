@@ -1,1 +1,0 @@
-. automatlarm ej brand . 5 . 5 . 5 . 5 . förmodad brand / undersökning . 5 . 5 . 5 . 5 . trafikolycka . . djurräddning 1 . 5 . 5 . 1 . förmodad räddning . 5 . 1 . 1 . 5 . annan kommunal rädd . tj . . 

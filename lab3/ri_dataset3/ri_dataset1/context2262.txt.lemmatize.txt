@@ -1,1 +1,0 @@
-. elev ska kunna * lyssna till enkel ord och fras med stöd av bild * efterlikna den enskild språkljud i kör * lyssna på och efterbilda en enkel . 
