@@ -82,20 +82,39 @@ minimum_words_per_file: Ökar vi denna så skippar vi korta meningar (eftersom v
 
 Välj minst två parametrar att prova (stoplist räknas inte).
 Prova minst ett annat värde än det som var från början. Får du bättre resultat?
--- Vi prövade att ändra shortest_word från 3 till 4, då får vi:
--- Correct: 21
--- Missed: 38
--- Unsufficient: 0 (0)
--- Total: 59
+-- ./runstuf.sh
+With minimum_words_per_file = 2
+    Without stoplist:
+    Shortest word == 3: Correct: 19
+    Shortest word == 4: Correct: 19
+
+    With stoplist:
+    Shortest word == 3: Correct: 24
+    Shortest word == 4: Correct: 24
+
+With minimum_words_per_file = 4
+    Without stoplist:
+    Shortest word == 3: Correct: 19
+    Shortest word == 4: Correct: 19
+
+    With stoplist:
+    Shortest word == 3: Correct: 23
+    Shortest word == 4: Correct: 23
 
 På vilket sätt tror du att de olika parametrarna spelar olika roll beroende på vilken textmängd man använder?
 (Om du har tid: prova om du kan hitta någon parameter som verkar ha
 olika inverkan då du kör på ri_dataset1/ respektive ri_dataset2/.)
--- ./runstuf.sh
 
 Egna synonymer
-Gör ett eget synonymtest i en fil som följer formatet i testfilerna (du kan ha hur många synonymförslag som helst till varje fråga). Prova t.ex. om programmet tycker att funktionsord (som t.ex. "och" och "men") är mer lika varandra än de som finns i någon av de ursprungliga testfilerna. Då kan du behålla några av dessa i din nya fil. Kom ihåg att bara använda ord i grundform (lemma)!
+Gör ett eget synonymtest i en fil som följer formatet i testfilerna
+(du kan ha hur många synonymförslag som helst till varje fråga).
+Prova t.ex. om programmet tycker att funktionsord (som t.ex. "och" och "men") är mer lika varandra än de som finns i någon av de ursprungliga testfilerna. Då kan du behålla några av dessa i din nya fil. Kom ihåg att bara använda ord i grundform (lemma)!
 
-Tänk efter så att inställningarna inte gör det omöjligt för programmet att lyckas (om du vill prova ordet "du" måste du t.ex. ha shortest_word = 2). Dessutom kan det vara så att andra inställningar är bättre för att lösa just ditt synonymtest, men det hinner du nog inte undersöka så noga.
+Tänk efter så att inställningarna inte gör det omöjligt för programmet att lyckas
+(om du vill prova ordet "du" måste du t.ex. ha shortest_word = 2).
+Dessutom kan det vara så att andra inställningar är bättre för att lösa just ditt synonymtest,
+men det hinner du nog inte undersöka så noga.
 
-Var också medveten om att det finns en möjlighet att de ord du är intresserad av inte finns med i träningsmängderna. De är ju framtagna för det ursprungliga testet. Det är alltså en fördel om du väljer rätt vanligt förekommande ord som har en rimlig chans att förekomma i träningsmänderna. 
+Var också medveten om att det finns en möjlighet att de ord du är intresserad av inte finns med i träningsmängderna.
+De är ju framtagna för det ursprungliga testet. Det är alltså en fördel om du väljer rätt vanligt förekommande ord
+som har en rimlig chans att förekomma i träningsmänderna.
