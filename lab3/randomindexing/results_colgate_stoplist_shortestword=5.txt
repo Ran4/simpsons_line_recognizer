@@ -1,0 +1,93 @@
+--- Training Info
+
+dimensionality: 1800
+random degree: 8
+seed: 710225
+left window size: 4
+right window size: 4
+weighting scheme: moj.ri.weighting.MangesWS
+stoplist: true
+stoplist_name: Stoplist.txt
+shortest_word: 5
+longest_word: 25
+minimum_words_per_file: 2
+Training File Or Directory: ../ri_dataset1/
+
+61335 words indexed
+19788 wordforms/index terms
+
+
+--- Test Result
+
+
+- Numbers
+Correct: 24
+Missed: 31
+Unsufficient: 4 (1*)
+Total: 59
+Test File: test1.dat
+
+- Correct
+mimik => minspel [minspel(0.227) rörelseschema(0.141) improvisation(0.124) efterapning(0.086) skuggteater(0.01)]
+periferi => ytterområde [ytterområde(0.17) vändpunkt(0.088) mittpunkt(0.061) gränslinje(0.042) närmiljö(0.027)]
+rekreation => återhämtning [återhämtning(0.116) omsorg(0.074) återkoppling(0.05) återkomst(0.009) omställning(-0.009)]
+fluktuera => variera [variera(0.146) passera(0.034) flyta(0.003) minska(-0.006) sväva(-0.019)]
+misantrop => människohatare [människohatare(0.228) ryktesspridare(0.186) tråkmåns(0.104) sjukling(0.077) slöfock(-0.007)]
+otidighet => oförskämdhet [oförskämdhet(0.361) ombytlighet(0.023) osjälvständighet(0.013) oärlighet(-0.037) omdömeslöshet(-0.041)]
+skarabé => skalbagge [skalbagge(0.213) hudsjukdom(0.076) stråkinstrument(0.055) sittmöbel(0.042) gåspenna(0.042)]
+underlåtenhet => försummelse [försummelse(0.043) vördnad(0.04) feghet(0.026) tvivel(0.014) misstanke(-0.012)]
+bussarong => klädesplagg [klädesplagg(0.278) förtält(0.066) ryggsäck(0.028) musikinstrument(0.027) hårnål(-0.049)]
+avhandla => diskutera [diskutera(0.399) bedöma(0.118) beställa(0.062) rådfråga(0.016) styra(0.008)]
+konsolidering => förstärkning [förstärkning(0.089) invigning(0.052) utökning(0.035) avslutning(0.01) igångsättning(0.006)]
+purken => förnärmad [förnärmad(0.167) hånfull(0.114) omedgörlig(0.108) avståndstagande(0.072) långsint(0.045)]
+brink => strandsluttning [strandsluttning(0.296) sandtag(0.05) älvfåra(0.03) betesäng(0.019) skogsbryn(0.016)]
+kongruens => överensstämmelse [överensstämmelse(0.258) undantag(0.186) slutsats(0.159) sammanfattning(0.016) utmaning(0.015)]
+aseptisk => bakteriefri [bakteriefri(0.151) bedövande(0.011) ofarlig(0.011) smittsam(0.011) läkande(-0.013)]
+erkänsla => tacksamhet [tacksamhet(0.073) inlevelse(0.048) avund(0.038) välvilja(0.017) skuld(-0.006)]
+ajournera => uppskjuta [uppskjuta(0.164) utlämna(0.084) underkänna(0.073) uppehålla(0.056) underrätta(0.03)]
+deportera => förvisa [förvisa(0.16) avresa(0.069) förvara(0.06) förråda(0.052) avslöja(-0.004)]
+deskriptiv => beskrivande [beskrivande(0.661) jämförande(0.133) argumenterande(0.039) uttömmande(0.032) omfattande(0.0)]
+androgyn => dubbelkönad [dubbelkönad(0.257) manlig(0.231) kastrerad(0.022) omänsklig(0.002) steril(-0.005)]
+betingelse => förutsättning [förutsättning(0.128) slutsats(0.055) avsikt(0.04) jämförelse(0.02) tillfällighet(0.013)]
+sekulariserad => förvärldsligad [förvärldsligad(0.542) vördad(0.327) förbisedd(0.068) motarbetad(0.066) underordnad(0.044)]
+dekret => påbud [påbud(0.25) undantag(0.115) tillägg(0.09) översyn(0.024) avslag(-0.003)]
+altruism => osjälviskhet [osjälviskhet(0.514) självständighet(0.104) obeslutsamhet(0.061) öppenhet(0.058) envishet(-0.051)]
+
+- Missed
+ansats => försök [sammanfattning(0.128) syfte(0.071) granskning(0.055) fortsättning(0.049) försök(-0.001)]
+formalitet => formsak [formfulländning(0.203) formsak(0.044) formlöshet(0.033) formgivning(0.026) formfel(-0.007)]
+obstinat => trotsig [obegåvad(0.158) elak(0.128) dum(0.092) argsint(0.067) trotsig(0.057)]
+paradoxal => motsägelsefull [fördelaktig(0.079) likartad(0.069) övertygande(0.035) förmodad(0.019) motsägelsefull(-0.005)]
+konstituera => inrätta [slutföra(0.106) kritisera(0.087) inrätta(0.085) bekräfta(0.059) avgöra(0.024)]
+prompt => ovillkorligen [uteslutande(0.068) naturligtvis(0.058) ovillkorligen(0.053) slutligen(0.009) tydligen(-0.027)]
+stickling => blomskott [fröskida(0.221) fröställning(0.192) blomknopp(0.187) blomskott(0.061) kronblad(-0.041)]
+husera => härja [ordna(0.101) ramla(0.075) flytta(0.067) välta(0.047) härja(0.034)]
+premiera => belöna [föredra(0.165) betala(0.105) fördela(0.07) förebygga(0.056) belöna(0.026)]
+obändig => okuvlig [olämplig(0.127) otillgänglig(0.114) okuvlig(0.093) obegriplig(0.026) okunnig(-0.022)]
+dogm => lärosats [tillstånd(0.084) tradition(0.037) lärosats(0.021) förbud(0.01) skyldighet(-0.019)]
+synnerligen => ytterst [ganska(0.207) ytterst(0.003) knappast(0.0) tydligen(-0.024) obetydligt(-0.029)]
+emfas => eftertryck [uppskov(0.083) avgörande(0.071) utträde(0.051) förväntan(0.017) eftertryck(-0.005)]
+motto => valspråk [ansvarskänsla(0.169) valspråk(0.158) inspirationskälla(0.099) framtidstro(0.049) förmaning(0.038)]
+bibliografi => litteraturförteckning [bibelöversättning(0.208) bokbindning(0.051) litteraturförteckning(0.043) skriftväxling(0.035) bildtext(0.004)]
+proaktiv => förebyggande [undersökande(0.062) utmanande(0.05) förebyggande(0.03) utvecklande(0.022) förenande(-0.002)]
+appell => vädjan [tvång(0.072) vädjan(0.049) svar(0.048) hot(0.044) löfte(-0.0)]
+ograverad => orörd [ojämn(0.173) oäkta(0.134) okänd(0.123) orörd(0.111) otydlig(-0.012)]
+syndrom => sjukdomsbild [följdsjukdom(0.131) sjukdomsfall(0.069) folksjukdom(0.018) sjukdomsbild(-0.008) sjukdomsorsak(-0.015)]
+anomali => avvikelse [ersättning(0.07) motsats(0.038) avvikelse(0.029) enformighet(0.016) avlägsnande(0.003)]
+kalkera => efterbilda [planera(0.072) skissa(0.061) efterbilda(0.06) beräkna(0.012) mäta(0.0)]
+libido => könsdrift [skuldkänsla(0.364) dödsdrift(0.25) högmod(0.164) könsdrift(0.145) tålamod(0.086)]
+ackumulation => anhopning [anpassning(0.102) anhopning(0.089) tidsintervall(0.018) vinst(0.004) bifall(-0.004)]
+troskyldig => naiv [osäker(0.117) övertygande(0.046) tvivlande(0.029) naiv(-0.011) ångerfull(-0.025)]
+modulera => variera [markera(0.069) variera(0.066) förnya(0.034) lokalisera(-0.012) gradera(-0.015)]
+besutten => förmögen [begagnad(0.046) nedtryckt(0.043) förmögen(0.033) övertygad(0.025) angripen(0.02)]
+begeistrad => förtjust [frestad(0.029) förtjust(0.004) upprörd(0.003) otålig(0.001) förskräckt(-0.0)]
+passé => föråldrad [hämmad(0.038) tröttkörd(0.018) verkningslös(0.013) utbytt(0.013) föråldrad(0.012)]
+sinnrik => fyndig [rolig(0.222) känslig(0.129) vettig(0.053) livlig(0.038) fyndig(0.013)]
+obskyr => tvivelaktig [omodern(0.179) envis(0.119) ohövlig(0.071) känslokall(0.035) tvivelaktig(0.016)]
+moderera => anpassa [förstärka(0.13) förnya(0.097) anpassa(0.073) komplettera(0.031) ersätta(0.028)]
+
+- Unsufficient
+*dana => forma [forma(0.0) lämna(-1.0)]
+latent => dold [lindrig(0.141) klar(0.023) djup(0.0) dold(-0.007)]
+kväsa => kuva [klaga(0.209) kräva(0.085) lura(0.0) muta(-0.02)]
+nabo => granne [inhägnad(0.0)]
