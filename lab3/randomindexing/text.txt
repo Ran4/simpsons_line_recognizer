@@ -1,0 +1,120 @@
+ Kör nu programmet OrdHP med träningsmängd ri_dataset1/ och testfilen test1.dat:
+java -Xmx1000m -cp lib:RI:OrdHP OrdHP /info/sprakt10/ri/ri_dataset1/ test1.dat
+
+eller om du gör labben i Windowsmiljö (t.ex. hemma, förutsatt att du kopierat även textmängderna):
+java -Xmx1000m -cp lib;RI;OrdHP OrdHP ../ri_dataset1/ test1.dat
+
+Hur många rätt blev det?
+java -Xmx1000m -cp lib:RI:OrdHP OrdHP ../ri_dataset1/ test1.dat
+-- Correct: 17
+-- Missed: 42
+-- Unsufficient: 0 (0)
+-- Total: 59
+-- Svar: 17 rätt
+Hur många rätt hade det blivit om man chansat?
+-- ./chansning.py
+-- ca: 20%
+
+
+I katalogen results/ ligger nu en fil i vilken resultatet finns att läsa.
+Varje gång du kör OrdHP generaras en ny unik sådan fil.
+De är bra att ha kvar när du ska jämföra resultatet för olika inställningar (se nedan).
+Öppna filen och bekanta dig med resultatet.
+
+Överst i filen finns information om hur träningen gick till (mer om det senare). Sedan följer resultaten. Först antal rätt och fel och sedan vilka ord som blev rätt och fel. Med "Correct" menas de ord som programmet gett rätt svar på, med "Missed" menas de som det inte gjorde rätt på och med "Insufficient" menas de ord som träningsmängden inte gav tillräckligt med information om.
+
+Orden presenteras så här:
+
+konstituera => inrätta [inrätta(0.205) avgöra(0.105) bekräfta(0.089) kritisera(0.071) slutföra(0.065)],
+Först kommer ordet man söker synonym till, sedan den rätta synonymen och därefter inom hakparenteser hur lika programmet tyckte att alternativen var frågeordet (i fallande ordning). I det här exemplet har programmet alltså rätt!
+
+
+#Parametrar
+Den första provkörning du gjorde ovan under "För att komma igång" hade specifika inställningar. Dessa är angivna i filen TrainHP.properties. Det du ska göra är att ändra dessa och se om du kan få bättre resultat.
+
+De parametrar i TrainHP.properties som du kan ändra på är:
+
+    dimensionality = 1800
+    Dimensionen på vektorerna som representerar ordet (både Random Labels och kontextvektorer har denna dimension).
+    random_degree = 8
+    Antalet 1:or och -1:or i en Random Label.
+    seed = 710225
+    Slumpfrö. Eftersom RI slumpar fram Random Labels kan slumpen påverka resultatet.
+    left_window_size = 4
+    Antalet ord till vänster om fokusordet som används för att uppdatera kontextvektorn.
+    right_window_size = 4
+    Antalet ord till höger om fokusordet som används för att uppdatera kontextvektorn.
+    weighting_scheme = moj.ri.weighting.MangesWS
+    Viktningsschema. Mer om det i Extrauppgiften nedan.
+    stoplist = False
+    Om stopplista ska användas eller inte (se nedan).
+    stoplist_name = Stoplist.txt
+    Namnet på en eventuell stopplista.
+    shortest_word = 3
+    Kortare ord än det angivna värdet används inte vid indexeringen.
+    longest_word = 25
+    Längre ord än det angivna värdet används inte vid indexeringen.
+    minimum_words_per_file = 2
+    Lägsta antalet ord en fil måste innehålla för att indexeras.
+
+#Uppgifter
+Gör följande tre uppgifter.
+
+Stopplista
+Ändra från "False" till "True" för parametern stoplist i TrainHP.properties och kör igen på ri_dataset1/. Orden i stopplistan kommer nu inte att tas med i indexeringen. Vad ger detta för resultat? Varför tror du?
+
+-- Correct: 23
+-- Missed: 36
+-- Unsufficient: 0 (0)
+-- Total: 59
+
+
+Ändra parametrar
+På vilket sätt tror du att de olika parametrarna kan påverka resultatet? (Du behöver inte resonera om alla.)
+
+dimensionality: Om den är för låg kan vi få krockar
+random_degree: Dito
+seed: om vi vill få samma resultat varje körning
+left_window_size/right_window_size: Mer kontext, men behöver mer data då vi får mer speciella exempel
+weighting_scheme: Bestämmer hur ordet ter sig till sina grannar
+shortest_word, longest_word: Om vi skippar många korta ord så kan vi kanske få bättre resultat
+minimum_words_per_file: Ökar vi denna så skippar vi korta meningar (eftersom varje fil innehåller en mening)
+
+Välj minst två parametrar att prova (stoplist räknas inte).
+Prova minst ett annat värde än det som var från början. Får du bättre resultat?
+-- ./runstuf.sh
+With minimum_words_per_file = 2
+    Without stoplist:
+    Shortest word == 3: Correct: 19
+    Shortest word == 4: Correct: 19
+
+    With stoplist:
+    Shortest word == 3: Correct: 24
+    Shortest word == 4: Correct: 24
+
+With minimum_words_per_file = 4
+    Without stoplist:
+    Shortest word == 3: Correct: 19
+    Shortest word == 4: Correct: 19
+
+    With stoplist:
+    Shortest word == 3: Correct: 23
+    Shortest word == 4: Correct: 23
+
+På vilket sätt tror du att de olika parametrarna spelar olika roll beroende på vilken textmängd man använder?
+(Om du har tid: prova om du kan hitta någon parameter som verkar ha
+olika inverkan då du kör på ri_dataset1/ respektive ri_dataset2/.)
+
+Egna synonymer
+Gör ett eget synonymtest i en fil som följer formatet i testfilerna
+(du kan ha hur många synonymförslag som helst till varje fråga).
+Prova t.ex. om programmet tycker att funktionsord (som t.ex. "och" och "men") är mer lika varandra än de som finns i någon av de ursprungliga testfilerna. Då kan du behålla några av dessa i din nya fil. Kom ihåg att bara använda ord i grundform (lemma)!
+
+Tänk efter så att inställningarna inte gör det omöjligt för programmet att lyckas
+(om du vill prova ordet "du" måste du t.ex. ha shortest_word = 2).
+Dessutom kan det vara så att andra inställningar är bättre för att lösa just ditt synonymtest,
+men det hinner du nog inte undersöka så noga.
+
+Var också medveten om att det finns en möjlighet att de ord du är intresserad av inte finns med i träningsmängderna.
+De är ju framtagna för det ursprungliga testet. Det är alltså en fördel om du väljer rätt vanligt förekommande ord
+som har en rimlig chans att förekomma i träningsmänderna.
