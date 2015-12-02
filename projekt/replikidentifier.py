@@ -4,6 +4,8 @@ import pprint
 try:
     #pip install fuzzywuzzy
     from fuzzywuzzy import process
+    #fuzzywuzzy's levenstein distance is much quicker with this C addon:
+    #https://github.com/miohtama/python-Levenshtein
 except:
     process = None
     
