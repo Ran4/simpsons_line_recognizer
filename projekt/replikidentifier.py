@@ -25,6 +25,10 @@ class replikIdentifier(object):
         self.ACCEPTED_LETTERS = "abcdefghijklmnopqrstuvwxyz' "
         self.DO_FIND_SIMILAR_CHARACTERS = False
         
+        self.printLoadedFiles = False
+        self.printMerges = False
+        self.printPrunedRepliker = False
+        
         self.verbose = verbose
         self.replik = {}
         
@@ -68,9 +72,9 @@ class replikIdentifier(object):
         #NValues = [1]
         #NValues = [2]
         #NValues = [3]
-        NValues = [5]
+        NValues = [1,2,3,4,5]
         for n in NValues:
-            print colored("Calculating %s-Grams..." % n, "cyan")
+            print colored("%s-Grams:" % n, "cyan")
             self.calculateNGram(replik, n)
                 
     def calculateNGram(self, replik, n):
@@ -82,11 +86,22 @@ class replikIdentifier(object):
                 
         nGrams = {}
         
+        if n == 1:
+            minCount = 15
+        elif n == 2:
+            minCount = 6
+        elif n == 3:
+            minCount = 4
+        elif n == 4:
+            minCount = 3
+        elif n >= 5:
+            minCount = 2
+        
         for name in replik.keys():
             ngramCounter = Counter()
             if self.verbose:
-                print colored("Character %s has %s lines" % \
-                    (name, len(replik[name])), "yellow")
+                print colored("%s, %s lines" % \
+                    (name, len(replik[name])), "yellow"),
                     
             for line in replik[name]:
                 words = line.split(" ")
@@ -95,10 +110,8 @@ class replikIdentifier(object):
                     #ngram = words[i] + " " + words[i+1]
                     ngramCounter[ngram] += 1
                     
-            minCount = 7 - n
-            if minCount > 1:
-                removeItemsUnderCount(ngramCounter, minCount)
-            print "Most common n-grams: ",
+            removeItemsUnderCount(ngramCounter, minCount)
+            #print "Most common n-grams: ",
             sortedItems = sorted(ngramCounter.items(),
                     key=lambda x: x[1], reverse=True)
             print " ".join(["%s(%s)" % item for item in sortedItems])
@@ -130,17 +143,17 @@ class replikIdentifier(object):
                 ("FISHERMAN 2","FISHERMAN"),
                 ]
         for fr, to in fromToList:
-            if self.verbose == 2:
+            if self.verbose and self.printMerges:
                 print colored("Merging %s -> %s" % (fr, to), "cyan") + ",",
             if to in replik.keys():
                 replik[to].extend(replik[fr])
             else:
                 replik[to] = replik[fr]
             del replik[fr]
-            if self.verbose == 2:
+            if self.verbose and self.printMerges:
                 print "%s now has %s lines" % (to, len(replik[to]))
             
-        if self.verbose == 2:
+        if self.verbose and self.printMerges:
             print "Fixing AND-names:"
         #fix "BART AND LISA" -> "BART", "LISA"
         for oldName in replik.keys():
@@ -157,7 +170,7 @@ class replikIdentifier(object):
                     else:
                         replik[newName] = replik[oldName]
                     
-                    if self.verbose == 2:
+                    if self.verbose and self.printMerges:
                         print colored("Merging %s -> %s," % (oldName, newName),
                                 "cyan"),
                         print "%s now has %s lines" % \
@@ -190,7 +203,7 @@ class replikIdentifier(object):
             if len(replik[name]) < self.MIN_REPLIK_OCCURANCE:
                 del replik[name]
                 prunedNames.append(name)
-        if self.verbose:
+        if self.verbose and self.printPrunedRepliker:
             if self.verbose == 2:
                 prunedNamesString = ", ".join(prunedNames)
             else: #only show the first few characters
@@ -243,7 +256,9 @@ class replikIdentifier(object):
     def getFileNames(self):
         fileNames = [os.path.join("episodes", fname)
                 for fname in os.listdir("episodes")]
-        print "Loading these %s files: %s" % (len(fileNames), str(fileNames))
+        if self.verbose and self.printLoadedFiles:
+            print "Loading these %s files: %s" % \
+                    (len(fileNames), str(fileNames))
         return fileNames
 
 if __name__ == "__main__":
