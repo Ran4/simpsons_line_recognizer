@@ -1,23 +1,24 @@
+import os
 import pprint
 
 
 class replikIdentifier(object):
     def __init__(self, verbose=True):
         
-        self.MIN_REPLIK_OCCURANCE = 3
+        self.MIN_REPLIK_OCCURANCE = 25
         self.ACCEPTED_LETTERS = "abcdefghijklmnopqrstuvwxyz "
         
         self.verbose = verbose
         self.replik = {}
         
-        fileNames = ["simpsonsepisode.txt",]
+        fileNames = self.getFileNames()
         for fileName in fileNames:
-            try:
-                with open(fileName) as f:
-                    lines = f.read().split("\n")
-                    self.addReplikerToDict(lines, self.replik)
-            except:
-                raise Exception("Couldn't load file %s" % fileName)
+            #try:
+            with open(fileName) as f:
+                lines = f.read().split("\n")
+                self.addReplikerToDict(lines, self.replik)
+            #except:
+            #    raise Exception("Couldn't load file %s" % fileName)
             
         self.pruneRepliker(self.replik)
         if self.verbose:
@@ -74,6 +75,12 @@ class replikIdentifier(object):
                 
                 replik[name] = replik.get(name, []) + [line]
                 name = None
+                
+    def getFileNames(self):
+        fileNames = [os.path.join("episodes", fname)
+                for fname in os.listdir("episodes")]
+        print "Loading these %s files: %s" % (len(fileNames), str(fileNames))
+        return fileNames
 
 if __name__ == "__main__":
-    ri = replikIdentifier(verbose=2)
+    ri = replikIdentifier(verbose=1)
