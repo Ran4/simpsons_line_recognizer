@@ -1,12 +1,12 @@
  Homer The Heretic
 
 HOMER
-<thinking> Ah, another beautiful day in the womb.
+ Ah, another beautiful day in the womb.
 
 Homer swims around in the womb singing "The Blue Danube" by Strauss. Suddenly, arms grab him and start to pull him out.
 
 HOMER
-<gasping> Let go! Let go! I'm all naked and wet!
+ Let go! Let go! I'm all naked and wet!
 
 MARGE
 Get up, Homer. It's time for church.
@@ -26,7 +26,7 @@ MARGE
 I'm tired of having this argument every Sunday. Get dressed.
 
 HOMER
-Oh, stupid, itchy church pants. <grunting> One size fits all, my butt!
+Oh, stupid, itchy church pants.  One size fits all, my butt!
 
 MARGE
 Come on. We're going to be late.
@@ -37,7 +37,7 @@ HOMER
 Forget it. I'm not going.
 
 MARGE
-<grumbles>
+
 
 Marge, Lisa, Bart and Maggie all drive to church without Homer.
 
@@ -63,13 +63,13 @@ I'm whizzin' with the door open, and I love it!
 Homer has a shower.
 
 HOMER
-<sings> Why, oh, why, Delilah! Brrrah!
+ Why, oh, why, Delilah! Brrrah!
 
 NO SOAP RADIO
 It's 11 KBBL degrees below zero. I hope you're someplace warm.
 
 HOMER
-You bet your sweet … ass! <chuckles>
+You bet your sweet … ass! 
 
 At church, everyone is freezing.
 
@@ -106,12 +106,12 @@ Ahhh, I'm there.
 Back home, Homer drops some ice-cream on his chest.
 
 HOMER
-Uh-oh. <whistles> Here, boy.
+Uh-oh.  Here, boy.
 
 Santa's Little Helper comes in and licks the chocolate ice-cream off his chest.
 
 HOMER
-<laughing> Okay, okay, okay, okay.
+ Okay, okay, okay, okay.
 
 REVEREND LOVEJOY
 The service has ended. Go in peace.
@@ -119,10 +119,10 @@ The service has ended. Go in peace.
 The church organ plays as everyone goes to leave.
 
 FLANDERS
-<grunting> The door's frozen shut. And it's the only way out!
+ The door's frozen shut. And it's the only way out!
 
 CROWD
-<chattering>
+
 
 LISA
 Our Father who art in heaven, hallowed be…
@@ -139,7 +139,7 @@ MAN #2
 Haha, 'course Johnny's next record was a spoken word album of his right-wing political views. It kinda killed his career. If you can tell me the name of that album, call our contest line now.
 
 HOMER
-<gasps> I know that!
+ I know that!
 
 Homer goes through his records and finds it. He rings up the radio station.
 
@@ -185,10 +185,10 @@ You heard the lady. Grab her spine and get crackin'.
 The sound of a spine cracking is heard.
 
 HOMER
-<chuckling> Moe is their leader.
+ Moe is their leader.
 
 CURLY
-<whooping>
+
 
 MOE
 Why, you!
@@ -201,7 +201,7 @@ Hey!
 Groundskeeper Willie nearly has the doors open.
 
 GROUNDSKEEPER WILLIE
-<grunting> Huzzah!
+ Huzzah!
 
 REVEREND LOVEJOY
 Plea-Please, Christians, don't push.
@@ -253,7 +253,7 @@ Woo-hoo!
 Homer looks down on the floor and sees a Penny.
 
 HOMER
-<gasps> Is that what I think it is?
+ Is that what I think it is?
 
 ABRAHAM LINCOLN
 Mm-hmm.
@@ -278,7 +278,7 @@ LISA
 Just fun. Fun, that's what it is.
 
 MARGE
-<snorts>
+
 
 HOMER
 I, on the other hand, have been having the best day of my life, and I owe it all to skipping church.
@@ -317,7 +317,7 @@ BART
 Testify!
 
 MARGE
-<grumbles>
+
 
 That night, Marge is saying prayers for Homer.
 
@@ -334,7 +334,7 @@ HOMER
 Marge. Come to bed, Marge.
 
 MARGE
-<whispering> Lord, please. He's not a bad person, Lord, really. He just sometimes…
+ Lord, please. He's not a bad person, Lord, really. He just sometimes…
 
 HOMER
 It's good for what ails ya.
@@ -343,12 +343,12 @@ MARGE
 He doesn't mean any harm.
 
 HOMER
-I can wait all…<snoring>
+I can wait all…
 
 Homer starts dreaming that he's down on the couch watching TV. Suddenly there's a loud rumble and God lifts off the roof to Homer's house.
 
 HOMER
-<gulps> God?
+ God?
 
 GOD
 Thou has forsaken my church!
@@ -429,7 +429,7 @@ HOMER
 Yeah. He appeared before me in a dream, and I knew that was special because I usually dream about naked … Marge.
 
 MARGE
-<groans>
+
 
 BART
 So, Homer, you saw the big cheese? What'd he look like?
@@ -488,7 +488,7 @@ Rain came down. It started to get muddy muddy.
 Homer's driving home when Ned drives up next to him and asks him to lower his window.
 
 FLANDERS FAMILY
-Get those animals <clap> out on the ark-y ark-y.
+Get those animals  out on the ark-y ark-y.
 
 HOMER
 Leave me alone.
@@ -505,7 +505,7 @@ FLANDERS
 Ah!
 
 HOMER
-<laughs> Where are we going?
+ Where are we going?
 
 GUY
 Garbage Island.
@@ -515,7 +515,7 @@ The boat's horn blares.
 Back home, Bart, Lisa, Homer and Maggie watch Itchy and Scratchy in "Flay Me To The Moon".
 
 FAMILY
-<laughing>
+
 
 MARGE
 Let's go, kids.
@@ -524,7 +524,7 @@ BART
 How come we have to go to church and Dad gets to stay home and watch cartoons?
 
 MARGE
-<groans> I have a responsibility to raise these children right, and unless you change, I'll have to tell them their father is … well, wicked.
+ I have a responsibility to raise these children right, and unless you change, I'll have to tell them their father is … well, wicked.
 
 HOMER
 Kids, let me tell you about another so-called "wicked" guy. He had long hair and some wild idea, and he didn't always do what other people thought was right. And that man's name was … I forget. But the point is … I forget that too. Marge, you know who I'm talking about. He used to drive that blue car.
@@ -550,7 +550,7 @@ REVEREND LOVEJOY
 My friends, the devil walks among us!
 
 CONGREGATION
-<chattering>
+
 
 Bart grabs a man that looks like the devil.
 
@@ -561,12 +561,12 @@ REVEREND LOVEJOY
 No, don't look for the pitchfork and pointy tail. Today's devil has assumed a more seductive form … pleasing to the eye.
 
 HOMER
-Ah … an interview with Lorne Michaels. Ah. Wait, that's no good. Hey, now we're talking. "Our unabashed dictionary defines I.U.D. as "love springs internal." <laughs> I don't get it.
+Ah … an interview with Lorne Michaels. Ah. Wait, that's no good. Hey, now we're talking. "Our unabashed dictionary defines I.U.D. as "love springs internal."  I don't get it.
 
 The doorbell rings.
 
 KRUSTY
-Hello. I'm collecting for the Brotherhood of Jewish Clowns. Last year, tornadoes claimed the lives of 75 Jewish clowns. The worst incident was during our convention in Lubbock, Texas. There were floppy shoes and rainbow wigs everywhere. It was terrible! <sobs>
+Hello. I'm collecting for the Brotherhood of Jewish Clowns. Last year, tornadoes claimed the lives of 75 Jewish clowns. The worst incident was during our convention in Lubbock, Texas. There were floppy shoes and rainbow wigs everywhere. It was terrible! 
 
 HOMER
 Wait a minute. Is this a religious thing?
@@ -614,20 +614,20 @@ Boy, everyone is stupid except me.
 Homer falls asleep on the couch holding a beer and a cigar. The cigar falls onto a Playdude and starts a fire.
 
 HOMER
-<snoring> Marge, turn down the heat. That's better.
+ Marge, turn down the heat. That's better.
 
 HOMER
-<snoring>
+
 
 Santa's Little Helper runs in. He chews at Homer's pocket and a Hershey's chocolate bar falls out. He runs off with it. Some fire runs up a phone line onto the couch and singes Homer's hair.
 
 HOMER
-<screams> Fire! What do I do? What do I do? <coughing> Oh, the song. The song. When a fire starts to burn, there's a lesson you must learn. Something, something, then you'll see, you'll avoid catastrophe. D'oh! <coughing>
+ Fire! What do I do? What do I do?  Oh, the song. The song. When a fire starts to burn, there's a lesson you must learn. Something, something, then you'll see, you'll avoid catastrophe. D'oh! 
 
 Homer faints. Apu spots fire coming from Homer's house.
 
 APU
-<gasps> Fire at the old Simpson place!
+ Fire at the old Simpson place!
 
 He puts on his fire helmet and jacket.
 
@@ -643,14 +643,14 @@ APU
 Little Jamshed, the store is in your hands.
 
 JAMSHED
-How I have waited for this day. <cocks shotgun>
+How I have waited for this day. 
 
 Dolph, Kearney and Jimbo all look stunned.
 
 The fire engine speeds towards the fire. It has to stop for a family of ducks crossing the road.
 
 DUCKS
-<quack>
+
 
 APU
 You ducks are really trying my patience! But you're so cute.
@@ -668,7 +668,7 @@ No!
 The floor gives way and Ned falls through it, only surviving by holding onto Homer who's stuck in the gap.
 
 HOMER
-<moans>
+
 
 Ned climbs back up and carries Homer upstairs. He throws a mattress out of the window and gets ready to throw Homer out.
 
@@ -685,7 +685,7 @@ Ned follows Homer with a twist. He then carries Homer back out the window. The f
 [Siren Wailing]
 
 HOMER
-<coughs> Flanders, you saved me. Why?
+ Flanders, you saved me. Why?
 
 FLANDERS
 Heck, you'd have done the same for me.
@@ -696,7 +696,7 @@ FLANDERS
 Help! Help!
 
 HOMER
-<laughs>
+
 
 Homer comes back to reality.
 
@@ -715,7 +715,7 @@ Our magazines and roach traps, gone. All gone.
 Krusty runs out of the house with the cat on his face.
 
 SNOWBALL II
-<screeching>
+
 
 KRUSTY
 I saved your cat. Ow! That hurt.
@@ -766,7 +766,7 @@ CHIEF WIGGUM
 Hey, it's out.
 
 EVERYONE
-<cheering>
+
 
 KENT BROCKMAN
 Coming up next, "Which Work Better: Springy Clothespins or the Other Kind?"
@@ -807,7 +807,7 @@ I'll be there next Sunday, front row, center.
 The next Sunday, Homer's in church.
 
 HOMER
-<snores>
+
 
 Homer dreams that he's up in Heaven with God.
 
