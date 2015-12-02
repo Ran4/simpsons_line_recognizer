@@ -1,5 +1,6 @@
 import os
 import pprint
+from collections import Counter
 
 try:
     #pip install fuzzywuzzy
@@ -18,8 +19,11 @@ except: #Couldn't load termcolor, use a regular function instead
 class replikIdentifier(object):
     def __init__(self, verbose=True):
         
-        self.MIN_REPLIK_OCCURANCE = 25
+        #self.MIN_REPLIK_OCCURANCE = 25
+        self.MIN_REPLIK_OCCURANCE = 100
+        self.MINWORDS_1GRAM = 1
         self.ACCEPTED_LETTERS = "abcdefghijklmnopqrstuvwxyz' "
+        self.DO_FIND_SIMILAR_CHARACTERS = False
         
         self.verbose = verbose
         self.replik = {}
@@ -37,16 +41,70 @@ class replikIdentifier(object):
             
         if process: #helper function, use this manually then change
                     #fixCharacterNames
-            self.findSimilarCharacters(self.replik)
-            pass
+            if self.verbose and self.DO_FIND_SIMILAR_CHARACTERS:
+                print "Starting to find similar characters"
+                self.findSimilarCharacters(self.replik)
+                print "Finished finding similar characters"
+        else:
+            if self.verbose:
+                print "Doesn't have fuzzywuzzy.process," + \
+                        "won't find similar characters"
             
         self.pruneRepliker(self.replik)
         if self.verbose:
             print ""
             self.printStatistics(self.replik)
                 
-        if self.verbose == 2:
+        if self.verbose == 3:
             print pprint.pprint(self.replik)
+            
+        if self.verbose:
+            print "\nStarting to calculate N-Gram statistics"
+            
+        self.calculateNGrams(self.replik)
+        
+    def calculateNGrams(self, replik):
+        #NValues = [1, 3]
+        #NValues = [1]
+        #NValues = [2]
+        #NValues = [3]
+        NValues = [5]
+        for n in NValues:
+            print colored("Calculating %s-Grams..." % n, "cyan")
+            self.calculateNGram(replik, n)
+                
+    def calculateNGram(self, replik, n):
+        def removeItemsUnderCount(counter, n):
+            smallCountList = filter(lambda item: counter[item] < n,
+                    counter)
+            for item in smallCountList:
+                del counter[item]
+                
+        nGrams = {}
+        
+        for name in replik.keys():
+            ngramCounter = Counter()
+            if self.verbose:
+                print colored("Character %s has %s lines" % \
+                    (name, len(replik[name])), "yellow")
+                    
+            for line in replik[name]:
+                words = line.split(" ")
+                for i in range(len(words) - n + 1):
+                    ngram = " ".join(words[i:i+n])
+                    #ngram = words[i] + " " + words[i+1]
+                    ngramCounter[ngram] += 1
+                    
+            minCount = 7 - n
+            if minCount > 1:
+                removeItemsUnderCount(ngramCounter, minCount)
+            print "Most common n-grams: ",
+            sortedItems = sorted(ngramCounter.items(),
+                    key=lambda x: x[1], reverse=True)
+            print " ".join(["%s(%s)" % item for item in sortedItems])
+            #pprint.pprint(ngramCounter)
+            
+            nGrams[name] = ngramCounter
             
     def fixCharacterNames(self, replik):
         fromToList = [
@@ -72,13 +130,40 @@ class replikIdentifier(object):
                 ("FISHERMAN 2","FISHERMAN"),
                 ]
         for fr, to in fromToList:
-            print colored("Merging %s -> %s" % (fr, to), "cyan") + ",",
+            if self.verbose == 2:
+                print colored("Merging %s -> %s" % (fr, to), "cyan") + ",",
             if to in replik.keys():
                 replik[to].extend(replik[fr])
             else:
                 replik[to] = replik[fr]
             del replik[fr]
-            print "%s now has %s lines" % (to, len(replik[to]))
+            if self.verbose == 2:
+                print "%s now has %s lines" % (to, len(replik[to]))
+            
+        if self.verbose == 2:
+            print "Fixing AND-names:"
+        #fix "BART AND LISA" -> "BART", "LISA"
+        for oldName in replik.keys():
+            if " AND " in oldName or "&" in oldName:
+                if " AND " in oldName:
+                    names = oldName.split(" AND ")
+                else:
+                    names = oldName.split("&")
+                
+                for newName in names:
+                    newName = newName.strip()
+                    if newName in replik.keys():
+                        replik[newName].extend(replik[oldName])
+                    else:
+                        replik[newName] = replik[oldName]
+                    
+                    if self.verbose == 2:
+                        print colored("Merging %s -> %s," % (oldName, newName),
+                                "cyan"),
+                        print "%s now has %s lines" % \
+                                (newName, len(replik[newName]))
+                            
+                del replik[oldName]
 
     def findSimilarCharacters(self, replik):
         #->[('New York Jets', 100), ('New York Giants', 78)]
@@ -92,13 +177,12 @@ class replikIdentifier(object):
                 s1 =  "%s: %s" % (name, str(possibleNames))
                 s2 = colored("Might be wrong?", "red")
                
-                print s1 + " " + s2
+                if self.verbose == 2:
+                    print s1 + " " + s2
                 #open("similar.log", "a").write("%s %s\n" % (s1, s2))
             else:
                 #print ""
                 pass
-            
-        exit()
         
     def pruneRepliker(self, replik):
         prunedNames = []
@@ -107,8 +191,14 @@ class replikIdentifier(object):
                 del replik[name]
                 prunedNames.append(name)
         if self.verbose:
-            print "Pruned %s names: %s" % \
-                    (len(prunedNames), ", ".join(prunedNames))
+            if self.verbose == 2:
+                prunedNamesString = ", ".join(prunedNames)
+            else: #only show the first few characters
+                prunedNamesString = ", ".join(prunedNames[:10]) + "..."
+            
+            print "Pruned %s names with less than %s lines: %s" % \
+                    (len(prunedNames), self.MIN_REPLIK_OCCURANCE,
+                            prunedNamesString)
         
     def printStatistics(self, replik):
         numCharacters = len(replik.keys())
@@ -140,9 +230,11 @@ class replikIdentifier(object):
                 if line.startswith("(") and ")" in line:
                     line = line[line.find(")")+1:].strip()
                 
-                line = filter(lambda x: x in self.ACCEPTED_LETTERS,line)
+                line = filter(lambda x: x in self.ACCEPTED_LETTERS, line)
+                while "  " in line:
+                    line = line.replace("  ", " ")
                 
-                if self.verbose == 2:
+                if self.verbose == 3:
                     print "* %s\n  %s" % (oldLine, line)
                 
                 replik[name] = replik.get(name, []) + [line]
@@ -155,4 +247,4 @@ class replikIdentifier(object):
         return fileNames
 
 if __name__ == "__main__":
-    ri = replikIdentifier(verbose=1)
+    ri = replikIdentifier(verbose=2)
