@@ -1,7 +1,3 @@
-
-
-Homer is playing poker at Lenny's house. Also present are Moe, Barney and Carl.
-
 MOE
 All right, I raise a quarter.
 
@@ -865,3 +861,5 @@ Hey Moe.
 
 MOE
 Aah!
+
+
