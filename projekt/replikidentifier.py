@@ -1,12 +1,23 @@
 import os
 import pprint
 
+try:
+    #pip install fuzzywuzzy
+    from fuzzywuzzy import process
+except:
+    process = None
+    
+try:
+    from termcolor import colored
+except: #Couldn't load termcolor, use a regular function instead
+    def colored(*args):
+        return args[0]
 
 class replikIdentifier(object):
     def __init__(self, verbose=True):
         
         self.MIN_REPLIK_OCCURANCE = 25
-        self.ACCEPTED_LETTERS = "abcdefghijklmnopqrstuvwxyz "
+        self.ACCEPTED_LETTERS = "abcdefghijklmnopqrstuvwxyz' "
         
         self.verbose = verbose
         self.replik = {}
@@ -20,6 +31,13 @@ class replikIdentifier(object):
             #except:
             #    raise Exception("Couldn't load file %s" % fileName)
             
+        self.fixCharacterNames(self.replik)
+            
+        if process: #helper function, use this manually then change
+                    #fixCharacterNames
+            self.findSimilarCharacters(self.replik)
+            pass
+            
         self.pruneRepliker(self.replik)
         if self.verbose:
             print ""
@@ -27,6 +45,58 @@ class replikIdentifier(object):
                 
         if self.verbose == 2:
             print pprint.pprint(self.replik)
+            
+    def fixCharacterNames(self, replik):
+        fromToList = [
+                ("REPORTER #2","REPORTER"),
+                ("REPORTER #1","REPORTER"),
+                ("GUARDS","GUARD"),
+                ("DR NICK","DR. NICK"),
+                ("MRS. KREBAPPEL","EDNA KRABAPPEL"),
+                ("MRS. KRABAPPEL","EDNA KRABAPPEL"),
+                ("EDNA KREBAPPEL","EDNA KRABAPPEL"),
+                ("HIBBERT","DR. HIBBERT"),
+                ("DR HIBBERT","DR. HIBBERT"),
+                ("MS HOOVER","MS. HOOVER"),
+                ("MEYER","MEYERS"),
+                ("MAN #1","MAN"),
+                ("MAN #2","MAN"),
+                ("MARTIN PRINCE, SR.","MARTIN PRINCE"),
+                ("ADVISOR 3","ADVISOR"),
+                ("ADVISOR 2","ADVISOR"),
+                ("EMPLOYEES","EMPLOYEE"),
+                ("TV ANNOUNCER","ANNOUNCER"),
+                ("FISHERMAN 1","FISHERMAN"),
+                ("FISHERMAN 2","FISHERMAN"),
+                ]
+        for fr, to in fromToList:
+            print colored("Merging %s -> %s" % (fr, to), "cyan") + ",",
+            if to in replik.keys():
+                replik[to].extend(replik[fr])
+            else:
+                replik[to] = replik[fr]
+            del replik[fr]
+            print "%s now has %s lines" % (to, len(replik[to]))
+
+    def findSimilarCharacters(self, replik):
+        #->[('New York Jets', 100), ('New York Giants', 78)]
+        
+        #open("similar.log", "w").write("")
+        for name in replik.keys():
+            choices = filter(lambda x: x != name, replik.keys())
+            possibleNames = process.extract(name, choices, limit=1)
+            ALTERNATIVE, VAL = 0, 1
+            if possibleNames and possibleNames[0][VAL] > 90:
+                s1 =  "%s: %s" % (name, str(possibleNames))
+                s2 = colored("Might be wrong?", "red")
+               
+                print s1 + " " + s2
+                #open("similar.log", "a").write("%s %s\n" % (s1, s2))
+            else:
+                #print ""
+                pass
+            
+        exit()
         
     def pruneRepliker(self, replik):
         prunedNames = []

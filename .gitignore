@@ -1,5 +1,7 @@
+*.log
 *.swp
 *.swo
 *.res
+*.pyc
 
 temp_report.pdf
