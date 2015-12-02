@@ -5,3 +5,8 @@ http://www.simpsonspark.com/scripts.php
 http://www.springfieldspringfield.co.uk/episode_scripts.php?tv-show=the-simpsons
 
 http://simpsons-scripts.wikidot.com/
+
+
+
+http://www.vikparuchuri.com/blog/figuring-out-which-simpsons-character-is-speaking/
+https://github.com/vikparuchuri/simpsons-scripts
