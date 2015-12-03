@@ -72,7 +72,7 @@ class replikIdentifier(object):
         #NValues = [1]
         #NValues = [2]
         #NValues = [3]
-        NValues = [1,2,3,4,5]
+        NValues = [1,2,3,4,5,6,7]
         for n in NValues:
             print colored("%s-Grams:" % n, "cyan")
             self.calculateNGram(replik, n)
@@ -86,6 +86,7 @@ class replikIdentifier(object):
                 
         nGrams = {}
         
+        #minCount is used to filter out overly common ngrams
         if n == 1:
             minCount = 15
         elif n == 2:
@@ -107,7 +108,6 @@ class replikIdentifier(object):
                 words = line.split(" ")
                 for i in range(len(words) - n + 1):
                     ngram = " ".join(words[i:i+n])
-                    #ngram = words[i] + " " + words[i+1]
                     ngramCounter[ngram] += 1
                     
             removeItemsUnderCount(ngramCounter, minCount)
@@ -118,6 +118,8 @@ class replikIdentifier(object):
             #pprint.pprint(ngramCounter)
             
             nGrams[name] = ngramCounter
+            
+        return nGrams
             
     def fixCharacterNames(self, replik):
         fromToList = [
@@ -232,7 +234,8 @@ class replikIdentifier(object):
                 "%s %s" % (name, len(self.replik[name])) for name in sortedKeys)
 
     def addReplikerToDict(self, lines, replik):
-        """Takes a number of lines"""
+        """Takes a number of raw lines, parses them and
+        adds them to a dictionary replik"""
         name = None
         for i, line in enumerate(lines):
             if line.isupper() and not name:
@@ -246,7 +249,7 @@ class replikIdentifier(object):
                 line = filter(lambda x: x in self.ACCEPTED_LETTERS, line)
                 while "  " in line:
                     line = line.replace("  ", " ")
-                
+                    
                 if self.verbose == 3:
                     print "* %s\n  %s" % (oldLine, line)
                 
