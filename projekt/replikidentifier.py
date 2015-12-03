@@ -2,6 +2,8 @@ import os
 import pprint
 from collections import Counter
 
+import ngram
+
 try:
     #pip install fuzzywuzzy
     from fuzzywuzzy import process
@@ -9,6 +11,7 @@ try:
     #https://github.com/miohtama/python-Levenshtein
 except:
     process = None
+    
     
 try:
     from termcolor import colored
@@ -34,12 +37,9 @@ class replikIdentifier(object):
         
         fileNames = self.getFileNames()
         for fileName in fileNames:
-            #try:
             with open(fileName) as f:
                 lines = f.read().split("\n")
                 self.addReplikerToDict(lines, self.replik)
-            #except:
-            #    raise Exception("Couldn't load file %s" % fileName)
             
         self.fixCharacterNames(self.replik)
             
@@ -65,62 +65,33 @@ class replikIdentifier(object):
         if self.verbose:
             print "\nStarting to calculate N-Gram statistics"
             
-        self.calculateNGrams(self.replik)
+        ngramDict = ngram.calculateNGrams(self.replik, self.verbose)
         
-    def calculateNGrams(self, replik):
-        #NValues = [1, 3]
-        #NValues = [1]
-        #NValues = [2]
-        #NValues = [3]
-        NValues = [1,2,3,4,5,6,7]
-        for n in NValues:
-            print colored("%s-Grams:" % n, "cyan")
-            self.calculateNGram(replik, n)
-                
-    def calculateNGram(self, replik, n):
-        def removeItemsUnderCount(counter, n):
-            smallCountList = filter(lambda item: counter[item] < n,
-                    counter)
-            for item in smallCountList:
-                del counter[item]
-                
-        nGrams = {}
+        #print "ngramDict", ngramDict
         
-        #minCount is used to filter out overly common ngrams
-        if n == 1:
-            minCount = 15
-        elif n == 2:
-            minCount = 6
-        elif n == 3:
-            minCount = 4
-        elif n == 4:
-            minCount = 3
-        elif n >= 5:
-            minCount = 2
+        self.identifyString("mr burns is here", ngramDict)
         
-        for name in replik.keys():
-            ngramCounter = Counter()
-            if self.verbose:
-                print colored("%s, %s lines" % \
-                    (name, len(replik[name])), "yellow"),
+    def identifyString(self, s, ngramDict):
+        """Takes a string s and returns which name is the most likely
+        candidate to say this string.
+        """
+        #counter = Counter()
+        for n in ngramDict.keys():
+            
+            print "ngramDict[n]['HOMER']:", ngramDict[n]["HOMER"]
+            print "ngramDict[n]['HOMER']['mr burns']:",
+            print ngramDict[n]["HOMER"]["mr burns"]
+            
+            for name in ngramDict[n]:
+                print "identifying with name", name
+                for stringNgram in ngram.generateNGramsForLine(s, n):
                     
-            for line in replik[name]:
-                words = line.split(" ")
-                for i in range(len(words) - n + 1):
-                    ngram = " ".join(words[i:i+n])
-                    ngramCounter[ngram] += 1
-                    
-            removeItemsUnderCount(ngramCounter, minCount)
-            #print "Most common n-grams: ",
-            sortedItems = sorted(ngramCounter.items(),
-                    key=lambda x: x[1], reverse=True)
-            print " ".join(["%s(%s)" % item for item in sortedItems])
-            #pprint.pprint(ngramCounter)
-            
-            nGrams[name] = ngramCounter
-            
-        return nGrams
-            
+                    print "ngram: '%s'. Count in %s: %s" % \
+                            (stringNgram, name, ngramDict[n][name][ngram])
+                            
+                print "----"
+    
+    #{{{ Helper functions to merge characters with similar names
     def fixCharacterNames(self, replik):
         fromToList = [
                 ("REPORTER #2","REPORTER"),
@@ -198,7 +169,7 @@ class replikIdentifier(object):
             else:
                 #print ""
                 pass
-        
+    #}}}
     def pruneRepliker(self, replik):
         prunedNames = []
         for name in replik.keys():
