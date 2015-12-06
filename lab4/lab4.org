@@ -1,0 +1,130 @@
+
+* Testa granska (exempelregel)
+** jag har ett bilen
+   lyckas hitta: en bilen
+   men korrigerar inte felet i species
+   det hela borde korrigeras till: en bil
+** jag har ett bil
+   lyckas inte hitta någonting av någon anledning
+** jag har ett stol
+   korrigerar fint
+** jag är en föl
+   regeln omfattar bara sekvenser som börjar med ordet "ett"
+** ett fin gran
+   regeln har ingen kapacitet för ordföljder med adjektiv
+
+* Allmän instruktion
+   - Regel eller regler
+   - Kommentarer. Vilken typ av fel ska regeln/reglerna detektera?
+     Allmänna kommentarer om regelspråk granskningsfunktion och
+     lexikon (inte obligatorisk)
+   - Falska alarm: Hur många falska arlam uppstod i testtexten? I
+     vilka andra språkliga situationer kommer falska alarm att uppstå?
+     Hur ska de falska alarmen minimeras?
+   - Uppskattning av regelns användbarhet: bra-ok-dålig
+
+* Deluppgift 2: Fasta uttryck
+** Exempeltext
+   Lottas krog är ett trevligt ställe, för utom menyn som innehåller många felaktiga särskrivningar. Härom dagen gick jag till baka och sa vad jag tyckte rentut. I bland blir det fel i menyn, såpass många som härom kvällen är dock ovanligt, förklarar en föredetta anställd. 
+** Naiv regel
+category regel {
+info("regel")
+link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
+}
+
+naiv_sarskrivning@regel {
+X(wordcl=nn & spec=ind & case=nom),
+Y(wordcl=nn)
+-->
+mark(X Y)
+corr(X.join(Y.text))
+action(scrutinizing)
+}
+** Något mindre naiv regel
+category regel {
+info("regel")
+link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
+}
+
+sarskriving@regel {
+X(wordcl=nn & spec=ind & case=nom & nntype!=set & nntype!=dat),
+Y(wordcl=nn & spec=ind & spell_OK(smart_concat(X.text, Y.text), X.token))
+-->
+mark(X Y)
+corr(X.join(Y.text))
+info("Felaktig särskrivning")
+action(scrutinizing)
+}
+*** Fel
+    Ihopskrivningen "såpassman" föreslås eftersom stava tycker att det är ett ok ord
+** Naiv regel som tar vilket ord som helst + preposition
+category regel {
+info("regel")
+link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
+}
+
+naiv_sarskrivning@regel {
+X(),
+Y(wordcl=pp)
+-->
+mark(X Y)
+corr(X.join(Y.text))
+action(scrutinizing)
+}
+*** Rätt
+    Hittar: för utom
+    Hittar: i bland
+*** Fel
+    "fel i" blir "feli"
+
+* Deluppgift 3: Subjektsform efter preposition
+** Exempeltext
+   Han ondgör sig över de som skriver subjektsform efter preposition. Dom gav en present till han på födelsedan. De frågade han om han hade en tändsticka. 
+** Extra exempel? (nope)
+   Han gav en krans till dem som dog.
+** Regel
+category regel {
+info("regel")
+link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
+}
+
+pp_foljd_av_sub@regel {
+X(wordcl=pp),
+Y(pnf=sub)
+-->
+mark(X Y)
+corr(Y.form(pnf:=obj))
+info("Subjektsform efter preposition.")
+action(scrutinizing)
+}
+  
+sub_jj_sub@regel {
+X(wordcl=vb),
+Y(wordcl=pn & pnf=sub)
+-->
+mark(X Y)
+corr(Y.form(pnf:=obj))
+info("Subjektsform i objektplacering rel verb.")
+action(scrutinizing)
+}
+* Deluppgift 4: Dubbelsupinum
+** Exempeltext
+   Jag har inte kunnat sovit på hela veckan. Han har inte hunnit åkt skidor en enda gång i år. 
+** Extra exempel
+   Han hade kunnat lagat bilen tidigare. 
+** Regel
+category regel {
+info("regel")
+link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
+}
+
+dubbelsupinum@regel {
+X(wordcl=vb & vbf=sup),
+Y(wordcl=vb & vbf=sup)
+-->
+mark(X Y)
+info("Dubbel supinum.")
+corr(Y.form(vbf:=inf))
+action(scrutinizing)
+}
+* Deluppgift 5: Kommer utan att
