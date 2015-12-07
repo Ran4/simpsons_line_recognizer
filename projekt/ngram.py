@@ -72,12 +72,15 @@ def calculateNGramsForCharacters(replik, n, verbose, overrideMinCount=None):
             for ngram in generateNGramsForLine(line, n):
                 ngramCounter[ngram] += 1
                 
-        removeItemsUnderCount(ngramCounter, minCount)
-        #print "Most common n-grams: ",
+        if minCount:
+            removeItemsUnderCount(ngramCounter, minCount)
+        print "Most common n-grams: ",
         sortedItems = sorted(ngramCounter.items(),
                 key=lambda x: x[1], reverse=True)
-        if verbose:
+        if verbose == 2:
             print " ".join(["%s(%s)" % item for item in sortedItems])
+        elif verbose:
+            print " ".join(["%s(%s)" % item for item in sortedItems[:5]]) + ".."
         #pprint.pprint(ngramCounter)
         
         nGrams[name] = ngramCounter

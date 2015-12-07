@@ -1,8 +1,12 @@
+#encoding: utf-8
 import os
 import pprint
 from collections import Counter
+import copy
 
 import ngram
+
+import matplotlib.pyplot as plt
 
 try:
     #pip install fuzzywuzzy
@@ -18,31 +22,26 @@ try:
 except: #Couldn't load termcolor, use a regular function instead
     def colored(*args):
         return args[0]
+    
+VERBOSE = 0
+PRINT_MERGES = False
 
 class replikIdentifier(object):
-    def __init__(self, verbose=True):
+    def __init__(self, fileNames, verbose=True):
         
         #self.MIN_REPLIK_OCCURANCE = 25
         self.MIN_REPLIK_OCCURANCE = 100
         self.MINWORDS_1GRAM = 1
-        self.ACCEPTED_LETTERS = "abcdefghijklmnopqrstuvwxyz' "
         self.DO_FIND_SIMILAR_CHARACTERS = False
         
         self.printLoadedFiles = False
-        self.printMerges = False
         self.printPrunedRepliker = False
         
         self.verbose = verbose
-        self.replik = {}
+        self.replik = loadFiles(fileNames)
         
-        fileNames = self.getFileNames()
-        for fileName in fileNames:
-            with open(fileName) as f:
-                lines = f.read().split("\n")
-                self.addReplikerToDict(lines, self.replik)
-            
-        self.fixCharacterNames(self.replik)
-            
+        fixCharacterNames(self.replik)
+        
         if process: #helper function, use this manually then change
                     #fixCharacterNames
             if self.verbose and self.DO_FIND_SIMILAR_CHARACTERS:
@@ -53,8 +52,15 @@ class replikIdentifier(object):
             if self.verbose:
                 print "Doesn't have fuzzywuzzy.process," + \
                         "won't find similar characters"
+                        
+        if not self.replik:
+            print colored("before pruneRepliker, replik is tom!", "red")
             
         self.pruneRepliker(self.replik)
+        
+        if not self.replik:
+            print colored("self.replik is tom!", "red")
+        
         if self.verbose:
             print ""
             self.printStatistics(self.replik)
@@ -65,90 +71,58 @@ class replikIdentifier(object):
         if self.verbose:
             print "\nStarting to calculate N-Gram statistics"
             
-        ngramDict = ngram.calculateNGrams(self.replik, self.verbose)
+        self.ngramDict = ngram.calculateNGrams(self.replik, self.verbose,
+                globalMinCount=0)
         
         #print "ngramDict", ngramDict
         
-        self.identifyString("mr burns is here", ngramDict)
+        #self.identifyString("mr burns is here", ngramDict)
+        #self.identifyString("hey dad bet you five bucks you can't eat the whole box", ngramDict)
         
-    def identifyString(self, s, ngramDict):
+        
+    def identifyString(self, s):
         """Takes a string s and returns which name is the most likely
         candidate to say this string.
+        
+        ex.
+        ratios == {
+            2:{'BART': 0.1231, 'HOMER': 0.93},
+            3:{'MARGE': 0.03}
+        }
         """
+        ratios = {}
+        ngramDict = self.ngramDict
         
         def getClosenessValue(s, n, name):
-            print "identifying with name", name
+            print "identifying with name", name,
+            occurances = 0
             for stringNgram in ngram.generateNGramsForLine(s, n):
-                print "ngram: '%s'. Count in %s: %s" % \
-                        (stringNgram, name, ngramDict[n][name][stringNgram])
+                #print "ngram: '%s'. Count in %s: %s" % \
+                #        (stringNgram, name, ngramDict[n][name][stringNgram])
                         
-            print "----"
+                occurances += ngramDict[n][name][stringNgram]
+            numNGrams = sum(ngramDict[n][name].values())
+            
+            if numNGrams:
+                ratio = occurances / float(numNGrams)
+            else:
+                ratio = 0.0
+                
+            ratio *= 1000
+                
+            #print "Ratio: %s ----" % ratio
+            return ratio
         
         print "Trying to identify '%s'" % s
         #counter = Counter()
         for n in ngramDict.keys():
+            ratios[n] = {}
             for name in ngramDict[n]:
-                getClosenessValue(
-    #{{{ Helper functions to merge characters with similar names
-    def fixCharacterNames(self, replik):
-        fromToList = [
-                ("REPORTER #2","REPORTER"),
-                ("REPORTER #1","REPORTER"),
-                ("GUARDS","GUARD"),
-                ("DR NICK","DR. NICK"),
-                ("MRS. KREBAPPEL","EDNA KRABAPPEL"),
-                ("MRS. KRABAPPEL","EDNA KRABAPPEL"),
-                ("EDNA KREBAPPEL","EDNA KRABAPPEL"),
-                ("HIBBERT","DR. HIBBERT"),
-                ("DR HIBBERT","DR. HIBBERT"),
-                ("MS HOOVER","MS. HOOVER"),
-                ("MEYER","MEYERS"),
-                ("MAN #1","MAN"),
-                ("MAN #2","MAN"),
-                ("MARTIN PRINCE, SR.","MARTIN PRINCE"),
-                ("ADVISOR 3","ADVISOR"),
-                ("ADVISOR 2","ADVISOR"),
-                ("EMPLOYEES","EMPLOYEE"),
-                ("TV ANNOUNCER","ANNOUNCER"),
-                ("FISHERMAN 1","FISHERMAN"),
-                ("FISHERMAN 2","FISHERMAN"),
-                ]
-        for fr, to in fromToList:
-            if self.verbose and self.printMerges:
-                print colored("Merging %s -> %s" % (fr, to), "cyan") + ",",
-            if to in replik.keys():
-                replik[to].extend(replik[fr])
-            else:
-                replik[to] = replik[fr]
-            del replik[fr]
-            if self.verbose and self.printMerges:
-                print "%s now has %s lines" % (to, len(replik[to]))
-            
-        if self.verbose and self.printMerges:
-            print "Fixing AND-names:"
-        #fix "BART AND LISA" -> "BART", "LISA"
-        for oldName in replik.keys():
-            if " AND " in oldName or "&" in oldName:
-                if " AND " in oldName:
-                    names = oldName.split(" AND ")
-                else:
-                    names = oldName.split("&")
+                ratio = getClosenessValue(s, n, name)
+                print ratio
+                ratios[n][name] = ratio
+        return ratios
                 
-                for newName in names:
-                    newName = newName.strip()
-                    if newName in replik.keys():
-                        replik[newName].extend(replik[oldName])
-                    else:
-                        replik[newName] = replik[oldName]
-                    
-                    if self.verbose and self.printMerges:
-                        print colored("Merging %s -> %s," % (oldName, newName),
-                                "cyan"),
-                        print "%s now has %s lines" % \
-                                (newName, len(replik[newName]))
-                            
-                del replik[oldName]
-
     def findSimilarCharacters(self, replik):
         #->[('New York Jets', 100), ('New York Giants', 78)]
         
@@ -202,36 +176,133 @@ class replikIdentifier(object):
         print ", ".join(
                 "%s %s" % (name, len(self.replik[name])) for name in sortedKeys)
 
-    def addReplikerToDict(self, lines, replik):
-        """Takes a number of raw lines, parses them and
-        adds them to a dictionary replik"""
-        name = None
-        for i, line in enumerate(lines):
-            if line.isupper() and not name:
-                name = line
-            elif name:
-                oldLine = line.strip()
-                line = oldLine.lower()
-                if line.startswith("(") and ")" in line:
-                    line = line[line.find(")")+1:].strip()
+def addReplikerToDict(lines, replik, verbose=VERBOSE):
+    """Takes a number of raw lines, parses them and
+    adds them to a dictionary replik"""
+    ACCEPTED_LETTERS = "abcdefghijklmnopqrstuvwxyz' "
+    name = None
+    for i, line in enumerate(lines):
+        if line.isupper() and not name:
+            name = line
+        elif name:
+            oldLine = line.strip()
+            line = oldLine.lower()
+            if line.startswith("(") and ")" in line:
+                line = line[line.find(")")+1:].strip()
+            
+            line = filter(lambda x: x in ACCEPTED_LETTERS, line)
+            while "  " in line:
+                line = line.replace("  ", " ")
                 
-                line = filter(lambda x: x in self.ACCEPTED_LETTERS, line)
-                while "  " in line:
-                    line = line.replace("  ", " ")
-                    
-                if self.verbose == 3:
-                    print "* %s\n  %s" % (oldLine, line)
+            if verbose == 3:
+                print "* %s\n  %s" % (oldLine, line)
+            
+            replik[name] = replik.get(name, []) + [line]
+            name = None
+            
+def fixCharacterNames(replik, verbose=VERBOSE, printMerges=PRINT_MERGES):
+    """in-place change of replik!"""
+    
+    fromToList = [
+            ("REPORTER #2","REPORTER"),
+            ("REPORTER #1","REPORTER"),
+            ("GUARDS","GUARD"),
+            ("DR NICK","DR. NICK"),
+            ("MRS. KREBAPPEL","EDNA KRABAPPEL"),
+            ("MRS. KRABAPPEL","EDNA KRABAPPEL"),
+            ("EDNA KREBAPPEL","EDNA KRABAPPEL"),
+            ("HIBBERT","DR. HIBBERT"),
+            ("DR HIBBERT","DR. HIBBERT"),
+            ("MS HOOVER","MS. HOOVER"),
+            ("MEYER","MEYERS"),
+            ("MAN #1","MAN"),
+            ("MAN #2","MAN"),
+            ("MARTIN PRINCE, SR.","MARTIN PRINCE"),
+            ("ADVISOR 3","ADVISOR"),
+            ("ADVISOR 2","ADVISOR"),
+            ("EMPLOYEES","EMPLOYEE"),
+            ("TV ANNOUNCER","ANNOUNCER"),
+            ("FISHERMAN 1","FISHERMAN"),
+            ("FISHERMAN 2","FISHERMAN"),
+            ]
+    for fr, to in fromToList:
+        if verbose and printMerges:
+            print colored("Merging %s -> %s" % (fr, to), "cyan") + ",",
+        if fr in replik.keys():
+            if to in replik.keys():
+                replik[to].extend(replik[fr])
+            else:
+                replik[to] = replik[fr]
+            del replik[fr]
+            if verbose and printMerges:
+                print "%s now has %s lines" % (to, len(replik[to]))
+        else:
+            #print "Couldn't find %s in fr" % fr
+            pass
+        
+    if verbose and printMerges:
+        print "Fixing AND-names:"
+    #fix "BART AND LISA" -> "BART", "LISA"
+    for oldName in replik.keys():
+        if " AND " in oldName or "&" in oldName:
+            if " AND " in oldName:
+                names = oldName.split(" AND ")
+            else:
+                names = oldName.split("&")
+            
+            for newName in names:
+                newName = newName.strip()
+                if newName in replik.keys():
+                    replik[newName].extend(replik[oldName])
+                else:
+                    replik[newName] = replik[oldName]
                 
-                replik[name] = replik.get(name, []) + [line]
-                name = None
+                if verbose and printMerges:
+                    print colored("Merging %s -> %s," % (oldName, newName),
+                            "cyan"),
+                    print "%s now has %s lines" % \
+                            (newName, len(replik[newName]))
+                        
+            del replik[oldName]
+
                 
-    def getFileNames(self):
-        fileNames = [os.path.join("episodes", fname)
-                for fname in os.listdir("episodes")]
-        if self.verbose and self.printLoadedFiles:
-            print "Loading these %s files: %s" % \
-                    (len(fileNames), str(fileNames))
-        return fileNames
+def loadFiles(fileNames):
+    replik = {}
+    for fileName in fileNames:
+        with open(fileName) as f:
+            lines = f.read().split("\n")
+            addReplikerToDict(lines, replik)
+    return replik
+        
+                
+def getFileNames(folderName, verbose):
+    fileNames = []
+    for fname in os.listdir(folderName):
+        fileNames.append(os.path.join(folderName, fname))
+    
+    if verbose:
+        print "Getting these %s files: %s" % \
+                (len(fileNames), str(fileNames))
+    return fileNames
 
 if __name__ == "__main__":
-    ri = replikIdentifier(verbose=2)
+    verbose = 1
+    fileNames = getFileNames("episodes", verbose)
+    
+    asdf = []
+    for i, fname in enumerate(fileNames):
+        newFileNames = copy.copy(fileNames)
+        validationFile = newFileNames.pop(i)
+        
+        ri = replikIdentifier(newFileNames, verbose=0)
+        
+        #stringToIdentify = "mr burns is here"
+        stringToIdentify = "hey dad bet you five bucks you can't eat the whole box"
+        ratios = ri.identifyString(stringToIdentify)
+        asdf.append(ratios[2]["BART"])
+        
+    xx = range(len(asdf))
+    #plt.title("Identifiering av strangen '%s' for karaktaren 'BART'" % stringToIdentify)
+    plt.title("Identifiering av strang for BART over olika 15 avsnitt")
+    plt.plot(xx, asdf)
+    plt.show()
