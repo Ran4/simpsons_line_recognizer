@@ -148,6 +148,8 @@ info("regel")
 link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
 }
 
+%ett ord följt av en preposition så att om orden 1 och 2 ihoplagda
+%(med hänsyn till bindningsbokstäver) finns så klassas ord 1,2 som en särskrivning
 naiv_sarskrivning@regel {
 X(),
 Y(spell_OK(smart_concat(X.text, Y.text), X.token))
@@ -167,6 +169,7 @@ info("regel")
 link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
 }
 
+%preposition och ett (pronomenform) subjekt
 pp_foljd_av_sub@regel {
 X(wordcl=pp),
 Y(pnf=sub)
@@ -177,6 +180,7 @@ info("Subjektsform efter preposition.")
 action(scrutinizing)
 }
   
+%verb följt av ett pronomen i subjektform
 sub_jj_sub@regel {
 X(wordcl=vb),
 Y(wordcl=pn & pnf=sub)
@@ -197,6 +201,7 @@ info("regel")
 link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
 }
 
+%verb i subjektform följt av ett till verb i subjektform (dubbelsupinum!)
 dubbelsupinum@regel {
 X(wordcl=vb & vbf=sup),
 Y(wordcl=vb & vbf=sup)
