@@ -26,7 +26,7 @@
 * Deluppgift 2: Fasta uttryck
 ** Exempeltext
    Lottas krog är ett trevligt ställe, för utom menyn som innehåller många felaktiga särskrivningar. Härom dagen gick jag till baka och sa vad jag tyckte rentut. I bland blir det fel i menyn, såpass många som härom kvällen är dock ovanligt, förklarar en föredetta anställd. 
-** Naiv regel
+** Naiv regel (fel sorts särskrivning)
 category regel {
 info("regel")
 link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
@@ -40,7 +40,7 @@ mark(X Y)
 corr(X.join(Y.text))
 action(scrutinizing)
 }
-** Något mindre naiv regel
+** Något mindre naiv regel (fel sorts särskrivning)
 category regel {
 info("regel")
 link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
@@ -77,6 +77,85 @@ action(scrutinizing)
 *** Fel
     "fel i" blir "feli"
 
+** Bättre?
+category regel {
+info("regel")
+link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
+}
+
+naiv_sarskrivning@regel {
+X(wordcl = ab | wordcl = pp),
+Y(wordcl=pp)
+-->
+mark(X Y)
+corr(X.join(Y.text))
+action(scrutinizing)
+}
+*** Rätt rätt
+Två rätt på exempelmeningarna.
+*** Falsk positiv
+Inga på exempelmeningarna, men många kan nog tänkas.
+*** Missar
+"till baka"
+** Ännu bättre?
+category regel {
+info("regel")
+link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
+}
+
+naiv_sarskrivning@regel {
+X(wordcl != jj),
+Y(wordcl=pp)
+-->
+mark(X Y)
+corr(X.join(Y.text))
+action(scrutinizing)
+}
+*** Denna missar också "till baka"
+** Naiv regel med spell_OK
+category regel {
+info("regel")
+link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
+}
+
+naiv_sarskrivning@regel {
+X(),
+Y(wordcl=pp & spell_OK(smart_concat(X.text, Y.text), X.token))
+-->
+mark(X Y)
+corr(X.join(Y.text))
+action(scrutinizing)
+}
+
+** Ett misslyckat försök att få med "till baka"
+category regel {
+info("regel")
+link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
+}
+
+naiv_sarskrivning@regel {
+X(wordcl=ab | wordcl=pp),
+Y((wordcl=pp | wordcl=vb)& spell_OK(smart_concat(X.text, Y.text), X.token))
+-->
+mark(X Y)
+corr(X.join(Y.text))
+action(scrutinizing)
+}
+
+** Ett mer lyckat(?) försök
+category regel {
+info("regel")
+link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
+}
+
+naiv_sarskrivning@regel {
+X(),
+Y(wordcl=pp & spell_OK(smart_concat(X.text, Y.text), X.token))
+-->
+mark(X Y)
+corr(X.join(Y.text))
+action(scrutinizing)
+}
 * Deluppgift 3: Subjektsform efter preposition
 ** Exempeltext
    Han ondgör sig över de som skriver subjektsform efter preposition. Dom gav en present till han på födelsedan. De frågade han om han hade en tändsticka. 
@@ -128,3 +207,43 @@ corr(Y.form(vbf:=inf))
 action(scrutinizing)
 }
 * Deluppgift 5: Kommer utan att
+** Exempeltext
+    Han kommer lista ut svaret på gåtan. Nä, han kommer inte göra det. Kommer han inte göra det? Den man som kommer gillar jag inte. 
+** Regel
+category regel {
+info("regel")
+link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelregel.txt" "exempelregel")
+}
+
+kommer@regel {
+X(text="kommer"),
+Y(wordcl=vb & vbf=inf)
+-->
+mark(X Y)
+corr(Y.insert("att"))
+info("Kommer utan att.")
+action(scrutinizing)
+}
+
+kommer_neg@regel {
+X(text="kommer"),
+Y(text="inte" | text="ej"),
+Z(wordcl=vb & vbf=inf)
+-->
+mark(X Y Z)
+corr(Z.insert("att"))
+info("Kommer utan att.")
+action(scrutinizing)
+}
+
+kommer_pn_neg@regel { % frageform
+X(text="kommer"),
+Y(wordcl=pn & pnf=sub), % sub, annars ju grammatiskt fel ()
+Z(text="inte" | text="ej"),
+W(wordcl=vb & vbf=inf)
+-->
+mark(X Y Z)
+corr(W.insert("att"))
+info("Kommer utan att.")
+action(scrutinizing)
+}
