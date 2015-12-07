@@ -75,22 +75,20 @@ class replikIdentifier(object):
         """Takes a string s and returns which name is the most likely
         candidate to say this string.
         """
+        
+        def getClosenessValue(s, n, name):
+            print "identifying with name", name
+            for stringNgram in ngram.generateNGramsForLine(s, n):
+                print "ngram: '%s'. Count in %s: %s" % \
+                        (stringNgram, name, ngramDict[n][name][stringNgram])
+                        
+            print "----"
+        
+        print "Trying to identify '%s'" % s
         #counter = Counter()
         for n in ngramDict.keys():
-            
-            print "ngramDict[n]['HOMER']:", ngramDict[n]["HOMER"]
-            print "ngramDict[n]['HOMER']['mr burns']:",
-            print ngramDict[n]["HOMER"]["mr burns"]
-            
             for name in ngramDict[n]:
-                print "identifying with name", name
-                for stringNgram in ngram.generateNGramsForLine(s, n):
-                    
-                    print "ngram: '%s'. Count in %s: %s" % \
-                            (stringNgram, name, ngramDict[n][name][ngram])
-                            
-                print "----"
-    
+                getClosenessValue(
     #{{{ Helper functions to merge characters with similar names
     def fixCharacterNames(self, replik):
         fromToList = [
