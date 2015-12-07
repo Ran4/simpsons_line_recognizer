@@ -4,7 +4,7 @@ from termcolor import colored
 
 import replikidentifier
 
-def calculateNGrams(replik, verbose, globalMinCount=None):
+def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2]):
     """Calculates N-grams for a dict of lines replik
     Returns a dict with key = n, value = an ngrams dict
     {
@@ -12,7 +12,7 @@ def calculateNGrams(replik, verbose, globalMinCount=None):
     }
     """
     #NValues = [1,2,3,4,5,6,7]
-    NValues = [2]
+    #NValues = [2]
     
     ngramDict = {}
     for n in NValues:
@@ -74,13 +74,15 @@ def calculateNGramsForCharacters(replik, n, verbose, overrideMinCount=None):
                 
         if minCount:
             removeItemsUnderCount(ngramCounter, minCount)
-        print "Most common n-grams: ",
         sortedItems = sorted(ngramCounter.items(),
                 key=lambda x: x[1], reverse=True)
-        if verbose == 2:
-            print " ".join(["%s(%s)" % item for item in sortedItems])
-        elif verbose:
-            print " ".join(["%s(%s)" % item for item in sortedItems[:5]]) + ".."
+        
+        if verbose:
+            print "Most common n-grams: ",
+            if verbose == 2:
+                print " ".join(["%s(%s)" % item for item in sortedItems])
+            else:
+                print " ".join(["%s(%s)" % item for item in sortedItems[:5]]) + ".."
         #pprint.pprint(ngramCounter)
         
         nGrams[name] = ngramCounter
@@ -96,4 +98,4 @@ def generateNGramsForLine(line, n):
 if __name__ == "__main__":
     calculateNGrams(
             {"TEST":["hej du", "hopp hej med jurtman"]},
-            verbose=2, globalMinCount=0)
+            verbose=2, globalMinCount=0, NValues=[2])

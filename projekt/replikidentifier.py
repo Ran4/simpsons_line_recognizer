@@ -3,6 +3,7 @@ import os
 import pprint
 from collections import Counter
 import copy
+import time
 
 import ngram
 
@@ -27,10 +28,12 @@ VERBOSE = 1
 PRINT_MERGES = False
 
 class replikIdentifier(object):
-    def __init__(self, fileNames, verbose=VERBOSE):
+    def __init__(self, fileNames, verbose=VERBOSE, minReplikOccurance=100,
+            NValues=[2]):
         
         #self.MIN_REPLIK_OCCURANCE = 25
-        self.MIN_REPLIK_OCCURANCE = 100
+        self.minReplikOccurance = minReplikOccurance
+        #self.MIN_REPLIK_OCCURANCE = 1
         self.MINWORDS_1GRAM = 1
         self.DO_FIND_SIMILAR_CHARACTERS = False
         
@@ -72,7 +75,7 @@ class replikIdentifier(object):
             print "\nStarting to calculate N-Gram statistics"
             
         self.ngramDict = ngram.calculateNGrams(self.replik, self.verbose,
-                globalMinCount=0)
+                globalMinCount=0, NValues=NValues)
         
         #print "ngramDict", ngramDict
         
@@ -94,7 +97,7 @@ class replikIdentifier(object):
         ngramDict = self.ngramDict
         
         def getClosenessValue(s, n, name):
-            print "identifying with name", name,
+            #print "identifying with name", name,
             occurances = 0
             for stringNgram in ngram.generateNGramsForLine(s, n):
                 #print "ngram: '%s'. Count in %s: %s" % \
@@ -113,13 +116,13 @@ class replikIdentifier(object):
             #print "Ratio: %s ----" % ratio
             return ratio
         
-        print "Trying to identify '%s'" % s
+        #print "Trying to identify '%s'" % s
         #counter = Counter()
         for n in ngramDict.keys():
             ratios[n] = {}
             for name in ngramDict[n]:
                 ratio = getClosenessValue(s, n, name)
-                print ratio
+                #print ratio
                 ratios[n][name] = ratio
         return ratios
                 
@@ -145,7 +148,7 @@ class replikIdentifier(object):
     def pruneRepliker(self, replik):
         prunedNames = []
         for name in replik.keys():
-            if len(replik[name]) < self.MIN_REPLIK_OCCURANCE:
+            if len(replik[name]) < self.minReplikOccurance:
                 del replik[name]
                 prunedNames.append(name)
         if self.verbose and self.printPrunedRepliker:
@@ -155,7 +158,7 @@ class replikIdentifier(object):
                 prunedNamesString = ", ".join(prunedNames[:10]) + "..."
             
             print "Pruned %s names with less than %s lines: %s" % \
-                    (len(prunedNames), self.MIN_REPLIK_OCCURANCE,
+                    (len(prunedNames), self.minReplikOccurance,
                             prunedNamesString)
         
     def printStatistics(self, replik):
@@ -285,7 +288,7 @@ def getFileNames(folderName, verbose=VERBOSE):
                 (len(fileNames), str(fileNames))
     return fileNames
 
-def bartfart():    
+def bartControl():
     verbose = 1
     fileNames = getFileNames("episodes", verbose)
     
@@ -294,7 +297,7 @@ def bartfart():
         newFileNames = copy.copy(fileNames)
         validationFile = newFileNames.pop(i)
         
-        ri = replikIdentifier(newFileNames, verbose=0)
+        ri = replikIdentifier(newFileNames, verbose=0, minReplikOccurance=100)
         
         #stringToIdentify = "mr burns is here"
         stringToIdentify = "hey dad bet you five bucks you can't eat the whole box"
@@ -306,11 +309,91 @@ def bartfart():
     plt.title("Identifiering av strang for BART over olika 15 avsnitt")
     plt.plot(xx, asdf)
     plt.show()
-
+    
+def validateAllLines():
+    def getKeyWithBiggestValue(d):
+        keyWithBiggestValue = None
+        for key in d:
+            if keyWithBiggestValue is None or d[key] > d[keyWithBiggestValue]:
+                keyWithBiggestValue = key
+        return keyWithBiggestValue
+        
+    def getMostLikelySpeakerPerNGram(ri, name, line):
+        """Takes a ri object and returns a dictionary of n values, with
+        each value holding a tuple being the most likely speaker and
+        a value representing how good the match was.
+        
+        E.g. {2: ("HOMER", 0.314)}"""
+        ratios = ri.identifyString(line)
+        bestMatches = {}
+        
+        for n in ri.ngramDict.keys():
+            bestNameMatch = getKeyWithBiggestValue(ratios[n])
+            bestMatches[n] = (bestNameMatch, ratios[n][bestNameMatch])
+            
+        return bestMatches
+    
+    def checkLinesForCharacter(ri, validationRI, name, n):
+        numCorrect = 0
+        for line in validationRI.replik[name]:
+            ngramsForLine = ngram.generateNGramsForLine(line, n)
+            
+            bestNameMatchCount = Counter()
+            
+            for ngramForLine in ngramsForLine:
+                bestMatches = getMostLikelySpeakerPerNGram(
+                        ri, name, ngramForLine)
+                
+                for n in NValues:
+                    bestNameMatch, value = bestMatches[n]
+                    bestNameMatchCount[bestNameMatch] += 1
+                
+            if not bestNameMatchCount:
+                print "No guess found for line '%s'" % line
+                continue
+                    
+            finalGuess, count = bestNameMatchCount.most_common(1)[0]
+            correctRatio = count / float(sum(bestNameMatchCount.values()))
+            isCorrect = finalGuess == name
+            if isCorrect:
+                numCorrect += 1
+            
+            print colored("%s: '%s' (%.2f for %s) %s" % \
+                    (name, line, correctRatio, finalGuess,
+                        "" if isCorrect else "FAIL"),
+                    "green" if isCorrect else "red")
+    
+    verbose = 1
+    NValues = [2]
+    fileNames = getFileNames("episodes", verbose)
+    for i, fname in enumerate(fileNames):
+        if i != 4: #TODO: later, check for all files
+            continue
+        
+        print colored("Checking file %s" % fname, "cyan")
+        
+        newFileNames = copy.copy(fileNames)
+        validationFile = newFileNames.pop(i)
+        
+        print "Creating ri"
+        ri = replikIdentifier(newFileNames, verbose=0, minReplikOccurance=100,
+                NValues=NValues)
+        print "Creating validationRI"
+        validationRI = replikIdentifier([validationFile], verbose=0,
+                minReplikOccurance=5, NValues=NValues)
+        
+        n = 2
+        for name in validationRI.ngramDict[n].keys():
+            print colored("Checking all lines by %s" % name, "cyan")
+            checkLinesForCharacter(ri, validationRI, name, n)
 
 if __name__ == "__main__":
     fileNames = getFileNames("episodes")
     
+    #bartControl()
+    validateAllLines()
+    
+    """
     for i, fname in enumerate(fileNames):
         newFileNames = copy.copy(fileNames)
         validationFile = newFileNames.pop(i)
@@ -321,3 +404,4 @@ if __name__ == "__main__":
         fixCharacterNames(validationSet)
         
         # TODO: here check how correctly ri can identify the characters' lines in validationSet
+    """
