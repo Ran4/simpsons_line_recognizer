@@ -285,7 +285,7 @@ def getFileNames(folderName, verbose):
                 (len(fileNames), str(fileNames))
     return fileNames
 
-if __name__ == "__main__":
+def bartfart():    
     verbose = 1
     fileNames = getFileNames("episodes", verbose)
     
@@ -306,3 +306,19 @@ if __name__ == "__main__":
     plt.title("Identifiering av strang for BART over olika 15 avsnitt")
     plt.plot(xx, asdf)
     plt.show()
+
+
+if __name__ == "__main__":
+    verbose = 1
+    fileNames = getFileNames("episodes", verbose)
+    
+    for i, fname in enumerate(fileNames):
+        newFileNames = copy.copy(fileNames)
+        validationFile = newFileNames.pop(i)
+        
+        ri = replikIdentifier(newFileNames, verbose=0)
+
+        validationSet = loadFiles([validationFile])
+        fixCharacterNames(validationSet)
+        
+        # TODO: here check how correctly ri can identify the characters' lines in validationSet
