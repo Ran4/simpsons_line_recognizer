@@ -150,7 +150,7 @@ link("http://www.nada.kth.se/kurser/kth/2D1418/laborationer00/granska/exempelreg
 
 naiv_sarskrivning@regel {
 X(),
-Y(wordcl=pp & spell_OK(smart_concat(X.text, Y.text), X.token))
+Y(spell_OK(smart_concat(X.text, Y.text), X.token))
 -->
 mark(X Y)
 corr(X.join(Y.text))
