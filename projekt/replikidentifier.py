@@ -23,11 +23,11 @@ except: #Couldn't load termcolor, use a regular function instead
     def colored(*args):
         return args[0]
     
-VERBOSE = 0
+VERBOSE = 1
 PRINT_MERGES = False
 
 class replikIdentifier(object):
-    def __init__(self, fileNames, verbose=True):
+    def __init__(self, fileNames, verbose=VERBOSE):
         
         #self.MIN_REPLIK_OCCURANCE = 25
         self.MIN_REPLIK_OCCURANCE = 100
@@ -275,7 +275,7 @@ def loadFiles(fileNames):
     return replik
         
                 
-def getFileNames(folderName, verbose):
+def getFileNames(folderName, verbose=VERBOSE):
     fileNames = []
     for fname in os.listdir(folderName):
         fileNames.append(os.path.join(folderName, fname))
@@ -309,14 +309,13 @@ def bartfart():
 
 
 if __name__ == "__main__":
-    verbose = 1
-    fileNames = getFileNames("episodes", verbose)
+    fileNames = getFileNames("episodes")
     
     for i, fname in enumerate(fileNames):
         newFileNames = copy.copy(fileNames)
         validationFile = newFileNames.pop(i)
         
-        ri = replikIdentifier(newFileNames, verbose=0)
+        ri = replikIdentifier(newFileNames)
 
         validationSet = loadFiles([validationFile])
         fixCharacterNames(validationSet)
