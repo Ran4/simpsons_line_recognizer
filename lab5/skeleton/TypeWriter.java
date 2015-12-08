@@ -32,70 +32,70 @@ public class TypeWriter extends JFrame implements KeyListener {
 
     /* Set up the GUI */
     public TypeWriter() {
-	setSize( 600, 350 );
-	inputWindow.setFont( coorFont );
-	inputWindow.addKeyListener( this );
-	outputWindow.setFont( coorFont );
-	decodeWindow.setFont( coorFont );
-	JPanel p = new JPanel();
-	p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-	p.add( inputPane );
-	p.add( outputPane );
-	p.add( decodePane );
-	JPanel b = new JPanel();
-	b.setLayout(new BoxLayout(b, BoxLayout.X_AXIS));
-	b.add( clearBut );
-	b.add( decodeBut );
-	p.add( b );
-	getContentPane().add(p, BorderLayout.CENTER);
-	setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-	setVisible( true );
-	setTitle( "Random Typewriter" );
+        setSize( 600, 350 );
+        inputWindow.setFont( coorFont );
+        inputWindow.addKeyListener( this );
+        outputWindow.setFont( coorFont );
+        decodeWindow.setFont( coorFont );
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.add( inputPane );
+        p.add( outputPane );
+        p.add( decodePane );
+        JPanel b = new JPanel();
+        b.setLayout(new BoxLayout(b, BoxLayout.X_AXIS));
+        b.add( clearBut );
+        b.add( decodeBut );
+        p.add( b );
+        getContentPane().add(p, BorderLayout.CENTER);
+        setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        setVisible( true );
+        setTitle( "Random Typewriter" );
 
-	/** Create the decoder. */
-	final Decoder d = new Decoder( STATSFILE );
+        /** Create the decoder. */
+        final Decoder d = new Decoder( STATSFILE );
 
-	/** Handle a click on the "Clear All" button. */
-	Action clear = new AbstractAction() {
-		public void actionPerformed( ActionEvent e ) {
-		    inputWindow.setText( "" );
-		    outputWindow.setText( "" );
-		    decodeWindow.setText( "" );
-		}
-	    };
-	clearBut.addActionListener( clear );
+        /** Handle a click on the "Clear All" button. */
+        Action clear = new AbstractAction() {
+                public void actionPerformed( ActionEvent e ) {
+                    inputWindow.setText( "" );
+                    outputWindow.setText( "" );
+                    decodeWindow.setText( "" );
+                }
+            };
+        clearBut.addActionListener( clear );
 
-	/** Handle a click on the "Decode" button. */
-	Action decode = new AbstractAction() {
-		public void actionPerformed( ActionEvent e ) {
-		    String original = inputWindow.getText();
-		    String scrambled = outputWindow.getText();
-		    // First add a end-of-string symbol at the end
-		    String s = scrambled + RandomKey.indexToChar( RandomKey.START_END );
-		    // Then decode the scrambled string
-		    String decoded = d.viterbi( s );
-		    // Compute the quality of the result 
-		    int baseline = compare( original, scrambled );
-		    int result = compare( original, decoded );
-		    outputWindow.append( " (" + baseline + "%)" );
-		    decodeWindow.setText( decoded + " (" + result + "%)" );
-		}
-	    };
-	decodeBut.addActionListener( decode );
+        /** Handle a click on the "Decode" button. */
+        Action decode = new AbstractAction() {
+                public void actionPerformed( ActionEvent e ) { 
+                    String original = inputWindow.getText();
+                    String scrambled = outputWindow.getText();
+                    // First add a end-of-string symbol at the end
+                    String s = scrambled + RandomKey.indexToChar( RandomKey.START_END );
+                    // Then decode the scrambled string
+                    String decoded = d.viterbi( s );
+                    // Compute the quality of the result 
+                    int baseline = compare( original, scrambled );
+                    int result = compare( original, decoded );
+                    outputWindow.append( " (" + baseline + "%)" );
+                    decodeWindow.setText( decoded + " (" + result + "%)" );
+                }
+            };
+        decodeBut.addActionListener( decode );
     }
 
     /** Handle the key typed event from the text field. */
     public void keyTyped(KeyEvent e) {
-	if ( e.getKeyChar() == 8 ) {
-	    // Backspace
-	    String s = outputWindow.getText();
-	    if ( s.length() > 0 ) {
-		outputWindow.setText( s.substring( 0, s.length()-1 ));
-	    }
-	} 
-	else {
-	    outputWindow.append( rand.keyPress( e.getKeyChar() ) + "" );
-	}
+        if ( e.getKeyChar() == 8 ) {
+            // Backspace
+            String s = outputWindow.getText();
+            if ( s.length() > 0 ) {
+                outputWindow.setText( s.substring( 0, s.length()-1 ));
+            }
+        } 
+        else {
+            outputWindow.append( rand.keyPress( e.getKeyChar() ) + "" );
+        }
     }
      
     /** Handle the key pressed event from the text field. */
@@ -109,24 +109,24 @@ public class TypeWriter extends JFrame implements KeyListener {
     //---------------------------
 
     int compare( String s1, String s2 ) {
-	int match = 0;
-	int non_space = 0;
-	for ( int i=0; i<s1.length() && i<s2.length(); i++ ) {
-	    if ( s1.charAt(i) != ' ' ) {
-		non_space++;
-		if ( s1.charAt(i) == s2.charAt(i) ) {
-		    match++;
-		}
-	    }
-	}
-	if ( non_space == 0 )
-	    return 0;
-	else
-	    return 100*match/non_space;
+        int match = 0;
+        int non_space = 0;
+        for ( int i=0; i<s1.length() && i<s2.length(); i++ ) {
+            if ( s1.charAt(i) != ' ' ) {
+                non_space++;
+                if ( s1.charAt(i) == s2.charAt(i) ) {
+                    match++;
+                }
+            }
+        }
+        if ( non_space == 0 )
+            return 0;
+        else
+            return 100*match/non_space;
     }
 
 
     public static void main( String[] args ) {
-	new TypeWriter();
+        new TypeWriter();
     }
 }

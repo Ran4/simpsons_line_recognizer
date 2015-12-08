@@ -22,7 +22,7 @@ Om vi ser strängen "qööq", vilket svenskt ord har antagligen skrivits in, giv
 modellen och bigramsstatistiken för svenska som finns i filen "bigramstats.txt"? Rita upp grafen
 (trellis) för strängen "qööq" och förklara.
 
-* ???
+* alla
 
 # Uppgift 4: Komplettera Java-koden i klassen Decoder.java (leta efter "YOUR CODE HERE"), så att
 klassen korrekt implementerar Viterbi-algoritmen. Tips: Implementationen håller sig nära
