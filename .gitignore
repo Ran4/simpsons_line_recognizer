@@ -3,5 +3,6 @@
 *.swo
 *.res
 *.pyc
+*.class
 
 temp_report.pdf
