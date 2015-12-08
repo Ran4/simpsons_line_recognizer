@@ -71,9 +71,9 @@ public class RandomKey {
     static int charToIndex( char c ) {
 	if ( c>='a' && c<='z' )
 	    return c-'a';
-	else if ( c == 246 ) 
+	else if ( c == 246 )
 	    return 26;
-	else if ( c == 228 ) 
+	else if ( c == 228 )
 	    return 27;
 	else if ( c == 229 )
 	    return 28;
@@ -85,17 +85,18 @@ public class RandomKey {
     static char indexToChar( int i ) {
 	if ( i < key.length )
 	    return key[i];
-	else 
+	else
 	    return '.';
     }
 
+    //Simulate pressing key c, returns what key we pressed (c or any key around it)
     char keyPress( char c ) {
 	int index = charToIndex( c );
-	if ( index == START_END ) 
+	if ( index == START_END )
 	    return c;
 	else {
 	    int r = random.nextInt( 10 );
-	    if ( r<neighbour[index].length )
+	    if (r < neighbour[index].length)
 		return neighbour[index][r];
 	    else
 		return c;

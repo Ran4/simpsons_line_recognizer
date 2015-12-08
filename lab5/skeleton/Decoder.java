@@ -14,7 +14,7 @@ public class Decoder {
      * time step. */
     double[][] v;
 
-    /** The bigram stats. */ 
+    /** The bigram stats. */
     double[][] a = new double[RandomKey.NUMBER_OF_CHARS][RandomKey.NUMBER_OF_CHARS];
 
     /** The observation matrix. */
@@ -40,10 +40,10 @@ public class Decoder {
 	}
     }
 
-    /** 
+    /**
      *  Initializes the observation matrix.
      *  Note that the 'neighbour' matrix really encodes
-     *  p(shown=x|pressed=y), whereas we are interested 
+     *  p(shown=x|pressed=y), whereas we are interested
      *  in p(pressed=y|shown=x). For the random typewriter
      *  application, it happens to be the same thing. But,
      *  as a word of caution, it might not be in other
@@ -67,12 +67,12 @@ public class Decoder {
 
     /**
      *  Performs the Viterbi decoding and returns the most likely
-     *  string. 
+     *  string.
      */
     String viterbi( String s ) {
 
-	// First turn chars to integers, so that 'a' is represented by 0, 
-	// 'b' by 1, and so on. 
+	// First turn chars to integers, so that 'a' is represented by 0,
+	// 'b' by 1, and so on.
 	int[] index = new int[s.length()];
 	for ( int i=0; i<s.length(); i++ ) {
 	    index[i] = RandomKey.charToIndex( s.charAt( i ));
@@ -100,14 +100,14 @@ public class Decoder {
 	    if ( m > best_prob ) {
 		best_prob = m;
 		last_backptr = j;
-	    } 
+	    }
 	}
 	    
 	// Finally return the result
 	char[] c = new char[index.length];
 	int current = last_backptr;
 	for ( int t=index.length-1; t>=0; t-- ) {
-	    if ( current >= RandomKey.key.length ) 
+	    if ( current >= RandomKey.key.length )
 		c[t] = ' ';
 	    else
 		c[t] = RandomKey.key[current];
@@ -119,7 +119,7 @@ public class Decoder {
 
 
     // ------------------------------------------------------
-    // 
+    //
     // Some debugging methods
     //
 
