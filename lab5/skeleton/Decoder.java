@@ -10,8 +10,7 @@ import java.io.*;
 
 public class Decoder {
 
-    /** The trellis used for Viterbi decoding. The first index is the
-     * time step. */
+    /** The trellis used for Viterbi decoding. The first index is the * time step. */
     double[][] v;
 
     /** The bigram stats. */
