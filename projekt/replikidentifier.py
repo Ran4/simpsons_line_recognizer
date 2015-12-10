@@ -396,9 +396,9 @@ def getMainChars(repliker, amount=5):
                       key=lambda x: x[1],
                       reverse=True))[0:amount]
     
-def mainCharPruner(repliker, amount=5):
+def mainCharPruner(repliker, amount=5, mainChars=None):
+    mainChars = mainChars or getMainChars(repliker, amount)
     repl = copy.copy(repliker)
-    mainChars = getMainChars(repl, amount)
     for key in repl.keys():
         if key not in mainChars:
             repl.pop(key)
@@ -407,11 +407,8 @@ def mainCharPruner(repliker, amount=5):
 def crossValidation(n=2):
     fileNames = getFileNames("episodes")
 
-    # mainChars = []
-    # repliker = loadFiles(fileNames)
-    # fixCharacterNames(repliker)
-    # mainChars = map(lambda x: x[0], sorted([(name, len(lines)) for (name, lines) in repliker.items()], key=lambda x: x[1], reverse=True))[0:5]
-    # print mainChars
+    repliker = fixCharacterNames(loadFiles(fileNames))
+    mainChars = getMainChars(repliker)  # need to determine who is main chars from all the data
     
     for i, fname in enumerate(fileNames):
         print "#########################%s, %s#########################" % (i, fname)
@@ -419,8 +416,8 @@ def crossValidation(n=2):
         newFileNames = copy.copy(fileNames)
         validationFile = newFileNames.pop(i)
 
-        trainingSet = mainCharPruner(fixCharacterNames(loadFiles(newFileNames)))
-        validationSet = mainCharPruner(fixCharacterNames(loadFiles([validationFile])))
+        trainingSet = mainCharPruner(fixCharacterNames(loadFiles(newFileNames)), mainChars=mainChars)
+        validationSet = mainCharPruner(fixCharacterNames(loadFiles([validationFile])), mainChars=mainChars)
 
         ri = replikIdentifier(trainingSet, NValues=[n])
 
