@@ -90,6 +90,30 @@ public class Decoder {
         // Induction step
 	
         // YOUR CODE HERE
+        // for (int t = 0; t < index.length; ++t) {
+        //     for (int ss = 0; ss < RandomKey.NUMBER_OF_CHARS; ++ss) {
+        //         for (int s_prim = 0; s_prim < RandomKey.NUMBER_OF_CHARS; ++s_prim) {
+        //             double new_score = v[t-1][ss] * a[s_prim][ss] * b[index[t-1]][s_prim];
+        //             if ((v[t][s_prim] == 0) || (new_score > v[t][s_prim])) {
+        //                 v[t][s_prim] = new_score;
+        //                 backptr[t][s_prim] = ss;
+        //             }
+        //         }
+        //     }
+        // }
+
+        for (int t = 0; t < index.length - 1; ++t) {
+            for (int ss = 0; ss < RandomKey.NUMBER_OF_CHARS; ++ss) {
+                for (int s_prim = 0; s_prim < RandomKey.NUMBER_OF_CHARS; ++s_prim) {
+                    double new_score = v[t][ss] + a[s_prim][ss] + b[index[t]][s_prim];
+                    if ((v[t+1][s_prim] == 0) || (new_score > v[t+1][s_prim])) {
+                        v[t+1][s_prim] = new_score;
+                        backptr[t+1][s_prim] = ss;
+                    }
+                }
+            }
+        }
+
 
         // Termination step
         double best_prob = Double.NEGATIVE_INFINITY;

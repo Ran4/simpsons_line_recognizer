@@ -23,6 +23,20 @@ modellen och bigramsstatistiken för svenska som finns i filen "bigramstats.txt"
 (trellis) för strängen "qööq" och förklara.
 
 * alla
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+|
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a 
+|
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a 
+|
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a 
+|
+--------------------------------------------------------
+                                                        |
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a 
+                                                        |
+                                                        --
+                                                          |
 
 # Uppgift 4: Komplettera Java-koden i klassen Decoder.java (leta efter "YOUR CODE HERE"), så att
 klassen korrekt implementerar Viterbi-algoritmen. Tips: Implementationen håller sig nära
