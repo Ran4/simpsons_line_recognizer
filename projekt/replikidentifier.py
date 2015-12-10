@@ -422,7 +422,8 @@ def crossValidation(n=2):
         ri = replikIdentifier(trainingSet, NValues=[n])
 
         # here check how correctly ri can identify the characters' lines in validationSet
-        confusion_matrix = dict(zip(mainChars, [[[0,0],[0,0]]*len(mainChars)))
+        # confusion_matrix = dict(zip(mainChars, [[[0,0],[0,0]]*len(mainChars)))
+        confusion_matrix = dict(zip(mainChars, [dict(zip(mainChars, [0]*len(mainChars)))]*len(mainChars)))
         for (name, lines) in validationSet.items():
             print "---Name: ", name
             for line in lines:
