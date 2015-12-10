@@ -38,6 +38,23 @@ a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a
                                                         --
                                                           |
 
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+|
+----------------------
+                      |
+a a a a a a a a a a a a a a a a a a a a a a a a a a a w a a 
+                      |
+a a a a a a a a a a a l a a a p a a a a a a a a a a l l p a 
+                      |
+----------------------
+|
+l a a a a a a a a a a a a a a a l a a a a a l a a a a a a a 
+|
+----------------------------------------------------------
+                                                          |
+a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a 
+                                                          |
+
 # Uppgift 4: Komplettera Java-koden i klassen Decoder.java (leta efter "YOUR CODE HERE"), så att
 klassen korrekt implementerar Viterbi-algoritmen. Tips: Implementationen håller sig nära
 pseudokoden i boken (s 220). En skillnad är att boken räknar sina tidssteg från 1 och uppåt, medan

@@ -102,18 +102,32 @@ public class Decoder {
         //     }
         // }
 
-        for (int t = 0; t < index.length - 1; ++t) {
+        // // fungerar typ
+        // for (int t = 0; t < index.length - 1; ++t) {
+        //     for (int ss = 0; ss < RandomKey.NUMBER_OF_CHARS; ++ss) {
+        //         for (int s_prim = 0; s_prim < RandomKey.NUMBER_OF_CHARS; ++s_prim) {
+        //             double new_score = v[t][ss] + a[ss][s_prim] + b[index[t]][s_prim];
+        //             if ((v[t+1][s_prim] == 0) || (new_score > v[t+1][s_prim])) {
+        //                 v[t+1][s_prim] = new_score;
+        //                 backptr[t+1][s_prim] = ss;
+        //             }
+        //         }
+        //     }
+        // }
+
+        for (int t = 1; t < index.length; ++t) {
             for (int ss = 0; ss < RandomKey.NUMBER_OF_CHARS; ++ss) {
                 for (int s_prim = 0; s_prim < RandomKey.NUMBER_OF_CHARS; ++s_prim) {
-                    double new_score = v[t][ss] + a[ss][s_prim] + b[index[t]][s_prim];
-                    if ((v[t+1][s_prim] == 0) || (new_score > v[t+1][s_prim])) {
-                        v[t+1][s_prim] = new_score;
-                        backptr[t+1][s_prim] = ss;
+                    double new_score = v[t-1][ss] + a[ss][s_prim] + b[index[t]][s_prim];
+                    if ((v[t][s_prim] == 0) || (new_score > v[t][s_prim])) {
+                        v[t][s_prim] = new_score;
+                        backptr[t][s_prim] = ss;
                     }
                 }
             }
         }
 
+        
         // for (int t = 1; t < index.length; ++t) {
         //     for (int ss = 0; ss < RandomKey.NUMBER_OF_CHARS; ++ss) {
         //         for (int s_prim = 0; s_prim < RandomKey.NUMBER_OF_CHARS; ++s_prim) {
