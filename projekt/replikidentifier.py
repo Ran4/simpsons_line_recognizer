@@ -24,11 +24,11 @@ except: #Couldn't load termcolor, use a regular function instead
     def colored(*args):
         return args[0]
     
-VERBOSE = 1
+VERBOSE = 0
 PRINT_MERGES = False
 
 class replikIdentifier(object):
-    def __init__(self, fileNames, verbose=VERBOSE, minReplikOccurance=100,
+    def __init__(self, replik, verbose=VERBOSE, minReplikOccurance=100,
             NValues=[2]):
         
         #self.MIN_REPLIK_OCCURANCE = 25
@@ -41,9 +41,10 @@ class replikIdentifier(object):
         self.printPrunedRepliker = False
         
         self.verbose = verbose
-        self.replik = loadFiles(fileNames)
-        
-        fixCharacterNames(self.replik)
+        # self.replik = loadFiles(fileNames)
+        # fixCharacterNames(self.replik)
+
+        self.replik = replik
         
         if process: #helper function, use this manually then change
                     #fixCharacterNames
@@ -58,8 +59,8 @@ class replikIdentifier(object):
                         
         if not self.replik:
             print colored("before pruneRepliker, replik is tom!", "red")
-            
-        self.pruneRepliker(self.replik)
+
+        # self.pruneRepliker(self.replik)
         
         if not self.replik:
             print colored("self.replik is tom!", "red")
@@ -203,8 +204,8 @@ def addReplikerToDict(lines, replik, verbose=VERBOSE):
             replik[name] = replik.get(name, []) + [line]
             name = None
             
-def fixCharacterNames(replik, verbose=VERBOSE, printMerges=PRINT_MERGES):
-    """in-place change of replik!"""
+def fixCharacterNames(repl, verbose=VERBOSE, printMerges=PRINT_MERGES):
+    replik = copy.copy(repl)
     
     fromToList = [
             ("REPORTER #2","REPORTER"),
@@ -267,6 +268,8 @@ def fixCharacterNames(replik, verbose=VERBOSE, printMerges=PRINT_MERGES):
                             (newName, len(replik[newName]))
                         
             del replik[oldName]
+            
+    return replik
 
                 
 def loadFiles(fileNames):
@@ -387,12 +390,59 @@ def validateAllLines():
             print colored("Checking all lines by %s" % name, "cyan")
             checkLinesForCharacter(ri, validationRI, name, n)
 
-if __name__ == "__main__":
+def getMainChars(repliker, amount=5):
+    return map(lambda x: x[0],
+               sorted([(name, len(lines)) for (name, lines) in repliker.items()],
+                      key=lambda x: x[1],
+                      reverse=True))[0:amount]
+    
+def mainCharPruner(repliker, amount=5):
+    repl = copy.copy(repliker)
+    mainChars = getMainChars(repl, amount)
+    for key in repl.keys():
+        if key not in mainChars:
+            repl.pop(key)
+    return repl
+    
+def crossValidation(n=2):
     fileNames = getFileNames("episodes")
+
+    # mainChars = []
+    # repliker = loadFiles(fileNames)
+    # fixCharacterNames(repliker)
+    # mainChars = map(lambda x: x[0], sorted([(name, len(lines)) for (name, lines) in repliker.items()], key=lambda x: x[1], reverse=True))[0:5]
+    # print mainChars
+    
+    for i, fname in enumerate(fileNames):
+        print "#########################%s, %s#########################" % (i, fname)
+        
+        newFileNames = copy.copy(fileNames)
+        validationFile = newFileNames.pop(i)
+
+        trainingSet = mainCharPruner(fixCharacterNames(loadFiles(newFileNames)))
+        validationSet = mainCharPruner(fixCharacterNames(loadFiles([validationFile])))
+
+        ri = replikIdentifier(trainingSet, NValues=[n])
+
+        # here check how correctly ri can identify the characters' lines in validationSet
+        confusion_matrix = {}
+        for (name, lines) in validationSet.items():
+            print "---Name: ", name
+            for line in lines:
+                guess = max(ri.identifyString(line)[n].items(), key=lambda x: x[1])[0]
+                correct = guess == name
+                # confusion_matrix[]
+                print colored("%s: %s" % (guess, line), "green" if correct else "red")
+                
+
+if __name__ == "__main__":
+    # fileNames = getFileNames("episodes")
     
     #bartControl()
-    validateAllLines()
-    
+    # validateAllLines()
+
+    crossValidation()
+
     """
     for i, fname in enumerate(fileNames):
         newFileNames = copy.copy(fileNames)
@@ -402,6 +452,13 @@ if __name__ == "__main__":
 
         validationSet = loadFiles([validationFile])
         fixCharacterNames(validationSet)
-        
+
+        print validationSet
         # TODO: here check how correctly ri can identify the characters' lines in validationSet
+        # for (name, lines) in validationSet[2].items():
+        #     print "---Name: ", name
+        #     for line in lines:
+        #         guess = ri.identifyString(line)
+        #         print colored("%s: %s" % (guess, line), "green" if guess == name else "red")
+                
     """
