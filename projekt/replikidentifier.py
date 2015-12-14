@@ -409,7 +409,8 @@ def crossValidation(n=2):
 
     repliker = fixCharacterNames(loadFiles(fileNames))
     mainChars = getMainChars(repliker)  # need to determine who is main chars from all the data
-    
+
+    confusion_matrix = dict(zip(mainChars, [dict(zip(mainChars, [0]*len(mainChars)))]*len(mainChars)))
     for i, fname in enumerate(fileNames):
         print "#########################%s, %s#########################" % (i, fname)
         
@@ -423,12 +424,12 @@ def crossValidation(n=2):
 
         # here check how correctly ri can identify the characters' lines in validationSet
         # confusion_matrix = dict(zip(mainChars, [[[0,0],[0,0]]*len(mainChars)))
-        confusion_matrix = dict(zip(mainChars, [dict(zip(mainChars, [0]*len(mainChars)))]*len(mainChars)))
         for (name, lines) in validationSet.items():
             print "---Name: ", name
             for line in lines:
                 guess = max(ri.identifyString(line)[n].items(), key=lambda x: x[1])[0]
                 correct = guess == name
+                confusion_matrix[name][guess] += 1
                 # confusion_matrix[]
                 print colored("%s: %s" % (guess, line), "green" if correct else "red")
                 
