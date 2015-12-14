@@ -12,8 +12,6 @@ from operator import itemgetter
 import ngram
 import julgran
 
-import matplotlib.pyplot as plt
-
 try:
     #pip install fuzzywuzzy
     from fuzzywuzzy import process
@@ -31,13 +29,11 @@ except: #Couldn't load termcolor, use a regular function instead
 VERBOSE = 0
 PRINT_MERGES = False
 
-class replikIdentifier(object):
+class replikIdentifier(object): #{{{
     def __init__(self, replik, verbose=VERBOSE, minReplikOccurance=100,
             NValues=[2]):
         
-        #self.MIN_REPLIK_OCCURANCE = 25
         self.minReplikOccurance = minReplikOccurance
-        #self.MIN_REPLIK_OCCURANCE = 1
         self.MINWORDS_1GRAM = 1
         self.DO_FIND_SIMILAR_CHARACTERS = False
         
@@ -81,12 +77,6 @@ class replikIdentifier(object):
             
         self.ngramDict = ngram.calculateNGrams(self.replik, self.verbose,
                 globalMinCount=0, NValues=NValues)
-        
-        #print "ngramDict", ngramDict
-        
-        #self.identifyString("mr burns is here", ngramDict)
-        #self.identifyString("hey dad bet you five bucks you can't eat the whole box", ngramDict)
-        
         
     def identifyString(self, s):
         """Takes a string s and returns which name is the most likely
@@ -212,7 +202,7 @@ def fixCharacterNames(repl, verbose=VERBOSE, printMerges=PRINT_MERGES):
     replik = copy.copy(repl)
     
     fromToList = [
-            ("REPORTER #2","REPORTER"),
+            ("REPORTER #2","REPORTER"), #{{{
             ("REPORTER #1","REPORTER"),
             ("GUARDS","GUARD"),
             ("DR NICK","DR. NICK"),
@@ -231,7 +221,7 @@ def fixCharacterNames(repl, verbose=VERBOSE, printMerges=PRINT_MERGES):
             ("EMPLOYEES","EMPLOYEE"),
             ("TV ANNOUNCER","ANNOUNCER"),
             ("FISHERMAN 1","FISHERMAN"),
-            ("FISHERMAN 2","FISHERMAN"),
+            ("FISHERMAN 2","FISHERMAN"), #}}}
             ]
     for fr, to in fromToList:
         if verbose and printMerges:
@@ -298,7 +288,8 @@ def getFileNames(folderName, verbose=VERBOSE):
     return fileNames
 
 """
-def bartControl():
+def bartControl(): #{{{
+    import matplotlib.pyplot as plt
     verbose = 1
     fileNames = getFileNames("episodes", verbose)
     
@@ -318,92 +309,93 @@ def bartControl():
     #plt.title("Identifiering av strangen '%s' for karaktaren 'BART'" % stringToIdentify)
     plt.title("Identifiering av strang for BART over olika 15 avsnitt")
     plt.plot(xx, asdf)
-    plt.show()
+    plt.show() #}}}
 """
-    
-def validateAllLines():
-    def getKeyWithBiggestValue(d):
-        keyWithBiggestValue = None
-        for key in d:
-            if keyWithBiggestValue is None or d[key] > d[keyWithBiggestValue]:
-                keyWithBiggestValue = key
-        return keyWithBiggestValue
-        
-    def getMostLikelySpeakerPerNGram(ri, name, line):
-        """Takes a ri object and returns a dictionary of n values, with
-        each value holding a tuple being the most likely speaker and
-        a value representing how good the match was.
-        
-        E.g. {2: ("HOMER", 0.314)}"""
-        ratios = ri.identifyString(line)
-        bestMatches = {}
-        
-        for n in ri.ngramDict.keys():
-            bestNameMatch = getKeyWithBiggestValue(ratios[n])
-            bestMatches[n] = (bestNameMatch, ratios[n][bestNameMatch])
-            
-        return bestMatches
-    
-    def checkLinesForCharacter(ri, validationRI, name, n):
-        numCorrect = 0
-        for line in validationRI.replik[name]:
-            ngramsForLine = ngram.generateNGramsForLine(line, n)
-            
-            bestNameMatchCount = Counter()
-            
-            for ngramForLine in ngramsForLine:
-                bestMatches = getMostLikelySpeakerPerNGram(
-                        ri, name, ngramForLine)
-                
-                for n in NValues:
-                    bestNameMatch, value = bestMatches[n]
-                    bestNameMatchCount[bestNameMatch] += 1
-                
-            if not bestNameMatchCount:
-                print "No guess found for line '%s'" % line
-                continue
-                    
-            finalGuess, count = bestNameMatchCount.most_common(1)[0]
-            correctRatio = count / float(sum(bestNameMatchCount.values()))
-            isCorrect = finalGuess == name
-            if isCorrect:
-                numCorrect += 1
-            
-            print colored("%s: '%s' (%.2f for %s) %s" % \
-                    (name, line, correctRatio, finalGuess,
-                        "" if isCorrect else "FAIL"),
-                    "green" if isCorrect else "red")
-    
-    verbose = 1
-    NValues = [2]
-    fileNames = getFileNames("episodes", verbose)
-    for i, fname in enumerate(fileNames):
-        if i != 4: #TODO: later, check for all files
-            continue
-        
-        print colored("Checking file %s" % fname, "cyan")
-        
-        newFileNames = copy.copy(fileNames)
-        validationFile = newFileNames.pop(i)
-       
-        print "Creating ri"
-        ri = replikIdentifier(newFileNames, verbose=0, minReplikOccurance=100,
-                NValues=NValues)
-        print "Creating validationRI"
-        validationRI = replikIdentifier([validationFile], verbose=0,
-                minReplikOccurance=5, NValues=NValues)
-        
-        n = 2
-        for name in validationRI.ngramDict[n].keys():
-            print colored("Checking all lines by %s" % name, "cyan")
-            checkLinesForCharacter(ri, validationRI, name, n)
+#def validateAllLines(): #{{{
+#    def getKeyWithBiggestValue(d):
+#        keyWithBiggestValue = None
+#        for key in d:
+#            if keyWithBiggestValue is None or d[key] > d[keyWithBiggestValue]:
+#                keyWithBiggestValue = key
+#        return keyWithBiggestValue
+#
+#    def getMostLikelySpeakerPerNGram(ri, name, line):
+#        """Takes a ri object and returns a dictionary of n values, with
+#        each value holding a tuple being the most likely speaker and
+#        a value representing how good the match was.
+#
+#        E.g. {2: ("HOMER", 0.314)}"""
+#        ratios = ri.identifyString(line)
+#        bestMatches = {}
+#
+#        for n in ri.ngramDict.keys():
+#            bestNameMatch = getKeyWithBiggestValue(ratios[n])
+#            bestMatches[n] = (bestNameMatch, ratios[n][bestNameMatch])
+#
+#        return bestMatches
+#
+#    def checkLinesForCharacter(ri, validationRI, name, n):
+#        numCorrect = 0
+#        for line in validationRI.replik[name]:
+#            ngramsForLine = ngram.generateNGramsForLine(line, n)
+#
+#            bestNameMatchCount = Counter()
+#
+#            for ngramForLine in ngramsForLine:
+#                bestMatches = getMostLikelySpeakerPerNGram(
+#                        ri, name, ngramForLine)
+#
+#                for n in NValues:
+#                    bestNameMatch, value = bestMatches[n]
+#                    bestNameMatchCount[bestNameMatch] += 1
+#
+#            if not bestNameMatchCount:
+#                print "No guess found for line '%s'" % line
+#                continue
+#
+#            finalGuess, count = bestNameMatchCount.most_common(1)[0]
+#            correctRatio = count / float(sum(bestNameMatchCount.values()))
+#            isCorrect = finalGuess == name
+#            if isCorrect:
+#                numCorrect += 1
+#
+#            print colored("%s: '%s' (%.2f for %s) %s" % \
+#                    (name, line, correctRatio, finalGuess,
+#                        "" if isCorrect else "FAIL"),
+#                    "green" if isCorrect else "red")
+#
+#    verbose = 1
+#    NValues = [2]
+#    fileNames = getFileNames("episodes", verbose)
+#    for i, fname in enumerate(fileNames):
+#        if i != 4: #TODO: later, check for all files
+#            continue
+#
+#        print colored("Checking file %s" % fname, "cyan")
+#
+#        newFileNames = copy.copy(fileNames)
+#        validationFile = newFileNames.pop(i)
+#
+#        print "Creating ri"
+#        ri = replikIdentifier(newFileNames, verbose=0, minReplikOccurance=100,
+#                NValues=NValues)
+#        print "Creating validationRI"
+#        validationRI = replikIdentifier([validationFile], verbose=0,
+#                minReplikOccurance=5, NValues=NValues)
+#
+#        n = 2
+#        for name in validationRI.ngramDict[n].keys():
+#            print colored("Checking all lines by %s" % name, "cyan")
+#            checkLinesForCharacter(ri, validationRI, name, n)
+#}}}
 
 def getMainChars(repliker, amount=5):
+    nameAndNumLines = [(name, len(lines)) for (name, lines) in repliker.items()]
+    
     return map(lambda x: x[0],
-               sorted([(name, len(lines)) for (name, lines) in repliker.items()],
+               sorted(nameAndNumLines,
                       key=lambda x: x[1],
-                      reverse=True))[0:amount]
-
+                      reverse=True))[:amount]
     
 def mainCharPruner(repliker, amount=5, mainChars=None, preserveOthers=False):
     mainChars = mainChars or getMainChars(repliker, amount)
@@ -502,6 +494,7 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True, preserveOthe
             sys.stdout.write(("%"+str(nameLen)+"d ") % confusion_matrix[ci][cj])
         sys.stdout.write("\n")
 
+    """
     sys.stdout.write("Row-Wise Precision Values:\n")
     for (name, precision) in calculateRowWisePrecision(confusion_matrix).items():
         sys.stdout.write(("%"+str(nameLen)+"s %"+str(nameLen)+"s\n") % (name, precision))
@@ -513,6 +506,23 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True, preserveOthe
     sys.stdout.write("Row-Wise F1 Scores:\n")
     for (name, recall) in calculateRowWiseF1Score(confusion_matrix).items():
         sys.stdout.write(("%"+str(nameLen)+"s %"+str(nameLen)+"s\n") % (name, recall))
+    """
+        
+    fullLen = max(nameLen, len("Precision")) + 2
+    print
+    print " "*(nameLen+3) + "Precision".ljust(fullLen) + \
+            "Recall".ljust(fullLen) + \
+            "F1Score".ljust(fullLen)
+    for precisionItem, recallItem, F1ScoreItem in zip(*map(lambda x: x.items(),
+                [calculateRowWisePrecision(confusion_matrix),
+                calculateRowWiseRecall(confusion_matrix),
+                calculateRowWiseF1Score(confusion_matrix)])):
+                    
+            prec, rec, f1 = map(lambda x: ("%.3f" % x[1]).ljust(fullLen),
+                    [precisionItem, recallItem, F1ScoreItem])
+            
+            print (precisionItem[0] + ":").ljust(nameLen + 2),
+            print "%s%s%s" % (prec, rec, f1)
 
     return confusion_matrix
 
@@ -526,7 +536,6 @@ def calculateRowWiseF1Score(confusion_matrix):
 
 def calculateRowWiseSomething(confusion_matrix):
     """Here goes confucian_matrix"""
-
     asdf = {}
     for (name, row) in confusion_matrix.items():
         correct = row[name]
@@ -536,7 +545,6 @@ def calculateRowWiseSomething(confusion_matrix):
 
 def calculateRowWisePrecision(confusion_matrix):
     """Here goes confucian_matrix"""
-
     precisions = {}
     for (name, row) in confusion_matrix.items():
         true_positives  = row[name]
@@ -548,7 +556,6 @@ def calculateRowWisePrecision(confusion_matrix):
 
 def calculateRowWiseRecall(confusion_matrix):
     """Here goes confucian_matrix"""
-
     recalls = {}
     for (name, row) in confusion_matrix.items():
         true_positives  = row[name]
@@ -557,7 +564,7 @@ def calculateRowWiseRecall(confusion_matrix):
     return recalls
 
         
-def repl():
+def repl(): #{{{
     fileNames = getFileNames("episodes")
     amount = 5
     repliker = loadFiles(fileNames)
@@ -612,10 +619,8 @@ def repl():
         else:
             msg = "No matches found, but here's a JULGRAN!"
             julgran.printJulgran(amount, random.choice([True, False]), msg)
-        
-        
+#}}}
 #python replikIdentifier.py -i
-
     
 if __name__ == "__main__":
 
@@ -629,9 +634,9 @@ if __name__ == "__main__":
 
         ngram.loadNgramStopList("combined_stoplist.txt")
         #print "Stoplist with length:", len(ngram.ngramStopList), ngram.ngramStopList
-        print colored("Using stoplist with length:", "cyan"),
-        print str(len(ngram.ngramStopList)),
-        print str(ngram.ngramStopList[:4])[1:-1] + "..."
+        print colored("\nUsing stoplist with length:", "cyan"),
+        print colored(str(len(ngram.ngramStopList)), "cyan")
+        #print str(ngram.ngramStopList[:4])[1:-1] + "..."
         crossValidation(n=2, amount=5, randomGuess=False, verbose=False, preserveOthers=False)
         # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
         # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
