@@ -6,6 +6,7 @@ import copy
 import time
 import sys
 import random
+from operator import itemgetter
 
 import ngram
 
@@ -379,7 +380,7 @@ def validateAllLines():
         
         newFileNames = copy.copy(fileNames)
         validationFile = newFileNames.pop(i)
-        
+       
         print "Creating ri"
         ri = replikIdentifier(newFileNames, verbose=0, minReplikOccurance=100,
                 NValues=NValues)
@@ -416,6 +417,8 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True):
     confusion_matrix = dict(zip(mainChars, [dict(zip(mainChars, [0]*len(mainChars))) for _ in range(len(mainChars))]))
     correct_guesses = 0
     incorrect_guesses = 0
+    # true_positives = {}; false_positives = {}
+    # false_negatives = {}; true_negatives = {}
     for i, fname in enumerate(fileNames):
         if verbose:
             print "#########################%s, %s#########################" % (i, fname)
@@ -464,17 +467,63 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True):
             sys.stdout.write(("%"+str(nameLen)+"d ") % confusion_matrix[ci][cj])
         sys.stdout.write("\n")
 
+    sys.stdout.write("Row-Wise Precision Values:\n")
+    for (name, precision) in calculateRowWisePrecision(confusion_matrix).items():
+        sys.stdout.write(("%"+str(nameLen)+"s %"+str(nameLen)+"s\n") % (name, precision))
+
+    sys.stdout.write("Row-Wise Recall Values:\n")
+    for (name, recall) in calculateRowWiseRecall(confusion_matrix).items():
+        sys.stdout.write(("%"+str(nameLen)+"s %"+str(nameLen)+"s\n") % (name, recall))
+
+
+    return confusion_matrix
+
+def calculateRowWiseSomething(confusion_matrix):
+    """Here goes confucian_matrix"""
+
+    asdf = {}
+    for (name, row) in confusion_matrix.items():
+        correct = row[name]
+        incorrect = sum([item[1] for item in row.items() if item[0] != name])
+        asdf[name] = float(correct)/float(incorrect)
+    return asdf
+
+def calculateRowWisePrecision(confusion_matrix):
+    """Here goes confucian_matrix"""
+
+    precisions = {}
+    for (name, row) in confusion_matrix.items():
+        true_positives  = row[name]
+        # print name, [r[name] for (n, r) in confusion_matrix.items() if n != name]
+        false_positives = sum([r[name] for (n, r) in confusion_matrix.items() if n != name]) # column-wise sum for column {name} with 0:ed diagonal
+        precisions[name] = float(true_positives)/float(true_positives + false_positives)
+    return precisions
+
+
+def calculateRowWiseRecall(confusion_matrix):
+    """Here goes confucian_matrix"""
+
+    recalls = {}
+    for (name, row) in confusion_matrix.items():
+        true_positives  = row[name]
+        false_negatives = sum([r for (n, r) in row.items() if n != name]) # row-wise sum with 0:ed diagonal
+        recalls[name] = float(true_positives)/float(true_positives + false_negatives)
+    return recalls
+
+        
+        
+
 if __name__ == "__main__":
     # fileNames = getFileNames("episodes")
     
     #bartControl()
     # validateAllLines()
 
-    crossValidation(n=3, amount=5, randomGuess=False, verbose=False)
+    crossValidation(n=2, amount=5, randomGuess=False, verbose=True)
     
-    crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
-    crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
-    crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
+    # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
+    # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
+    # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
 
     """
     for i, fname in enumerate(fileNames):
@@ -495,3 +544,4 @@ if __name__ == "__main__":
         #         print colored("%s: %s" % (guess, line), "green" if guess == name else "red")
                 
     """
+

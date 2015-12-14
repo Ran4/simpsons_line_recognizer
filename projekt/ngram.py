@@ -4,7 +4,7 @@ from termcolor import colored
 
 import replikidentifier
 
-def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2]):
+def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStopList=None):
     """Calculates N-grams for a dict of lines replik
     Returns a dict with key = n, value = an ngrams dict
     {
@@ -24,7 +24,9 @@ def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2]):
                     overrideMinCount=globalMinCount)
         else:
             nGrams = calculateNGramsForCharacters(replik, n, verbose)
-        
+        if ngramStopList: 
+            nGrams = filter(lambda x: x not in ngramStopList, nGrams)
+   
         ngramDict[n] = nGrams
     
     return ngramDict
