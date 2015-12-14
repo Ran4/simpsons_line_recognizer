@@ -12,8 +12,7 @@ def loadNgramStopList(fileName):
     ngramStopList = []
     for line in open(fileName).read().split("\n"):
         if line:
-            w1, w2 = line.split()
-            ngramStopList.append(" ".join([w1, w2]))
+            ngramStopList.append(" ".join([line.split()]))
             
 def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStopList=None):
     """Calculates N-grams for a dict of lines replik
