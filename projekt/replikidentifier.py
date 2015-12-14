@@ -406,17 +406,18 @@ def mainCharPruner(repliker, amount=5, mainChars=None):
             repl.pop(key)
     return repl
     
-def crossValidation(n=2, randomGuess=False):
+def crossValidation(n=2, randomGuess=False, amount=5, verbose=True):
     fileNames = getFileNames("episodes")
 
     repliker = fixCharacterNames(loadFiles(fileNames))
-    mainChars = getMainChars(repliker)  # need to determine who is main chars from all the data
+    mainChars = getMainChars(repliker, amount)  # need to determine who is main chars from all the data
 
     confusion_matrix = dict(zip(mainChars, [dict(zip(mainChars, [0]*len(mainChars))) for _ in range(len(mainChars))]))
     correct_guesses = 0
     incorrect_guesses = 0
     for i, fname in enumerate(fileNames):
-        print "#########################%s, %s#########################" % (i, fname)
+        if verbose:
+            print "#########################%s, %s#########################" % (i, fname)
         
         newFileNames = copy.copy(fileNames)
         validationFile = newFileNames.pop(i)
@@ -428,7 +429,8 @@ def crossValidation(n=2, randomGuess=False):
 
         # here check how correctly ri can identify the characters' lines in validationSet
         for (name, lines) in validationSet.items():
-            print "---Name: ", name
+            if verbose:
+                print "---Name: ", name
             for line in lines:
                 if not randomGuess:
                     guess = max(ri.identifyString(line)[n].items(), key=lambda x: x[1])[0]
@@ -440,10 +442,12 @@ def crossValidation(n=2, randomGuess=False):
                     correct_guesses += 1
                 else:
                     incorrect_guesses += 1
-                print colored("%s: %s" % (guess, line), "green" if correct else "red")
+                    
+                if verbose:
+                    print colored("%s: %s" % (guess, line), "green" if correct else "red")
 
     if randomGuess:
-        print "(random guessing)"
+        print colored("(random guessing)", "cyan")
     print "Correct Guesses: ", correct_guesses
     print "Incorrect Guesses: ", incorrect_guesses
 
@@ -465,8 +469,11 @@ if __name__ == "__main__":
     #bartControl()
     # validateAllLines()
 
-    #crossValidation()
-    crossValidation(randomGuess=True)
+    crossValidation(n=3, amount=5, randomGuess=False, verbose=False)
+    
+    crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
+    crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
+    crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
 
     """
     for i, fname in enumerate(fileNames):
