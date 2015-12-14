@@ -1,0 +1,50 @@
+### Stemming Lab v1.0b ###
+### Mon Dec 14 08:57:47 2015 ###
+
+### Step1 ###
+s$->;
+simn->simm;
+
+# Rule format:
+#^leftcontext|morpheme$->replacement;
+# # denotes a comment
+# ^ denotes NOT
+# | denotes end of left context
+# $ denotes end of word
+# -> denotes transformation
+# ; denotes end of rule
+
+# All rule parts are optional except -> and ;.
+# Rules are tried top-down, one rule per step is applied.
+
+### Step2 ###
+eln$->el;
+en$->;
+na$->;
+an$->;
+ade$->;
+at$->;
+ande$->;
+pt$->p;
+pte$->p;
+ang$->ing;
+ungit$->ing;
+
+ningar$->ning;
+
+### Step3 ###
+ningar$->n;
+
+cyk|el$->l;
+ar$->;
+
+or$->;
+orn$->;
+orer$->;
+^tid|ning$->;
+^spr|ing$->;
+er$->;
+
+a$->;
+
+### END ###
