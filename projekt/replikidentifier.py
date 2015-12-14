@@ -403,16 +403,28 @@ def getMainChars(repliker, amount=5):
                sorted([(name, len(lines)) for (name, lines) in repliker.items()],
                       key=lambda x: x[1],
                       reverse=True))[0:amount]
+
     
 def mainCharPruner(repliker, amount=5, mainChars=None, preserveOthers=False):
     mainChars = mainChars or getMainChars(repliker, amount)
+    if preserveOthers == True:
+        preserveOthers = filter(lambda x: x not in mainChars, repliker.keys())
+    elif type(preserveOthers) is int:
+        # KLUDGE
+        preserveOthers = filter(lambda x: x not in mainChars, getMainChars(repliker, len(mainChars) + preserveOthers))
+    elif type(preserveOthers) is list:
+        pass
+    elif type(preserveOthers) is bool:
+        pass
+    else:
+        raise exception("preserveOthers should be bool int or list")
     
     repl = copy.copy(repliker)
     if preserveOthers:
         others = []
     for key in repl.keys():
         if key not in mainChars:
-            if preserveOthers:
+            if preserveOthers and key in preserveOthers:
                 others += repl[key]
             repl.pop(key)
     if preserveOthers:
@@ -425,6 +437,12 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True, preserveOthe
     repliker = fixCharacterNames(loadFiles(fileNames))
     mainChars = getMainChars(repliker, amount)  # need to determine who is main chars from all the data
     repliker = mainCharPruner(repliker, mainChars=mainChars)
+
+    # if preserveOthers:
+    #     preserverOthersCount = preserveOthers if type(preserveOthers) is int else 30
+    #     preserveOthersList = getMainChars(repliker, amount+30)[amount:]
+    # else:
+    #     preserveOthersList = []
 
     iterMainChars = mainChars if not preserveOthers else mainChars + ["OTHER"]
 
@@ -607,14 +625,14 @@ if __name__ == "__main__":
         # fileNames = getFileNames("episodes")
         #bartControl()
         # validateAllLines()
-        crossValidation(n=2, amount=5, randomGuess=False, verbose=False, preserveOthers=True)
+        crossValidation(n=2, amount=5, randomGuess=False, verbose=False, preserveOthers=False)
 
         ngram.loadNgramStopList("combined_stoplist.txt")
         #print "Stoplist with length:", len(ngram.ngramStopList), ngram.ngramStopList
         print colored("Using stoplist with length:", "cyan"),
         print str(len(ngram.ngramStopList)),
         print str(ngram.ngramStopList[:4])[1:-1] + "..."
-        crossValidation(n=2, amount=5, randomGuess=False, verbose=False, preserveOthers=True)
+        crossValidation(n=2, amount=5, randomGuess=False, verbose=False, preserveOthers=False)
         # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
         # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
         # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
