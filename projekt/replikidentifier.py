@@ -92,12 +92,11 @@ class replikIdentifier(object): #{{{
         ngramDict = self.ngramDict
         
         def getClosenessValue(s, n, name):
-            #print "identifying with name", name,
+            """Takes a string of a line s and returns
+            how close it is to character >name<
+            """
             occurances = 0
             for stringNgram in ngram.generateNGramsForLine(s, n):
-                #print "ngram: '%s'. Count in %s: %s" % \
-                #        (stringNgram, name, ngramDict[n][name][stringNgram])
-                        
                 occurances += ngramDict[n][name][stringNgram]
             numNGrams = sum(ngramDict[n][name].values())
             
@@ -107,8 +106,6 @@ class replikIdentifier(object): #{{{
                 ratio = 0.0
                 
             ratio *= 1000
-                
-            #print "Ratio: %s ----" % ratio
             return ratio
         
         #print "Trying to identify '%s'" % s

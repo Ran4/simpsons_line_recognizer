@@ -21,9 +21,6 @@ def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStop
         3: {"BART": Counter({'hej': 2, 'hopp': 1})},
     }
     """
-    #NValues = [1,2,3,4,5,6,7]
-    #NValues = [2]
-    
     ngramDict = {}
     for n in NValues:
         if verbose:
@@ -65,29 +62,19 @@ def calculateNGramsForCharacters(replik, n, verbose, overrideMinCount=None):
     if overrideMinCount is not None:
         minCount = overrideMinCount
     else:
-        if n == 1:
-            minCount = 15
-        elif n == 2:
-            minCount = 6
-        elif n == 3:
-            minCount = 4
-        elif n == 4:
-            minCount = 3
-        elif n >= 5:
-            minCount = 2
+        if n == 1:   minCount = 15
+        elif n == 2: minCount = 6
+        elif n == 3: minCount = 4
+        elif n == 4: minCount = 3
+        elif n >= 5: minCount = 2
     
     for name in replik.keys():
         ngramCounter = Counter()
         if verbose:
-            print colored("%s, %s lines" % \
-                (name, len(replik[name])), "yellow"),
+            print colored("%s, %s lines" % (name, len(replik[name])), "yellow"),
                 
         for line in replik[name]:
             for ngram in generateNGramsForLine(line, n):
-                # print colored(ngram, "green" if ngram not in ngramStopList else "red")
-                # if "more" in ngram:
-                #     print ngram, ngramStopList
-                    
                 if ngram not in ngramStopList:
                     ngramCounter[ngram] += 1
                 
@@ -101,8 +88,8 @@ def calculateNGramsForCharacters(replik, n, verbose, overrideMinCount=None):
             if verbose == 2:
                 print " ".join(["%s(%s)" % item for item in sortedItems])
             else:
-                print " ".join(["%s(%s)" % item for item in sortedItems[:5]]) + ".."
-        #pprint.pprint(ngramCounter)
+                print " ".join(["%s(%s)" % item
+                    for item in sortedItems[:5]]) + ".."
         
         nGrams[name] = ngramCounter
         
