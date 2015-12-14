@@ -406,24 +406,29 @@ def getMainChars(repliker, amount=5):
     
 def mainCharPruner(repliker, amount=5, mainChars=None, preserveOthers=False):
     mainChars = mainChars or getMainChars(repliker, amount)
+    
     repl = copy.copy(repliker)
     if preserveOthers:
-        repl["OTHER"] = []
+        others = []
     for key in repl.keys():
         if key not in mainChars:
             if preserveOthers:
-                repl["OTHER"] += repl[key]
+                others += repl[key]
             repl.pop(key)
+    if preserveOthers:
+        repl["OTHER"] = others
     return repl
     
-def crossValidation(n=2, randomGuess=False, amount=5, verbose=True):
+def crossValidation(n=2, randomGuess=False, amount=5, verbose=True, preserveOthers=False):
     fileNames = getFileNames("episodes")
 
     repliker = fixCharacterNames(loadFiles(fileNames))
     mainChars = getMainChars(repliker, amount)  # need to determine who is main chars from all the data
     repliker = mainCharPruner(repliker, mainChars=mainChars)
-    
-    confusion_matrix = dict(zip(mainChars, [dict(zip(mainChars, [0]*len(mainChars))) for _ in range(len(mainChars))]))
+
+    iterMainChars = mainChars if not preserveOthers else mainChars + ["OTHER"]
+
+    confusion_matrix = dict(zip(iterMainChars, [dict(zip(iterMainChars, [0]*len(iterMainChars))) for _ in range(len(iterMainChars))]))
     correct_guesses = 0
     incorrect_guesses = 0
     # true_positives = {}; false_positives = {}
@@ -435,8 +440,8 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True):
         newFileNames = copy.copy(fileNames)
         validationFile = newFileNames.pop(i)
 
-        trainingSet = mainCharPruner(fixCharacterNames(loadFiles(newFileNames)), mainChars=mainChars)
-        validationSet = mainCharPruner(fixCharacterNames(loadFiles([validationFile])), mainChars=mainChars)
+        trainingSet = mainCharPruner(fixCharacterNames(loadFiles(newFileNames)), mainChars=mainChars, preserveOthers=preserveOthers)
+        validationSet = mainCharPruner(fixCharacterNames(loadFiles([validationFile])), mainChars=mainChars, preserveOthers=preserveOthers)
         
         ri = replikIdentifier(trainingSet, NValues=[n])
 
@@ -448,7 +453,7 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True):
                 if not randomGuess:
                     guess = max(ri.identifyString(line)[n].items(), key=lambda x: x[1])[0]
                 else:
-                    guess = random.choice(mainChars)
+                    guess = random.choice(iterMainChars)
                 correct = guess == name
                 confusion_matrix[name][guess] += 1
                 if correct:
@@ -462,20 +467,20 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True):
     if randomGuess:
         print colored("(random guessing)", "cyan")
         
-    print "Correct guesses: %s, incorrect guesses: %s (%.1f%%)" % \
+    print "Correct guesses: %s (%.1f%%), incorrect guesses: %s" % \
         (colored(str(correct_guesses), "green"),
-            100*correct_guesses/float(correct_guesses+incorrect_guesses),
-        colored(str(incorrect_guesses), "red"))
+         100*correct_guesses/float(correct_guesses+incorrect_guesses),
+         colored(str(incorrect_guesses), "red"))
 
     print "Rows: Correct name, Columns: Guessed name"
-    nameLen = max(map(len, mainChars))
+    nameLen = max(map(len, iterMainChars))
     sys.stdout.write(" "*(nameLen+1))
-    for char in mainChars:
+    for char in iterMainChars:
         sys.stdout.write(("%"+str(nameLen)+"s ") % char)
     sys.stdout.write("\n")
-    for ci in mainChars:
+    for ci in iterMainChars:
         sys.stdout.write(("%"+str(nameLen)+"s ") % ci)
-        for cj in mainChars:
+        for cj in iterMainChars:
             sys.stdout.write(("%"+str(nameLen)+"d ") % confusion_matrix[ci][cj])
         sys.stdout.write("\n")
 
@@ -602,14 +607,14 @@ if __name__ == "__main__":
         # fileNames = getFileNames("episodes")
         #bartControl()
         # validateAllLines()
-        crossValidation(n=2, amount=5, randomGuess=False, verbose=False)
+        crossValidation(n=2, amount=5, randomGuess=False, verbose=False, preserveOthers=True)
 
         ngram.loadNgramStopList("combined_stoplist.txt")
         #print "Stoplist with length:", len(ngram.ngramStopList), ngram.ngramStopList
         print colored("Using stoplist with length:", "cyan"),
         print str(len(ngram.ngramStopList)),
         print str(ngram.ngramStopList[:4])[1:-1] + "..."
-        crossValidation(n=2, amount=5, randomGuess=False, verbose=False)
+        crossValidation(n=2, amount=5, randomGuess=False, verbose=False, preserveOthers=True)
         # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
         # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
         # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
