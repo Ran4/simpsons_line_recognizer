@@ -411,7 +411,8 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True):
 
     repliker = fixCharacterNames(loadFiles(fileNames))
     mainChars = getMainChars(repliker, amount)  # need to determine who is main chars from all the data
-
+    repliker = mainCharPruner(repliker, mainChars=mainChars)
+    
     confusion_matrix = dict(zip(mainChars, [dict(zip(mainChars, [0]*len(mainChars))) for _ in range(len(mainChars))]))
     correct_guesses = 0
     incorrect_guesses = 0
@@ -424,7 +425,7 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True):
 
         trainingSet = mainCharPruner(fixCharacterNames(loadFiles(newFileNames)), mainChars=mainChars)
         validationSet = mainCharPruner(fixCharacterNames(loadFiles([validationFile])), mainChars=mainChars)
-
+        
         ri = replikIdentifier(trainingSet, NValues=[n])
 
         # here check how correctly ri can identify the characters' lines in validationSet
