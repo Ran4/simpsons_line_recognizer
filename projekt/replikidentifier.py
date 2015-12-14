@@ -457,8 +457,11 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True):
 
     if randomGuess:
         print colored("(random guessing)", "cyan")
-    print "Correct Guesses: ", correct_guesses
-    print "Incorrect Guesses: ", incorrect_guesses
+        
+    print "Correct guesses: %s, incorrect guesses: %s (%.1f%%)" % \
+        (colored(str(correct_guesses), "green"),
+            100*correct_guesses/float(correct_guesses+incorrect_guesses),
+        colored(str(incorrect_guesses), "red"))
 
     print "Rows: Correct name, Columns: Guessed name"
     nameLen = max(map(len, mainChars))
@@ -559,8 +562,9 @@ def repl():
         
         newAmount = intOrNone(inLine)
         if newAmount is not None:
+            amount = newAmount
             corpus = mainCharPruner(
-                    fixCharacterNames(repliker), amount=newAmount)
+                    fixCharacterNames(repliker), amount=amount)
             ri = replikIdentifier(corpus, NValues=[n])
             print "Now checking the top %s characters" % newAmount
             continue
@@ -578,11 +582,56 @@ def repl():
         if sortedRatios:
             format = lambda item: "%s (%.1f)" % (item[0].title(), item[1])
             print ", ".join(map(format, sortedRatios))
+        else:
+            msg = "No matches found, but here's a JULGRAN!"
+            printJulgran(amount, random.choice([True, False]), msg)
         
         
 #python replikIdentifier.py -i
 
+def printJulgran(n, kulorElseCones=True, msg=None):
+    r"""
+        /\
+       /\/\      MSG
+      /\/\/\
+      ^^||^^
+      BUT COLORED IN TRUE 256 COLORS
+    """
+        
+    barrColor = "green"
+    barkColor = "red"
+    
+    RESET_COLOR = '\033[0m'
+    MSG_COL = "\033[0m"
+    bgCol = ""
+    for i in range(0, n):
+        numSpaces = (n - 1) - i
+        numToothPicks = i + 1
+        sys.stdout.write(" "*numSpaces + colored("/\\"*numToothPicks, barrColor))
+        
+        if msg and i == (n-1)/2:
+            sys.stdout.write(" "*4 + MSG_COL + msg + RESET_COLOR)
+        sys.stdout.write("\n")
+    
+    
+    MANUAL_BARKCOLOR = '\033[38;5;137m'
+    barkStr = MANUAL_BARKCOLOR + "||" + RESET_COLOR
+    
+    if kulorElseCones:
+        ornament = "°"
+        ORNAMENT_COL = '\033[38;5;160m'
+    else:
+        ornament = "^"
+        ORNAMENT_COL = '\033[38;5;135m'
+        
+    if n > 1:
+        numCones = n - 1
+        ornamentStr = ORNAMENT_COL + ornament*numCones + RESET_COLOR
+        print ornamentStr + barkStr + ornamentStr
+    
+    
 if __name__ == "__main__":
+
     if "-i" in sys.argv[1:]:
         repl()
     elif "validate" in sys.argv[1:] or "--validate" in sys.argv[1:]:
@@ -592,7 +641,10 @@ if __name__ == "__main__":
         crossValidation(n=2, amount=5, randomGuess=False, verbose=False)
 
         ngram.loadNgramStopList("combined_stoplist.txt")
-        print len(ngram.ngramStopList), ngram.ngramStopList
+        #print "Stoplist with length:", len(ngram.ngramStopList), ngram.ngramStopList
+        print colored("Using stoplist with length:", "cyan"),
+        print str(len(ngram.ngramStopList)),
+        print str(ngram.ngramStopList[:4])[1:-1] + "..."
         crossValidation(n=2, amount=5, randomGuess=False, verbose=False)
         # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
         # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
@@ -601,3 +653,4 @@ if __name__ == "__main__":
         print "usage: one of"
         print "%s -i" % sys.argv[0]
         print "%s validate" % sys.argv[0]
+        printJulgran(3, random.choice([True, False]), msg="yeah!")
