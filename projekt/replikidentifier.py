@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #encoding: utf-8
 import os
 import pprint
@@ -276,6 +277,7 @@ def fixCharacterNames(repl, verbose=VERBOSE, printMerges=PRINT_MERGES):
 
                 
 def loadFiles(fileNames):
+    """Takes a list of fileNames and loads repliker (lines) from this"""
     replik = {}
     for fileName in fileNames:
         with open(fileName) as f:
@@ -285,6 +287,7 @@ def loadFiles(fileNames):
         
                 
 def getFileNames(folderName, verbose=VERBOSE):
+    """Returns a list of filenames in the folder folderName """
     fileNames = []
     for fname in os.listdir(folderName):
         fileNames.append(os.path.join(folderName, fname))
@@ -294,6 +297,7 @@ def getFileNames(folderName, verbose=VERBOSE):
                 (len(fileNames), str(fileNames))
     return fileNames
 
+"""
 def bartControl():
     verbose = 1
     fileNames = getFileNames("episodes", verbose)
@@ -315,6 +319,7 @@ def bartControl():
     plt.title("Identifiering av strang for BART over olika 15 avsnitt")
     plt.plot(xx, asdf)
     plt.show()
+"""
     
 def validateAllLines():
     def getKeyWithBiggestValue(d):
@@ -522,42 +527,77 @@ def calculateRowWiseRecall(confusion_matrix):
     return recalls
 
         
+def repl():
+    fileNames = getFileNames("episodes")
+    amount = 5
+    repliker = loadFiles(fileNames)
+    
+    n = 2
+    
+    corpus = mainCharPruner(fixCharacterNames(repliker), amount=amount)
+    ri = replikIdentifier(corpus, NValues=[n])
+    
+    def intOrNone(s):
+        try:
+            return int(s)
+        except:
+            return None
         
+    print "Enter a line. We'll try to figure out what character",
+    print "is most likely to say your entered line."
+    print "Type a number to change the number",
+    print "of characters to search for (default %s)." % amount
+    print "Type quit or exit to quit"
+    
+    while True:
+        inLine = raw_input("-> ")
+        if not inLine:
+            continue
+        
+        if inLine.lower() in ["q", "quit", ":q", "q!", "exit"]:
+            return
+        
+        newAmount = intOrNone(inLine)
+        if newAmount is not None:
+            corpus = mainCharPruner(
+                    fixCharacterNames(repliker), amount=newAmount)
+            ri = replikIdentifier(corpus, NValues=[n])
+            print "Now checking the top %s characters" % newAmount
+            continue
+     
+        ratios = ri.identifyString(inLine.lower())[n]
+        
+        """ratios == {
+            2:{'BART': 0.1231, 'HOMER': 0.93},
+            3:{'MARGE': 0.03}
+        } """
+        sortedRatios = sorted(ratios.items(), key=lambda x: x[1], reverse=True)
+        sortedRatios = filter(lambda x: x[1] > 0.0, sortedRatios)
+        #import pdb; pdb.set_trace()
+        
+        if sortedRatios:
+            format = lambda item: "%s (%.1f)" % (item[0].title(), item[1])
+            print ", ".join(map(format, sortedRatios))
+        
+        
+#python replikIdentifier.py -i
 
 if __name__ == "__main__":
-    # fileNames = getFileNames("episodes")
-    
-    #bartControl()
-    # validateAllLines()
+    if "-i" in sys.argv[1:]:
+        repl()
+    elif "validate" in sys.argv[1:] or "--validate" in sys.argv[1:]:
+        # fileNames = getFileNames("episodes")
+        #bartControl()
+        # validateAllLines()
+        crossValidation(n=2, amount=5, randomGuess=False, verbose=False)
 
-    crossValidation(n=2, amount=5, randomGuess=False, verbose=False)
-
-    ngram.loadNgramStopList("combined_stoplist.txt")
-    print len(ngram.ngramStopList), ngram.ngramStopList
-
-    crossValidation(n=2, amount=5, randomGuess=False, verbose=False)
-    
-    # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
-    # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
-    # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
-
-    """
-    for i, fname in enumerate(fileNames):
-        newFileNames = copy.copy(fileNames)
-        validationFile = newFileNames.pop(i)
-        
-        ri = replikIdentifier(newFileNames)
-
-        validationSet = loadFiles([validationFile])
-        fixCharacterNames(validationSet)
-
-        print validationSet
-        # TODO: here check how correctly ri can identify the characters' lines in validationSet
-        # for (name, lines) in validationSet[2].items():
-        #     print "---Name: ", name
-        #     for line in lines:
-        #         guess = ri.identifyString(line)
-        #         print colored("%s: %s" % (guess, line), "green" if guess == name else "red")
-                
-    """
-
+        ngram.loadNgramStopList("combined_stoplist.txt")
+        print len(ngram.ngramStopList), ngram.ngramStopList
+        crossValidation(n=2, amount=5, randomGuess=False, verbose=False)
+        # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
+        # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
+        # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
+    else:
+        print "usage: one of"
+        print "%s -i" % sys.argv[0]
+        print "%s validate" % sys.argv[0]
