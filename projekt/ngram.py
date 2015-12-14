@@ -4,6 +4,7 @@ from termcolor import colored
 
 import replikidentifier
 
+
 def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStopList=None):
     """Calculates N-grams for a dict of lines replik
     Returns a dict with key = n, value = an ngrams dict

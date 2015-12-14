@@ -475,8 +475,19 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True):
     for (name, recall) in calculateRowWiseRecall(confusion_matrix).items():
         sys.stdout.write(("%"+str(nameLen)+"s %"+str(nameLen)+"s\n") % (name, recall))
 
+    sys.stdout.write("Row-Wise F1 Scores:\n")
+    for (name, recall) in calculateRowWiseF1Score(confusion_matrix).items():
+        sys.stdout.write(("%"+str(nameLen)+"s %"+str(nameLen)+"s\n") % (name, recall))
 
     return confusion_matrix
+
+def calculateRowWiseF1Score(confusion_matrix):
+    F1scores = {}
+    recalls = calculateRowWiseRecall(confusion_matrix)
+    precisions = calculateRowWisePrecision(confusion_matrix)
+    for char in confusion_matrix.keys():
+        F1scores[char] = 2*(precisions[char]*recalls[char])/(precisions[char] + recalls[char])
+    return F1scores
 
 def calculateRowWiseSomething(confusion_matrix):
     """Here goes confucian_matrix"""
