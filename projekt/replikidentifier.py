@@ -4,6 +4,7 @@ import pprint
 from collections import Counter
 import copy
 import time
+import sys
 
 import ngram
 
@@ -410,7 +411,9 @@ def crossValidation(n=2):
     repliker = fixCharacterNames(loadFiles(fileNames))
     mainChars = getMainChars(repliker)  # need to determine who is main chars from all the data
 
-    confusion_matrix = dict(zip(mainChars, [dict(zip(mainChars, [0]*len(mainChars)))]*len(mainChars)))
+    confusion_matrix = dict(zip(mainChars, [dict(zip(mainChars, [0]*len(mainChars))) for _ in range(len(mainChars))]))
+    correct_guesses = 0
+    incorrect_guesses = 0
     for i, fname in enumerate(fileNames):
         print "#########################%s, %s#########################" % (i, fname)
         
@@ -423,16 +426,34 @@ def crossValidation(n=2):
         ri = replikIdentifier(trainingSet, NValues=[n])
 
         # here check how correctly ri can identify the characters' lines in validationSet
-        # confusion_matrix = dict(zip(mainChars, [[[0,0],[0,0]]*len(mainChars)))
         for (name, lines) in validationSet.items():
             print "---Name: ", name
             for line in lines:
                 guess = max(ri.identifyString(line)[n].items(), key=lambda x: x[1])[0]
                 correct = guess == name
                 confusion_matrix[name][guess] += 1
-                # confusion_matrix[]
+                if correct:
+                    correct_guesses += 1
+                else:
+                    incorrect_guesses += 1
                 print colored("%s: %s" % (guess, line), "green" if correct else "red")
-                
+
+    print "Correct Guesses: ", correct_guesses
+    print "Incorrect Guesses: ", incorrect_guesses
+
+    print "Rows: Correct name, Columns: Guessed name"
+    nameLen = max(map(len, mainChars))
+    sys.stdout.write(" "*(nameLen+1))
+    for char in mainChars:
+        sys.stdout.write(("%"+str(nameLen)+"s ") % char)
+    sys.stdout.write("\n")
+    for ci in mainChars:
+        sys.stdout.write(("%"+str(nameLen)+"s ") % ci)
+        for cj in mainChars:
+            sys.stdout.write(("%"+str(nameLen)+"d ") % confusion_matrix[ci][cj])
+        sys.stdout.write("\n")
+
+        
 
 if __name__ == "__main__":
     # fileNames = getFileNames("episodes")
