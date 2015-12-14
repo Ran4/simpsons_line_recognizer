@@ -530,7 +530,12 @@ if __name__ == "__main__":
     #bartControl()
     # validateAllLines()
 
-    crossValidation(n=2, amount=5, randomGuess=False, verbose=True)
+    crossValidation(n=2, amount=5, randomGuess=False, verbose=False)
+
+    ngram.loadNgramStopList("combined_stoplist.txt")
+    print len(ngram.ngramStopList), ngram.ngramStopList
+
+    crossValidation(n=2, amount=5, randomGuess=False, verbose=False)
     
     # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
     # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)

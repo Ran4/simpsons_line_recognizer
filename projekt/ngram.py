@@ -5,12 +5,15 @@ from termcolor import colored
 import replikidentifier
 
 global ngramStopList
+ngramStopList = []
 def loadNgramStopList(fileName):
+    global ngramStopList
+    
     ngramStopList = []
     for line in open(fileName).read().split("\n"):
         if line:
-            w1, w2 = line.split("\t")
-            ngramStopList.append((w1, w2))
+            w1, w2 = line.split()
+            ngramStopList.append(" ".join([w1, w2]))
             
 def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStopList=None):
     """Calculates N-grams for a dict of lines replik
@@ -32,8 +35,8 @@ def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStop
                     overrideMinCount=globalMinCount)
         else:
             nGrams = calculateNGramsForCharacters(replik, n, verbose)
-        if ngramStopList:
-            nGrams = filter(lambda x: x not in ngramStopList, nGrams)
+        # if ngramStopList:
+        #     nGrams = filter(lambda x: x not in ngramStopList, nGrams)
    
         ngramDict[n] = nGrams
     
@@ -49,6 +52,8 @@ def calculateNGramsForCharacters(replik, n, verbose, overrideMinCount=None):
         a Counter object. Like this:
     {"BART": Counter({'hej': 2, 'hopp': 1})}
     """
+    global ngramStopList
+    
     def removeItemsUnderCount(counter, n):
         smallCountList = filter(lambda item: counter[item] < n,
                 counter)
@@ -80,7 +85,12 @@ def calculateNGramsForCharacters(replik, n, verbose, overrideMinCount=None):
                 
         for line in replik[name]:
             for ngram in generateNGramsForLine(line, n):
-                ngramCounter[ngram] += 1
+                # print colored(ngram, "green" if ngram not in ngramStopList else "red")
+                # if "more" in ngram:
+                #     print ngram, ngramStopList
+                    
+                if ngram not in ngramStopList:
+                    ngramCounter[ngram] += 1
                 
         if minCount:
             removeItemsUnderCount(ngramCounter, minCount)
