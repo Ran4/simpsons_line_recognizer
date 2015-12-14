@@ -5,6 +5,7 @@ from collections import Counter
 import copy
 import time
 import sys
+import random
 
 import ngram
 
@@ -405,7 +406,7 @@ def mainCharPruner(repliker, amount=5, mainChars=None):
             repl.pop(key)
     return repl
     
-def crossValidation(n=2):
+def crossValidation(n=2, randomGuess=False):
     fileNames = getFileNames("episodes")
 
     repliker = fixCharacterNames(loadFiles(fileNames))
@@ -429,7 +430,10 @@ def crossValidation(n=2):
         for (name, lines) in validationSet.items():
             print "---Name: ", name
             for line in lines:
-                guess = max(ri.identifyString(line)[n].items(), key=lambda x: x[1])[0]
+                if not randomGuess:
+                    guess = max(ri.identifyString(line)[n].items(), key=lambda x: x[1])[0]
+                else:
+                    guess = random.choice(mainChars)
                 correct = guess == name
                 confusion_matrix[name][guess] += 1
                 if correct:
@@ -438,6 +442,8 @@ def crossValidation(n=2):
                     incorrect_guesses += 1
                 print colored("%s: %s" % (guess, line), "green" if correct else "red")
 
+    if randomGuess:
+        print "(random guessing)"
     print "Correct Guesses: ", correct_guesses
     print "Incorrect Guesses: ", incorrect_guesses
 
@@ -453,15 +459,14 @@ def crossValidation(n=2):
             sys.stdout.write(("%"+str(nameLen)+"d ") % confusion_matrix[ci][cj])
         sys.stdout.write("\n")
 
-        
-
 if __name__ == "__main__":
     # fileNames = getFileNames("episodes")
     
     #bartControl()
     # validateAllLines()
 
-    crossValidation()
+    #crossValidation()
+    crossValidation(randomGuess=True)
 
     """
     for i, fname in enumerate(fileNames):
