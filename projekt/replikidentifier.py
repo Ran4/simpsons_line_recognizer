@@ -404,11 +404,15 @@ def getMainChars(repliker, amount=5):
                       key=lambda x: x[1],
                       reverse=True))[0:amount]
     
-def mainCharPruner(repliker, amount=5, mainChars=None):
+def mainCharPruner(repliker, amount=5, mainChars=None, preserveOthers=False):
     mainChars = mainChars or getMainChars(repliker, amount)
     repl = copy.copy(repliker)
+    if preserveOthers:
+        repl["OTHER"] = []
     for key in repl.keys():
         if key not in mainChars:
+            if preserveOthers:
+                repl["OTHER"] += repl[key]
             repl.pop(key)
     return repl
     
