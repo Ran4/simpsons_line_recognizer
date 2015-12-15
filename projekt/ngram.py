@@ -5,16 +5,16 @@ from termcolor import colored
 import replikidentifier
 
 global ngramStopList
-ngramStopList = []
-def loadNgramStopList(fileName):
+ngramStopList = {}
+def loadNgramStopList(fileName, n=2):
     global ngramStopList
     
-    ngramStopList = []
+    ngramStopList[n] = []
     for line in open(fileName).read().split("\n"):
         if line:
-            ngramStopList.append(" ".join(line.split()))
+            ngramStopList[n].append(" ".join(line.split()))
             
-def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStopList=None):
+def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2]):
     """Calculates N-grams for a dict of lines replik
     Returns a dict with key = n, value = an ngrams dict
     {
@@ -75,7 +75,7 @@ def calculateNGramsForCharacters(replik, n, verbose, overrideMinCount=None):
                 
         for line in replik[name]:
             for ngram in generateNGramsForLine(line, n):
-                if ngram not in ngramStopList:
+                if ngram not in ngramStopList.get(n, []):
                     ngramCounter[ngram] += 1
                 
         if minCount:
