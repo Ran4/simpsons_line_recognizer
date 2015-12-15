@@ -441,9 +441,9 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
     iterMainChars = mainChars if not preserveOthers else mainChars + ["OTHER"]
 
     confusion_matrix = dict(zip(iterMainChars,
-        [dict(zip(iterMainChars,
-                  [0.0 if use_float_confusion_matrix else 0]*len(iterMainChars)))
-         for _ in range(len(iterMainChars))]))
+                                [dict(zip(iterMainChars,
+                                          [0.0 if use_float_confusion_matrix else 0]*len(iterMainChars)))
+                                 for _ in range(len(iterMainChars))]))
     correct_guesses = 0
     incorrect_guesses = 0
     for i, fname in enumerate(fileNames):
@@ -456,13 +456,14 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
 
         trainingSet = mainCharPruner(
             fixCharacterNames(loadFiles(newFileNames)),
-            mainChars=mainChars, preserveOthers=preserveOthers)
+            mainChars=mainChars,
+            preserveOthers=preserveOthers)
         validationSet = mainCharPruner(
             fixCharacterNames(loadFiles([validationFile])),
-            mainChars=mainChars, preserveOthers=preserveOthers)
+            mainChars=mainChars,
+            preserveOthers=preserveOthers)
         
-        ri = replikIdentifier(trainingSet, NValues=[n],
-                scoreFunction=scoreFunction)
+        ri = replikIdentifier(trainingSet, NValues=[n], scoreFunction=scoreFunction)
         
         # here check how correctly ri can identify the characters'
         #lines in validationSet
@@ -474,8 +475,7 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
                     slh = ri.identifyString(line)[n].items()
                     guess = max(slh, key=lambda x: x[1])[0]
                     if use_float_confusion_matrix:
-                        dict_add(confusion_matrix[name],
-                                dict(slh)) # modifies in place
+                        dict_add(confusion_matrix[name], dict(slh)) # modifies in place
                 else:
                     guess = random.choice(iterMainChars)
                 correct = guess == name
@@ -492,8 +492,9 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
                     print colored("%s: %s" % (guess, line),
                             "green" if correct else "red")
                     
-    printResultsFromCrossValidation(confusion_matrix,
-        randomGuess, correct_guesses, incorrect_guesses,
+    printResultsFromCrossValidation(
+        confusion_matrix, randomGuess,
+        correct_guesses, incorrect_guesses,
         use_float_confusion_matrix)
 
 def printResultsFromCrossValidation(confusion_matrix,
@@ -507,6 +508,23 @@ def printResultsFromCrossValidation(confusion_matrix,
         (colored(str(correct_guesses), "green"),
          100*correct_guesses/float(correct_guesses+incorrect_guesses),
          colored(str(incorrect_guesses), "red"))
+
+    diag_sum    = 0.0 if use_float_confusion_matrix else 0
+    nondiag_sum = 0.0 if use_float_confusion_matrix else 0
+    matrix_sum  = 0.0 if use_float_confusion_matrix else 0
+    for ci in iterMainChars:
+        for cj in iterMainChars:
+            matrix_sum += confusion_matrix[ci][cj]
+            if ci == cj:
+                diag_sum += confusion_matrix[ci][cj]
+            else:
+                nondiag_sum += confusion_matrix[ci][cj]
+    print ("Diagonal Sum: %s (%f), Non-Diagonal Sum: %s (%f)" % \
+           (diag_sum,
+            diag_sum/float(matrix_sum),
+            nondiag_sum,
+            nondiag_sum/float(matrix_sum)))
+
 
     print "Rows: Correct name, Columns: Guessed name"
     nameLen = max(map(len, iterMainChars))
@@ -655,7 +673,7 @@ if __name__ == "__main__":
         #bartControl()
         # validateAllLines()
 
-        use_float_confusion_matrix = True
+        use_float_confusion_matrix = False
         n = 2
         
         #for scoreFunction in [None, ngram.rescoreNGrams]:
