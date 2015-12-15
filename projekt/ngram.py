@@ -11,9 +11,7 @@ def loadNgramStopList(fileName, n=2):
     global ngramStopList
     
     ngramStopList[n] = []
-    for line in open(fileName).read().split("\n"):
-        if line:
-            ngramStopList[n].append(" ".join(line.split()))
+    ngramStopList[n] = [" ".join(line.split()) for line in open(fileName).read().split("\n") if line]
             
 def noStopList(n=2):
     global ngramStopList
