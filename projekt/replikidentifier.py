@@ -418,9 +418,14 @@ def mainCharPruner(repliker, amount=5, mainChars=None, preserveOthers=False):
     if preserveOthers:
         repl["OTHER"] = others
     return repl
+
+def dict_add(adict, bdict):
+    """adds bdict to adict (where keys match) and stores the result in adict"""
+    for key in set(adict.keys() + bdict.keys()):
+        adict[key] += bdict[key]
     
 def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
-        preserveOthers=False, scoreFunction=None):
+                    preserveOthers=False, scoreFunction=None, use_float_confusion_matrix=False):
     fileNames = getFileNames("episodes")
 
     repliker = fixCharacterNames(loadFiles(fileNames))
@@ -435,11 +440,12 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
 
     iterMainChars = mainChars if not preserveOthers else mainChars + ["OTHER"]
 
-    confusion_matrix = dict(zip(iterMainChars, [dict(zip(iterMainChars, [0]*len(iterMainChars))) for _ in range(len(iterMainChars))]))
+    confusion_matrix = dict(zip(iterMainChars,
+                                [dict(zip(iterMainChars,
+                                          [0.0 if use_float_confusion_matrix else 0]*len(iterMainChars)))
+                                 for _ in range(len(iterMainChars))]))
     correct_guesses = 0
     incorrect_guesses = 0
-    # true_positives = {}; false_positives = {}
-    # false_negatives = {}; true_negatives = {}
     for i, fname in enumerate(fileNames):
         if verbose:
             print "#########################%s, %s#########################" % (i, fname)
@@ -460,11 +466,13 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
                 print "---Name: ", name
             for line in lines:
                 if not randomGuess:
-                    guess = max(ri.identifyString(line)[n].items(), key=lambda x: x[1])[0]
+                    slh = ri.identifyString(line)[n].items()
+                    guess = max(slh, key=lambda x: x[1])[0]
+                    if use_float_confusion_matrix: dict_add(confusion_matrix_float[name], slh) # modifies in place
                 else:
                     guess = random.choice(iterMainChars)
                 correct = guess == name
-                confusion_matrix[name][guess] += 1
+                if not use_float_confusion_matrix: confusion_matrix[name][guess] += 1
                 if correct:
                     correct_guesses += 1
                 else:
@@ -490,33 +498,18 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
     for ci in iterMainChars:
         sys.stdout.write(("%"+str(nameLen)+"s ") % ci)
         for cj in iterMainChars:
-            sys.stdout.write(("%"+str(nameLen)+"d ") % confusion_matrix[ci][cj])
+            sys.stdout.write(("%"+str(nameLen)+(".2f" if use_float_confusion_matrix else "d ")) % confusion_matrix[ci][cj])
         sys.stdout.write("\n")
 
-    """
-    sys.stdout.write("Row-Wise Precision Values:\n")
-    for (name, precision) in calculateRowWisePrecision(confusion_matrix).items():
-        sys.stdout.write(("%"+str(nameLen)+"s %"+str(nameLen)+"s\n") % (name, precision))
-
-    sys.stdout.write("Row-Wise Recall Values:\n")
-    for (name, recall) in calculateRowWiseRecall(confusion_matrix).items():
-        sys.stdout.write(("%"+str(nameLen)+"s %"+str(nameLen)+"s\n") % (name, recall))
-
-    sys.stdout.write("Row-Wise F1 Scores:\n")
-    for (name, recall) in calculateRowWiseF1Score(confusion_matrix).items():
-        sys.stdout.write(("%"+str(nameLen)+"s %"+str(nameLen)+"s\n") % (name, recall))
-    """
-        
     fullLen = max(nameLen, len("Precision")) + 2
     print
     print " "*(nameLen+3) + "Precision".ljust(fullLen) + \
             "Recall".ljust(fullLen) + \
             "F1Score".ljust(fullLen)
     for precisionItem, recallItem, F1ScoreItem in zip(*map(lambda x: x.items(),
-                [calculateRowWisePrecision(confusion_matrix),
-                calculateRowWiseRecall(confusion_matrix),
-                calculateRowWiseF1Score(confusion_matrix)])):
-                    
+                                                           [calculateRowWisePrecision(confusion_matrix),
+                                                            calculateRowWiseRecall(confusion_matrix),
+                                                            calculateRowWiseF1Score(confusion_matrix)])):
             prec, rec, f1 = map(lambda x: ("%.3f" % x[1]).ljust(fullLen),
                     [precisionItem, recallItem, F1ScoreItem])
             
