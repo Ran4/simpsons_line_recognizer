@@ -468,7 +468,7 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
                 if not randomGuess:
                     slh = ri.identifyString(line)[n].items()
                     guess = max(slh, key=lambda x: x[1])[0]
-                    if use_float_confusion_matrix: dict_add(confusion_matrix_float[name], slh) # modifies in place
+                    if use_float_confusion_matrix: dict_add(confusion_matrix[name], slh) # modifies in place
                 else:
                     guess = random.choice(iterMainChars)
                 correct = guess == name
@@ -638,7 +638,7 @@ if __name__ == "__main__":
             print colored(str(len(ngram.ngramStopList)), "cyan")
             #print str(ngram.ngramStopList[:4])[1:-1] + "..."
             crossValidation(n=2, amount=5, randomGuess=False, verbose=False,
-                    preserveOthers=False, scoreFunction=scoreFunction)
+                            preserveOthers=False, scoreFunction=scoreFunction, use_float_confusion_matrix=True)
             
             ngram.noStopList()
     else:
