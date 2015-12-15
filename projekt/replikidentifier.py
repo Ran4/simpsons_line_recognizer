@@ -621,7 +621,8 @@ if __name__ == "__main__":
         #bartControl()
         # validateAllLines()
         
-        for scoreFunction in [None, ngram.rescoreNGrams]:
+        #for scoreFunction in [None, ngram.rescoreNGrams]:
+        for scoreFunction in [None, ngram.rescoreNGramsByMoreUniqueMethod]:
             print colored("-"*50, "yellow")
             print colored(("with" if scoreFunction else "without") + \
                         " score function!", "yellow")
@@ -629,7 +630,7 @@ if __name__ == "__main__":
         
             crossValidation(n=2, amount=5, randomGuess=False, verbose=False,
                     preserveOthers=False, scoreFunction=scoreFunction)
-
+            
             ngram.loadNgramStopList("combined_stoplist.txt")
             
             #print "Stoplist with length:", len(ngram.ngramStopList), ngram.ngramStopList
