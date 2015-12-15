@@ -1,0 +1,70 @@
+--------------------------------------------------
+without score function!
+--------------------------------------------------
+Correct guesses: 834 (31.5%), incorrect guesses: 1810
+Rows: Correct name, Columns: Guessed name
+                HOMER       BART      MARGE       LISA      BURNS 
+     HOMER    1730.42    1513.87    1629.61    1401.87    1357.81 
+      BART     527.84     591.93     584.48     534.66     419.90 
+     MARGE     625.43     639.21     807.39     626.25     602.12 
+      LISA     399.16     433.35     464.88     431.19     343.87 
+     BURNS     309.46     274.96     358.84     274.11     364.26 
+
+             Precision   Recall      F1Score     
+HOMER:       0.482       0.227       0.308       
+LISA:        0.132       0.208       0.161       
+BURNS:       0.118       0.230       0.156       
+BART:        0.171       0.223       0.194       
+MARGE:       0.210       0.245       0.226       
+
+Using stoplist with length: 187
+Correct guesses: 867 (32.8%), incorrect guesses: 1777
+Rows: Correct name, Columns: Guessed name
+                HOMER       BART      MARGE       LISA      BURNS 
+     HOMER     745.65     564.23     610.44     545.80     545.08 
+      BART     196.23     256.10     185.25     215.43     142.43 
+     MARGE     232.28     201.43     322.27     224.94     204.39 
+      LISA     156.69     176.45     169.94     192.94     119.78 
+     BURNS     124.69      94.32     124.14      95.76     170.38 
+
+             Precision   Recall      F1Score     
+HOMER:       0.512       0.248       0.334       
+LISA:        0.151       0.237       0.185       
+BURNS:       0.144       0.280       0.190       
+BART:        0.198       0.257       0.224       
+MARGE:       0.228       0.272       0.248       
+--------------------------------------------------
+with score function!
+--------------------------------------------------
+Correct guesses: 880 (33.3%), incorrect guesses: 1764
+Rows: Correct name, Columns: Guessed name
+                HOMER       BART      MARGE       LISA      BURNS 
+     HOMER     258.91     143.82     204.33     124.12     136.91 
+      BART      58.38      75.95      71.47      47.93      32.34 
+     MARGE      70.25      58.87     140.73      50.64      52.37 
+      LISA      47.88      49.86      61.68      68.80      26.82 
+     BURNS      40.98      22.16      51.61      24.96      46.19 
+
+             Precision   Recall      F1Score     
+HOMER:       0.543       0.298       0.385       
+LISA:        0.217       0.270       0.241       
+BURNS:       0.157       0.248       0.192       
+BART:        0.217       0.265       0.239       
+MARGE:       0.266       0.377       0.312       
+
+Using stoplist with length: 187
+Correct guesses: 901 (34.1%), incorrect guesses: 1743
+Rows: Correct name, Columns: Guessed name
+                HOMER       BART      MARGE       LISA      BURNS 
+     HOMER     250.19     125.34     153.25     116.33     128.32 
+      BART      55.23      70.27      50.02      45.04      29.03 
+     MARGE      67.16      52.45     115.47      47.50      47.78 
+      LISA      45.57      45.61      46.30      66.61      23.97 
+     BURNS      38.25      19.04      38.40      22.92      44.41 
+
+             Precision   Recall      F1Score     
+HOMER:       0.548       0.323       0.407       
+LISA:        0.223       0.292       0.253       
+BURNS:       0.162       0.272       0.203       
+BART:        0.225       0.282       0.250       
+MARGE:       0.286       0.350       0.315       
