@@ -468,7 +468,7 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
                 if not randomGuess:
                     slh = ri.identifyString(line)[n].items()
                     guess = max(slh, key=lambda x: x[1])[0]
-                    if use_float_confusion_matrix: dict_add(confusion_matrix[name], slh) # modifies in place
+                    if use_float_confusion_matrix: dict_add(confusion_matrix[name], dict(slh)) # modifies in place
                 else:
                     guess = random.choice(iterMainChars)
                 correct = guess == name
@@ -491,6 +491,7 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
 
     print "Rows: Correct name, Columns: Guessed name"
     nameLen = max(map(len, iterMainChars))
+    if use_float_confusion_matrix: nameLen = 10 if nameLen < 10 else nameLen
     sys.stdout.write(" "*(nameLen+1))
     for char in iterMainChars:
         sys.stdout.write(("%"+str(nameLen)+"s ") % char)
@@ -498,7 +499,7 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
     for ci in iterMainChars:
         sys.stdout.write(("%"+str(nameLen)+"s ") % ci)
         for cj in iterMainChars:
-            sys.stdout.write(("%"+str(nameLen)+(".2f" if use_float_confusion_matrix else "d ")) % confusion_matrix[ci][cj])
+            sys.stdout.write(("%"+str(nameLen)+(".2f " if use_float_confusion_matrix else "d ")) % confusion_matrix[ci][cj])
         sys.stdout.write("\n")
 
     fullLen = max(nameLen, len("Precision")) + 2
@@ -620,6 +621,8 @@ if __name__ == "__main__":
         # fileNames = getFileNames("episodes")
         #bartControl()
         # validateAllLines()
+
+        use_float_confusion_matrix=True
         
         #for scoreFunction in [None, ngram.rescoreNGrams]:
         for scoreFunction in [None, ngram.rescoreNGramsByMoreUniqueMethod]:
@@ -629,7 +632,7 @@ if __name__ == "__main__":
             print colored("-"*50, "yellow")
         
             crossValidation(n=2, amount=5, randomGuess=False, verbose=False,
-                    preserveOthers=False, scoreFunction=scoreFunction)
+                            preserveOthers=False, scoreFunction=scoreFunction, use_float_confusion_matrix=use_float_confusion_matrix)
             
             ngram.loadNgramStopList("combined_stoplist.txt")
             
@@ -638,7 +641,7 @@ if __name__ == "__main__":
             print colored(str(len(ngram.ngramStopList)), "cyan")
             #print str(ngram.ngramStopList[:4])[1:-1] + "..."
             crossValidation(n=2, amount=5, randomGuess=False, verbose=False,
-                            preserveOthers=False, scoreFunction=scoreFunction, use_float_confusion_matrix=True)
+                            preserveOthers=False, scoreFunction=scoreFunction, use_float_confusion_matrix=use_float_confusion_matrix)
             
             ngram.noStopList()
     else:
