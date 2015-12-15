@@ -1,4 +1,5 @@
 from collections import Counter
+import time
 
 from termcolor import colored
 
@@ -14,7 +15,11 @@ def loadNgramStopList(fileName):
         if line:
             ngramStopList.append(" ".join(line.split()))
             
-def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStopList=None):
+def noStopList():
+    global ngramStopList
+    ngramStopList = []
+            
+def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStopList=None, scoreFunction=None):
     """Calculates N-grams for a dict of lines replik
     Returns a dict with key = n, value = an ngrams dict
     {
@@ -33,10 +38,36 @@ def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStop
             nGrams = calculateNGramsForCharacters(replik, n, verbose)
         # if ngramStopList:
         #     nGrams = filter(lambda x: x not in ngramStopList, nGrams)
+        
+        if scoreFunction is not None:
+            scoreFunction(nGrams)
    
         ngramDict[n] = nGrams
     
     return ngramDict
+    
+def rescoreNGrams(nGrams):
+    """rescoreNGrams: Takes a dict of ngrams of form
+    {"BART": Counter({'hej': 2, 'hopp': 1})}
+    and in-place multiplies the value of every key with 1/occurance
+    where occurance is the number of occurances of a specific ngram
+    """
+    
+    allNGrams = Counter()
+    map(allNGrams.update, nGrams.values())
+    
+    #print "allNGrams:", allNGrams
+    
+    for name in nGrams.keys():
+        for ngramStr in nGrams[name]:
+            nGrams[name][ngramStr] *= 1.0 / allNGrams[ngramStr]**8
+            
+def rescoreNGramsByMoreUniqueMethod(nGrams):
+    """like rescoreNGrams but use allnGrams but those specific
+    to a certain character
+    TODO: finish this
+    """
+    pass
             
 def calculateNGramsForCharacters(replik, n, verbose, overrideMinCount=None):
     """Calculates NGrams with n=n for all characters in replik
