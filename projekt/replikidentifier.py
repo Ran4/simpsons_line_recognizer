@@ -441,9 +441,9 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
     iterMainChars = mainChars if not preserveOthers else mainChars + ["OTHER"]
 
     confusion_matrix = dict(zip(iterMainChars,
-                                [dict(zip(iterMainChars,
-                                          [0.0 if use_float_confusion_matrix else 0]*len(iterMainChars)))
-                                 for _ in range(len(iterMainChars))]))
+        [dict(zip(iterMainChars,
+                  [0.0 if use_float_confusion_matrix else 0]*len(iterMainChars)))
+         for _ in range(len(iterMainChars))]))
     correct_guesses = 0
     incorrect_guesses = 0
     for i, fname in enumerate(fileNames):
@@ -454,13 +454,18 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
         newFileNames = copy.copy(fileNames)
         validationFile = newFileNames.pop(i)
 
-        trainingSet = mainCharPruner(fixCharacterNames(loadFiles(newFileNames)), mainChars=mainChars, preserveOthers=preserveOthers)
-        validationSet = mainCharPruner(fixCharacterNames(loadFiles([validationFile])), mainChars=mainChars, preserveOthers=preserveOthers)
+        trainingSet = mainCharPruner(
+            fixCharacterNames(loadFiles(newFileNames)),
+            mainChars=mainChars, preserveOthers=preserveOthers)
+        validationSet = mainCharPruner(
+            fixCharacterNames(loadFiles([validationFile])),
+            mainChars=mainChars, preserveOthers=preserveOthers)
         
         ri = replikIdentifier(trainingSet, NValues=[n],
                 scoreFunction=scoreFunction)
         
-        # here check how correctly ri can identify the characters' lines in validationSet
+        # here check how correctly ri can identify the characters'
+        #lines in validationSet
         for (name, lines) in validationSet.items():
             if verbose:
                 print "---Name: ", name
@@ -468,19 +473,33 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
                 if not randomGuess:
                     slh = ri.identifyString(line)[n].items()
                     guess = max(slh, key=lambda x: x[1])[0]
-                    if use_float_confusion_matrix: dict_add(confusion_matrix[name], dict(slh)) # modifies in place
+                    if use_float_confusion_matrix:
+                        dict_add(confusion_matrix[name],
+                                dict(slh)) # modifies in place
                 else:
                     guess = random.choice(iterMainChars)
                 correct = guess == name
-                if not use_float_confusion_matrix: confusion_matrix[name][guess] += 1
+                
+                if not use_float_confusion_matrix:
+                    confusion_matrix[name][guess] += 1
+                    
                 if correct:
                     correct_guesses += 1
                 else:
                     incorrect_guesses += 1
                     
                 if verbose:
-                    print colored("%s: %s" % (guess, line), "green" if correct else "red")
+                    print colored("%s: %s" % (guess, line),
+                            "green" if correct else "red")
+                    
+    printResultsFromCrossValidation(confusion_matrix,
+        randomGuess, correct_guesses, incorrect_guesses,
+        use_float_confusion_matrix)
 
+def printResultsFromCrossValidation(confusion_matrix,
+        randomGuess, correct_guesses, incorrect_guesses,
+        use_float_confusion_matrix):
+    iterMainChars = confusion_matrix.keys()
     if randomGuess:
         print colored("(random guessing)", "cyan")
         
@@ -499,7 +518,9 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
     for ci in iterMainChars:
         sys.stdout.write(("%"+str(nameLen)+"s ") % ci)
         for cj in iterMainChars:
-            sys.stdout.write(("%"+str(nameLen)+(".2f " if use_float_confusion_matrix else "d ")) % confusion_matrix[ci][cj])
+            sys.stdout.write(("%"+str(nameLen) +
+                (".2f " if use_float_confusion_matrix else "d ")) % \
+                        confusion_matrix[ci][cj])
         sys.stdout.write("\n")
 
     fullLen = max(nameLen, len("Precision")) + 2
@@ -553,7 +574,8 @@ def calculateRowWisePrecision(confusion_matrix):
     for (name, row) in confusion_matrix.items():
         true_positives  = row[name]
         # print name, [r[name] for (n, r) in confusion_matrix.items() if n != name]
-        false_positives = sum([r[name] for (n, r) in confusion_matrix.items() if n != name]) # column-wise sum for column {name} with 0:ed diagonal
+        false_positives = sum([r[name] for (n, r) in confusion_matrix.items()
+            if n != name]) # column-wise sum for column {name} with 0:ed diagonal
         precisions[name] = float(true_positives)/float(true_positives + false_positives)
     return precisions
 
@@ -633,7 +655,7 @@ if __name__ == "__main__":
         #bartControl()
         # validateAllLines()
 
-        use_float_confusion_matrix=False
+        use_float_confusion_matrix = True
         n = 2
         
         #for scoreFunction in [None, ngram.rescoreNGrams]:
@@ -644,7 +666,8 @@ if __name__ == "__main__":
             print colored("-"*50, "yellow")
         
             crossValidation(n=n, amount=5, randomGuess=False, verbose=False,
-                            preserveOthers=False, scoreFunction=scoreFunction, use_float_confusion_matrix=use_float_confusion_matrix)
+                    preserveOthers=False, scoreFunction=scoreFunction,
+                    use_float_confusion_matrix=use_float_confusion_matrix)
 
             # TODO: we need stoplist for trigrams etc. to be able to
             # load them for other n's. Either that or being able to
@@ -655,7 +678,8 @@ if __name__ == "__main__":
             print colored("\nUsing stoplist with length:", "cyan"),
             print colored(str(len(ngram.ngramStopList.get(n, []))), "cyan")
             crossValidation(n=n, amount=5, randomGuess=False, verbose=False,
-                            preserveOthers=False, scoreFunction=scoreFunction, use_float_confusion_matrix=use_float_confusion_matrix)
+                    preserveOthers=False, scoreFunction=scoreFunction,
+                    use_float_confusion_matrix=use_float_confusion_matrix)
             
             ngram.noStopList()
     else:
