@@ -31,7 +31,7 @@ PRINT_MERGES = False
 
 class replikIdentifier(object): #{{{
     def __init__(self, replik, verbose=VERBOSE, minReplikOccurance=100,
-            NValues=[2]):
+            NValues=[2], scoreFunction=None):
         
         self.minReplikOccurance = minReplikOccurance
         self.MINWORDS_1GRAM = 1
@@ -41,8 +41,6 @@ class replikIdentifier(object): #{{{
         self.printPrunedRepliker = False
         
         self.verbose = verbose
-        # self.replik = loadFiles(fileNames)
-        # fixCharacterNames(self.replik)
 
         self.replik = replik
         
@@ -76,7 +74,8 @@ class replikIdentifier(object): #{{{
             print "\nStarting to calculate N-Gram statistics"
             
         self.ngramDict = ngram.calculateNGrams(self.replik, self.verbose,
-                globalMinCount=0, NValues=NValues)
+                globalMinCount=0, NValues=NValues,
+                scoreFunction=scoreFunction)
         
     def identifyString(self, s):
         """Takes a string s and returns which name is the most likely
@@ -420,7 +419,8 @@ def mainCharPruner(repliker, amount=5, mainChars=None, preserveOthers=False):
         repl["OTHER"] = others
     return repl
     
-def crossValidation(n=2, randomGuess=False, amount=5, verbose=True, preserveOthers=False):
+def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
+        preserveOthers=False, scoreFunction=None):
     fileNames = getFileNames("episodes")
 
     repliker = fixCharacterNames(loadFiles(fileNames))
@@ -443,6 +443,7 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True, preserveOthe
     for i, fname in enumerate(fileNames):
         if verbose:
             print "#########################%s, %s#########################" % (i, fname)
+            
         
         newFileNames = copy.copy(fileNames)
         validationFile = newFileNames.pop(i)
@@ -450,8 +451,9 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True, preserveOthe
         trainingSet = mainCharPruner(fixCharacterNames(loadFiles(newFileNames)), mainChars=mainChars, preserveOthers=preserveOthers)
         validationSet = mainCharPruner(fixCharacterNames(loadFiles([validationFile])), mainChars=mainChars, preserveOthers=preserveOthers)
         
-        ri = replikIdentifier(trainingSet, NValues=[n])
-
+        ri = replikIdentifier(trainingSet, NValues=[n],
+                scoreFunction=scoreFunction)
+        
         # here check how correctly ri can identify the characters' lines in validationSet
         for (name, lines) in validationSet.items():
             if verbose:
@@ -523,7 +525,7 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True, preserveOthe
 
     return confusion_matrix
 
-def calculateRowWiseF1Score(confusion_matrix):
+def calculateRowWiseF1Score(confusion_matrix): #{{{
     F1scores = {}
     recalls = calculateRowWiseRecall(confusion_matrix)
     precisions = calculateRowWisePrecision(confusion_matrix)
@@ -558,8 +560,7 @@ def calculateRowWiseRecall(confusion_matrix):
         true_positives  = row[name]
         false_negatives = sum([r for (n, r) in row.items() if n != name]) # row-wise sum with 0:ed diagonal
         recalls[name] = float(true_positives)/float(true_positives + false_negatives)
-    return recalls
-
+    return recalls #}}}
         
 def repl(): #{{{
     fileNames = getFileNames("episodes")
@@ -620,24 +621,32 @@ def repl(): #{{{
 #python replikIdentifier.py -i
     
 if __name__ == "__main__":
-
     if "-i" in sys.argv[1:]:
         repl()
     elif "validate" in sys.argv[1:] or "--validate" in sys.argv[1:]:
         # fileNames = getFileNames("episodes")
         #bartControl()
         # validateAllLines()
-        crossValidation(n=2, amount=5, randomGuess=False, verbose=False, preserveOthers=False)
+        
+        for scoreFunction in [None, ngram.rescoreNGrams]:
+            print colored("-"*50, "yellow")
+            print colored(("with" if scoreFunction else "without") + \
+                        " score function!", "yellow")
+            print colored("-"*50, "yellow")
+        
+            crossValidation(n=2, amount=5, randomGuess=False, verbose=False,
+                    preserveOthers=False, scoreFunction=scoreFunction)
 
-        ngram.loadNgramStopList("combined_stoplist.txt")
-        #print "Stoplist with length:", len(ngram.ngramStopList), ngram.ngramStopList
-        print colored("\nUsing stoplist with length:", "cyan"),
-        print colored(str(len(ngram.ngramStopList)), "cyan")
-        #print str(ngram.ngramStopList[:4])[1:-1] + "..."
-        crossValidation(n=2, amount=5, randomGuess=False, verbose=False, preserveOthers=False)
-        # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
-        # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
-        # crossValidation(n=3, amount=5, randomGuess=True,  verbose=False)
+            ngram.loadNgramStopList("combined_stoplist.txt")
+            
+            #print "Stoplist with length:", len(ngram.ngramStopList), ngram.ngramStopList
+            print colored("\nUsing stoplist with length:", "cyan"),
+            print colored(str(len(ngram.ngramStopList)), "cyan")
+            #print str(ngram.ngramStopList[:4])[1:-1] + "..."
+            crossValidation(n=2, amount=5, randomGuess=False, verbose=False,
+                    preserveOthers=False, scoreFunction=scoreFunction)
+            
+            ngram.noStopList()
     else:
         print "usage: one of"
         print "%s -i" % sys.argv[0]
