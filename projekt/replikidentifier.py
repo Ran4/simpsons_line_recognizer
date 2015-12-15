@@ -507,15 +507,26 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
     print " "*(nameLen+3) + "Precision".ljust(fullLen) + \
             "Recall".ljust(fullLen) + \
             "F1Score".ljust(fullLen)
+    precList = []; recList = []; f1List = []
     for precisionItem, recallItem, F1ScoreItem in zip(*map(lambda x: x.items(),
-                                                           [calculateRowWisePrecision(confusion_matrix),
-                                                            calculateRowWiseRecall(confusion_matrix),
-                                                            calculateRowWiseF1Score(confusion_matrix)])):
+               [calculateRowWisePrecision(confusion_matrix),
+                calculateRowWiseRecall(confusion_matrix),
+                calculateRowWiseF1Score(confusion_matrix)])):
             prec, rec, f1 = map(lambda x: ("%.3f" % x[1]).ljust(fullLen),
                     [precisionItem, recallItem, F1ScoreItem])
             
+            precList.append(float(prec))
+            recList.append(float(rec))
+            f1List.append(float(f1))
+            
             print (precisionItem[0] + ":").ljust(nameLen + 2),
             print "%s%s%s" % (prec, rec, f1)
+            
+    print "avg:".ljust(nameLen + 2),
+    avg = lambda seq: sum(seq)/float(len(seq))
+    avgPrec, avgRec, avgF1 = map(lambda x: ("%.3f" % avg(x)).ljust(fullLen),
+            [precList, recList, f1List])
+    print colored("%s%s%s" % (avgPrec, avgRec, avgF1), "yellow")
 
     return confusion_matrix
 
