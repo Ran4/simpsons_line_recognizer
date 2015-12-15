@@ -628,7 +628,8 @@ if __name__ == "__main__":
         #bartControl()
         # validateAllLines()
         
-        for scoreFunction in [None, ngram.rescoreNGrams]:
+        #for scoreFunction in [None, ngram.rescoreNGrams]:
+        for scoreFunction in [None, ngram.rescoreNGramsByMoreUniqueMethod]:
             print colored("-"*50, "yellow")
             print colored(("with" if scoreFunction else "without") + \
                         " score function!", "yellow")

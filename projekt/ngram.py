@@ -57,14 +57,24 @@ def rescoreNGrams(nGrams):
     
     for name in nGrams.keys():
         for ngramStr in nGrams[name]:
-            nGrams[name][ngramStr] *= 1.0 / allNGrams[ngramStr]**8
+            nGrams[name][ngramStr] *= 1.0 / allNGrams[ngramStr]
             
 def rescoreNGramsByMoreUniqueMethod(nGrams):
-    """like rescoreNGrams but use allnGrams but those specific
+    """Like rescoreNGrams but use all nGrams except those specific
     to a certain character
-    TODO: finish this
     """
-    pass
+    def getAllNGramsExceptByCharacter(nGrams, name):
+        allNGrams = Counter()
+        map(allNGrams.update,
+                [item[1] for item in nGrams.items()
+                    if item[0] != name])
+        return allNGrams
+    
+    UNIQVALUE = 0.05
+    for name in nGrams.keys():
+        allNGrams = getAllNGramsExceptByCharacter(nGrams, name)
+        for ngramStr in nGrams[name]:
+            nGrams[name][ngramStr] *= 1.0 / max(UNIQVALUE, allNGrams[ngramStr])
             
 def calculateNGramsForCharacters(replik, n, verbose, overrideMinCount=None):
     """Calculates NGrams with n=n for all characters in replik
