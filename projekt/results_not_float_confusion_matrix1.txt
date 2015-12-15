@@ -1,0 +1,70 @@
+--------------------------------------------------
+without score function!
+--------------------------------------------------
+Correct guesses: 834 (31.5%), incorrect guesses: 1810
+Rows: Correct name, Columns: Guessed name
+      HOMER  BART MARGE  LISA BURNS 
+HOMER   487   159   168   133   163 
+ BART   165   100    86    81    59 
+MARGE   167    50   128    60    79 
+ LISA   128    65    72    58    49 
+BURNS    54    14    35    23    61 
+
+        Precision  Recall     F1Score    
+HOMER:  0.487      0.439      0.461      
+LISA:   0.163      0.156      0.160      
+BURNS:  0.148      0.326      0.204      
+BART:   0.258      0.204      0.228      
+MARGE:  0.262      0.264      0.263      
+
+Using stoplist with length: 187
+Correct guesses: 867 (32.8%), incorrect guesses: 1777
+Rows: Correct name, Columns: Guessed name
+      HOMER  BART MARGE  LISA BURNS 
+HOMER   507   166   133   129   175 
+ BART   192   107    66    78    48 
+MARGE   181    57   127    54    65 
+ LISA   154    62    53    63    40 
+BURNS    63     9    31    21    63 
+
+        Precision  Recall     F1Score    
+HOMER:  0.462      0.457      0.459      
+LISA:   0.183      0.169      0.176      
+BURNS:  0.161      0.337      0.218      
+BART:   0.267      0.218      0.240      
+MARGE:  0.310      0.262      0.284      
+--------------------------------------------------
+with score function!
+--------------------------------------------------
+Correct guesses: 880 (33.3%), incorrect guesses: 1764
+Rows: Correct name, Columns: Guessed name
+      HOMER  BART MARGE  LISA BURNS 
+HOMER   551   136   211    89   123 
+ BART   207    94   102    53    35 
+MARGE   192    50   149    43    50 
+ LISA   159    54    75    54    30 
+BURNS    69    18    51    17    32 
+
+        Precision  Recall     F1Score    
+HOMER:  0.468      0.496      0.482      
+LISA:   0.211      0.145      0.172      
+BURNS:  0.119      0.171      0.140      
+BART:   0.267      0.191      0.223      
+MARGE:  0.253      0.308      0.278      
+
+Using stoplist with length: 187
+Correct guesses: 901 (34.1%), incorrect guesses: 1743
+Rows: Correct name, Columns: Guessed name
+      HOMER  BART MARGE  LISA BURNS 
+HOMER   596   133   154    99   128 
+ BART   230    96    71    58    36 
+MARGE   211    50   119    51    53 
+ LISA   178    53    56    54    31 
+BURNS    76    19    38    18    36 
+
+        Precision  Recall     F1Score    
+HOMER:  0.462      0.537      0.496      
+LISA:   0.193      0.145      0.166      
+BURNS:  0.127      0.193      0.153      
+BART:   0.274      0.196      0.228      
+MARGE:  0.272      0.246      0.258    

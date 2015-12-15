@@ -633,7 +633,8 @@ if __name__ == "__main__":
         #bartControl()
         # validateAllLines()
 
-        use_float_confusion_matrix=True
+        use_float_confusion_matrix=False
+        n = 2
         
         #for scoreFunction in [None, ngram.rescoreNGrams]:
         for scoreFunction in [None, ngram.rescoreNGramsByMoreUniqueMethod]:
@@ -642,16 +643,18 @@ if __name__ == "__main__":
                         " score function!", "yellow")
             print colored("-"*50, "yellow")
         
-            crossValidation(n=2, amount=5, randomGuess=False, verbose=False,
+            crossValidation(n=n, amount=5, randomGuess=False, verbose=False,
                             preserveOthers=False, scoreFunction=scoreFunction, use_float_confusion_matrix=use_float_confusion_matrix)
+
+            # TODO: we need stoplist for trigrams etc. to be able to
+            # load them for other n's. Either that or being able to
+            # synthesize a trigram stoplist from a bigram one
+            if n == 2:
+                ngram.loadNgramStopList("combined_stoplist.txt", n=n)
             
-            ngram.loadNgramStopList("combined_stoplist.txt")
-            
-            #print "Stoplist with length:", len(ngram.ngramStopList), ngram.ngramStopList
             print colored("\nUsing stoplist with length:", "cyan"),
-            print colored(str(len(ngram.ngramStopList)), "cyan")
-            #print str(ngram.ngramStopList[:4])[1:-1] + "..."
-            crossValidation(n=2, amount=5, randomGuess=False, verbose=False,
+            print colored(str(len(ngram.ngramStopList.get(n, []))), "cyan")
+            crossValidation(n=n, amount=5, randomGuess=False, verbose=False,
                             preserveOthers=False, scoreFunction=scoreFunction, use_float_confusion_matrix=use_float_confusion_matrix)
             
             ngram.noStopList()
