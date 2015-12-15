@@ -597,7 +597,9 @@ def repl(): #{{{
     n = 2
     
     corpus = mainCharPruner(fixCharacterNames(repliker), amount=amount)
-    ri = replikIdentifier(corpus, NValues=[n])
+    ri = replikIdentifier(corpus, NValues=[n],
+            scoreFunction=ngram.rescoreNGramsByMoreUniqueMethod)
+            #scoreFunction=None)
     
     def intOrNone(s):
         try:
@@ -639,7 +641,7 @@ def repl(): #{{{
         #import pdb; pdb.set_trace()
         
         if sortedRatios:
-            format = lambda item: "%s (%.1f)" % (item[0].title(), item[1])
+            format = lambda item: "%s (%.4g)" % (item[0].title(), item[1])
             print ", ".join(map(format, sortedRatios))
         else:
             msg = "No matches found, but here's a JULGRAN!"

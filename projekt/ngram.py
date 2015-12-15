@@ -71,6 +71,7 @@ def rescoreNGramsByMoreUniqueMethod(nGrams):
         return allNGrams
     
     UNIQVALUE = 0.05
+    #MUL = 1e9
     for name in nGrams.keys():
         allNGrams = getAllNGramsExceptByCharacter(nGrams, name)
         for ngramStr in nGrams[name]:
