@@ -20,7 +20,7 @@ def noStopList(n=2):
     
     ngramStopList[n] = []
             
-def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStopList=None, scoreFunction=None):
+def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], scoreFunction=None):
     """Calculates N-grams for a dict of lines replik
     Returns a dict with key = n, value = an ngrams dict
     {
@@ -37,8 +37,6 @@ def calculateNGrams(replik, verbose, globalMinCount=None, NValues=[2], ngramStop
                     overrideMinCount=globalMinCount)
         else:
             nGrams = calculateNGramsForCharacters(replik, n, verbose)
-        # if ngramStopList:
-        #     nGrams = filter(lambda x: x not in ngramStopList, nGrams)
         
         if scoreFunction is not None:
             scoreFunction(nGrams)
