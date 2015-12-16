@@ -173,8 +173,8 @@ Vi använder även en bättre variant, där vi tar hänsyn till hur "unikt" varj
 n-gram är hos en karaktär.
 
 Om ett visst n-gram förekommer $X$ gånger hos karaktär A, $Y$ gånger hos karaktär B
-och $Z$ gånger hos karaktär C får ett n-gram poängen $X/(Y+Z)$ för karaktär A,
-$Y/(X+Z)$ för karaktär B och $Z/(X+Y)$ för karaktär C.
+och $Z$ gånger hos karaktär C får ett n-gram poängen $\frac{X}{(Y+Z)}$ för karaktär A,
+$\frac{Y}{(X+Z)}$ för karaktär B och $\frac{Z}{(X+Y)}$ för karaktär C.
 
 \begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
 function calculate_score_for_line_improved(all_ngrams, line, name):

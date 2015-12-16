@@ -49,6 +49,10 @@ HOMER there's no time to be careful we're late
 
 ====Klassificering====
 
+# Läs in strängen för den replik vi vill klassificera
+# Generera n-gram från strängen
+# Jämför med databasen  och generera en vektor med sannolikheter hur sannolik vilken karaktär är
+# Välj den mest sannolika
 
 ====Korsvalidering====
 
