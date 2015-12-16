@@ -11,7 +11,7 @@ usepackage=[utf8]{inputenc}
 [ autotemplate ]>
 
 <[nowiki]
-\renewcommand{\thefootnote}{\fnsymbol{footnote}} % A sequence of nine symbols (try it and see!) 
+\renewcommand{\thefootnote}{\fnsymbol{footnote}} % A sequence of nine symbols (try it and see!)
 [nowiki]>
 
 %==Replikidentifiering av karaktärer från tv-serien The Simpsons med N-Grams==
@@ -27,7 +27,7 @@ mening generar vi dess n-gram, och sen väljer vi den rollfigur för
 vilken denna n-gram-sekvens är sannolikast.
 
 ====Parsning av Data====
-
+i
 * Blah1
 ** Blah1.1
 * Blah2
@@ -35,6 +35,16 @@ vilken denna n-gram-sekvens är sannolikast.
 
 ====Vår Modell====
 
+Vi bygger upp
+
+<[code][mathescape,basicstyle=\tiny]
+HOMER There's no time to be careful, we're late.
+$\downarrow$
+HOMER there's no time to be careful we're late
+$\downarrow$
+"HOMER": ["there's no", "no time", "time to", "to be",
+          "be careful", "careful we're", "we're late"]
+[code]>
 
 
 ====Korsvalidering====
@@ -42,11 +52,11 @@ vilken denna n-gram-sekvens är sannolikast.
 
 ====Resultat====
 <[code]
-        Precision  Recall     F1Score    
-HOMER:  0.641      0.309      0.417      
-LISA:   0.203      0.269      0.231      
-BURNS:  0.190      0.353      0.247      
-BART:   0.278      0.289      0.283      
-MARGE:  0.323      0.506      0.394      
-avg:    0.327      0.345      0.314 
+        Precision  Recall     F1Score
+HOMER:  0.641      0.309      0.417
+LISA:   0.203      0.269      0.231
+BURNS:  0.190      0.353      0.247
+BART:   0.278      0.289      0.283
+MARGE:  0.323      0.506      0.394
+avg:    0.327      0.345      0.314
 [code]>
