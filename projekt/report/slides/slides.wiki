@@ -38,3 +38,9 @@ vilken denna n-gram-sekvens är sannolikast.
 
 
 ====Korsvalidering====
+
+
+====Resultat====
+<[code]
+
+[code]>
