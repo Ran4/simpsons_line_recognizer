@@ -174,6 +174,7 @@ def addReplikerToDict(lines, replik, verbose=VERBOSE):
     """Takes a number of raw lines, parses them and
     adds them to a dictionary replik"""
     ACCEPTED_LETTERS = "abcdefghijklmnopqrstuvwxyz' "
+    # ACCEPTED_LETTERS = "abcdefghijklmnopqrstuvwxyz' ."
     name = None
     for i, line in enumerate(lines):
         if line.isupper() and not name:
@@ -185,6 +186,7 @@ def addReplikerToDict(lines, replik, verbose=VERBOSE):
                 line = line[line.find(")")+1:].strip()
             
             line = filter(lambda x: x in ACCEPTED_LETTERS, line)
+            # line = line.replace(". ", " $ ")
             while "  " in line:
                 line = line.replace("  ", " ")
                 
