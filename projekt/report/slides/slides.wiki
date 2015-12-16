@@ -41,8 +41,17 @@ HOMER there's no time to be careful we're late
 [code]>
 
 ====Poängfunktion====
+För att koppla ihop en specifik mening till en specifik karaktär
+så har vi skapat en funktion som beräknar ett poängvärde för varje rad och karaktär.
+Den karaktär som ger högst poäng för en viss rad klassificerass som rätt karaktär.
 
+Poängvärdet beräknas med hjälp av en metod inspirerad av tf*idf:
+term frequence * inverse document frequency.
 
+Om ett visst n-gram förekommer $X$ gånger hos karaktär A,
+$Y$ gånger hos karaktär B och $Z$ gånger hos karaktär C
+får ett n-gram poängen $X/(Y+Z)$ för karaktär A,
+$Y/(X+Z)$ för karaktär B och så vidare.
 
 ====Korsvalidering====
 
