@@ -11,9 +11,9 @@
 \usepackage{endnotes}
 \usepackage{alltt}
 \usepackage{listings}
-
+\usepackage{hyperref}
 \author{Anton Kindestam antonki@kth.se\\Rasmus Ansin ransin@kth.se}
-\title{N-Gram The Simpsons super special extravaganza}
+\title{Replikidentifiering av karaktärer från tv-serien The Simpsons med N-Grams}
 
 \begin{document}
 \maketitle
@@ -31,18 +31,17 @@
 %    Explicita referenser: när andras verktyg, lexikon, teorier osv. används skall detta explicit redovisas.
 
 \section{Bakgrund}
+Vi har valt att analysera repliker av The Simpsons-avsnitt för att skapa en klassificerare som kan klassificera vilken yttring som tillhör vilken Simpsons-rollfigur. Vi gör detta genom att skapa en n-gram-databas över yttringar kopplade till rollfigurer. För en given mening generar vi dess n-gram, och sen väljer vi den rollfigur för vilken denna n-gram-sekvens är sannolikast.
 
-Vi har valt att analysera repliker av The Simpsons-avsnitt 
 
 \section{Utgångspunkt}
 
-Vi har utgått från en samling med manuskript från den amerikanska tv-serien The Simpsons som vi fann på webbsidan http://www.simpsoncrazy.com/scripts
+Vi har utgått från en samling med manuskript från den amerikanska tv-serien The Simpsons som vi fann på webbsidan \url{http://www.simpsoncrazy.com/scripts}
 
 \section{Metod}
 
 \subsection{Parsning av data}
-Manuskripten från simpsonscrazy har följande form:
-
+Manuskripten från \nolinkurl{simpsonscrazy.com} har följande form:
 \begin{verbatim}
 ACT ONE
 
@@ -78,10 +77,10 @@ repliker = {
 \end{verbatim}
 
 \subsection{Generering av N-Gram}
-Från replikerna genereras därefter n-grams för olika n-värden, vilket bildar vårt korpus.
+Från replikerna genereras därefter n-gram för olika n-värden, vilka bildar vårt korpus.
 
 \begin{verbatim}
-ngrams = {
+grams = {
   2:{
     "MARGE": ["oh careful", "careful homer", "sorry excuse",
               "excuse me", "me pardon", "pardon me", "me sorry"],
@@ -97,6 +96,14 @@ ngrams = {
 }
 \end{verbatim}
 
+\subsection{Stopplistor}
+Vi är intresserade av n-gram som är särskiljande.
+För att vanligt förekommande n-gram inte ska räknas plockar vi bort dem med hjälp av en stopplista.
+Vi skapade en första stopplista genom att lista de vanligast förekommande n-grammen sett över alla karaktärers n-gram.
+Till denna stopplista lades sedan de 100 vanligaste engelska n-grammen till, från Corpus of Contemporary American English (COCA)
+\footnote{\url{http://www.ngrams.info/download_coca.asp}}.
+Med dessa n-gram så förväntar vi oss att få en bättre klassificering av nya meningar. 
+
 \subsection{Intrinsisk/Extrinsisk evaluering}
 \subsection{Precision, Återkallning}
 \[\mathrm{precision}=\dfrac{\text{sanna positiva}}{\text{sanna positiva} + \text{falska positiva}}\]
@@ -104,10 +111,10 @@ ngrams = {
 \[F_1 = 2 \cdot \dfrac{\text{precision} \cdot \text{återkallning}}{\text{precision} + \text{återkallning}}\]
 
 \subsection{Korsvalidering}
-Korsvalidering går ut på att man delar upp sitt dataset i ett testset och träningset.
-Man brukar dela upp det så att tränningssetet innehåller all data förutom den som tillhör testsetet.
+Korsvalidering går ut på att man delar upp sitt dataset i ett testset och träningsset.
+Man brukar dela upp det så att träningssetet innehåller all data förutom den som tillhör testsetet.
 Man roterar sedan det som ingår i testsetet och träningssetet så att all data i det totala datasetet har klassificerats av klassificeraren,
-utan att det dataset man klassificerar ingår i träningsdatat när man klassificerar.
+utan att det dataset man klassificerar ingår i träningsdatan när man klassificerar.
 
 I vårt projekt har vi gjort korsvalidering på avsnittsnivå.
 Vi tar bort ett avsnitt från alla avsnitt vi har och tränar klassificeraren på återstående data.
@@ -116,8 +123,6 @@ Sen klassificerar vi det borttagna avsnittet och mäter hur väl klassificeraren
 \subsection{Poängfunktioner}
 För att koppla en specifik mening till en viss karaktär så har en funktion som beräknar ett poängvärde för varje rad och karaktär skapats.
 Den karaktär som ger högst poäng för en viss rad kopplas ihop med den raden.
-
-%returnera alla-ngram[namn].räkna-antal(ngram)
 
 \begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
 function calculate_points_for_ngrams(all_ngrams, ngram, name):
@@ -130,10 +135,10 @@ function calculate_score_for_line(all_ngrams, line, name):
     return points
 \end{lstlisting}
 
-Vi använder även en bättre variant, där vi tar hänsyn till hur "unikt" varje ngram är hos en karaktär.
+Vi använder även en bättre variant, där vi tar hänsyn till hur "unikt" varje n-gram är hos en karaktär.
 
-Om ett visst ngram förekommer X gånger hos karaktär A, Y gånger hos karaktär B och Z gånger hos karaktär C
-får ett ngram poängen X/(Y+Z) för karaktär A, Y/(X+Z) för karaktär B och Z/(X+Y) för karaktär C.
+Om ett visst n-gram förekommer X gånger hos karaktär A, Y gånger hos karaktär B och Z gånger hos karaktär C
+får ett n-gram poängen X/(Y+Z) för karaktär A, Y/(X+Z) för karaktär B och Z/(X+Y) för karaktär C.
 
 \begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
 function calculate_score_for_line_improved(all_ngrams, line, name):
@@ -142,15 +147,95 @@ function calculate_score_for_line_improved(all_ngrams, line, name):
     return points
 \end{lstlisting}
 
-\section{Resultat}
+\section{Resultat av korsvalidering}
+\begin{verbatim}
+--------------------------------------------------
+without score function
+--------------------------------------------------
+Correct guesses: 896 (33.9%), incorrect guesses: 1748
+Diagonal Sum: 896 (0.338880), Non-Diagonal Sum: 1748 (0.661120)
+Rows: Correct name, Columns: Guessed name
+      HOMER  LISA BURNS  BART MARGE 
+HOMER   343   172   129   220   246 
+ LISA    46   100    50    74   102 
+BURNS    27    23    66    17    54 
+ BART    77   118    42   142   112 
+MARGE    42    79    60    58   245 
+
+        Precision  Recall     F1Score    
+HOMER:  0.641      0.309      0.417      
+LISA:   0.203      0.269      0.231      
+BURNS:  0.190      0.353      0.247      
+BART:   0.278      0.289      0.283      
+MARGE:  0.323      0.506      0.394      
+avg:    0.327      0.345      0.314      
+
+Using stoplist with length: 187
+Correct guesses: 882 (33.4%), incorrect guesses: 1762
+Diagonal Sum: 882 (0.333585), Non-Diagonal Sum: 1762 (0.666415)
+Rows: Correct name, Columns: Guessed name
+      HOMER  LISA BURNS  BART MARGE 
+HOMER   315   193   119   234   249 
+ LISA    53   106    41    75    97 
+BURNS    21    27    64    19    56 
+ BART    71   129    38   157    96 
+MARGE    46    88    45    65   240 
+
+        Precision  Recall     F1Score    
+HOMER:  0.623      0.284      0.390      
+LISA:   0.195      0.285      0.232      
+BURNS:  0.208      0.342      0.259      
+BART:   0.285      0.320      0.302      
+MARGE:  0.325      0.496      0.393      
+avg:    0.327      0.345      0.315      
+
+--------------------------------------------------
+with score function
+--------------------------------------------------
+Correct guesses: 906 (34.3%), incorrect guesses: 1738
+Diagonal Sum: 906 (0.342663), Non-Diagonal Sum: 1738 (0.657337)
+Rows: Correct name, Columns: Guessed name
+      HOMER  LISA BURNS  BART MARGE 
+HOMER   393   105   103   181   328 
+ LISA    76    55    29    76   136 
+BURNS    36    17    40    18    76 
+ BART   113    53    29   141   155 
+MARGE    76    45    42    44   277 
+
+        Precision  Recall     F1Score    
+HOMER:  0.566      0.354      0.436      
+LISA:   0.200      0.148      0.170      
+BURNS:  0.165      0.214      0.186      
+BART:   0.307      0.287      0.297      
+MARGE:  0.285      0.572      0.380      
+avg:    0.305      0.315      0.294      
+
+Using stoplist with length: 187
+Correct guesses: 911 (34.5%), incorrect guesses: 1733
+Diagonal Sum: 911 (0.344554), Non-Diagonal Sum: 1733 (0.655446)
+Rows: Correct name, Columns: Guessed name
+      HOMER  LISA BURNS  BART MARGE 
+HOMER   398   109   104   189   310 
+ LISA    79    57    30    81   125 
+BURNS    40    21    42    20    64 
+ BART   120    61    30   149   131 
+MARGE    83    46    44    46   265 
+
+        Precision  Recall     F1Score    
+HOMER:  0.553      0.359      0.435      
+LISA:   0.194      0.153      0.171      
+BURNS:  0.168      0.225      0.192      
+BART:   0.307      0.303      0.305      
+MARGE:  0.296      0.548      0.384      
+avg:    0.304      0.318      0.297      
+\end{verbatim}
 
 
 \section{Utvärdering}
 
 Vårt korpus är för litet för uppgiften.
-Det visar sig att det var svårare än vi räknat med att få tag i transkript av Simpsons-avsnitt på nätet.
-Det visar sig även att Homer har flest repliker (över hälften) så vårt korpus är snedbalanserat och tenderar att föredra Homer.
-\footnote{http://www.vikparuchuri.com/blog/figuring-out-which-simpsons-character-is-speaking/}
+Det visar sig att det var svårare än vi räknat med att få tag i avskrift av Simpsons-avsnitt på nätet.
+Det visar sig även att Homer har flest repliker (över hälften) så vårt korpus är snedbalanserat och tenderar att föredra Homer\footnote{\url{http://www.vikparuchuri.com/blog/figuring-out-which-simpsons-character-is-speaking/}}.
 Antalet korrekt klassificerade repliker är alltså ett dåligt mått, då en gissning på Homer för alla repliker kommer ge över 50\% korrekta svar. Vi kan dock trösta oss med att vår klassificerare i alla fall ger bättre resultat än att gissa slumpmässigt. 
 %Saker att diskutera:
 %allt på http://www.csc.kth.se/~jboye/teaching/sprakt/2015_Utvardering.pdf
@@ -162,6 +247,18 @@ Antalet korrekt klassificerade repliker är alltså ett dåligt mått, då en gi
 %F-Measure: F_1 = 2 * precision*recall / (precision + recall)
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
