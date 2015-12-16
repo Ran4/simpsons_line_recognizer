@@ -43,6 +43,7 @@ HOMER there's no time to be careful we're late
 ====Score-funktion====
 
 
+
 ====Korsvalidering====
 
 Man vill inte testa en klassificerare på samma data som det tränats på. Det är ``fusk''.
@@ -52,7 +53,7 @@ Man vill inte testa en klassificerare på samma data som det tränats på. Det �
 # Träna på träningssetet
 # Testa klassificeraren på det borttagna avsnittet
 # Upprepa från steg 1 för alla avsnitt
-n
+
 ====Resultat, utan score-funktion====
 
 * Utan Stopplista
