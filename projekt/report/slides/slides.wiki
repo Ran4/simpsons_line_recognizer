@@ -8,6 +8,7 @@ usepackage=[11pt]{moresize}
 usepackage=[T1]{fontenc}
 usepackage=[swedish]{babel}
 usepackage=[utf8]{inputenc}
+date={17 december 2015}
 [ autotemplate ]>
 
 <[nowiki]
