@@ -28,7 +28,7 @@ vilken denna n-gram-sekvens är sannolikast.
 
 % ====Vår Modell====
 
-====Parsning====
+====Inläsning av data====
 Vi bygger upp
 
 <[code][basicstyle=\tiny,escapechar=\&]
@@ -45,7 +45,7 @@ HOMER there's no time to be careful we're late
 
 * Utöver att bara räkna antal förekomster av n-gram har vi även provat att vikta våra n-gram med en metod inspirerad av tf*idf: $\text{term frequency} * \text{inverse document frequency}$
 
-* Om ett visst n-gram förekommer $X$ gånger hos karaktär A, $Y$ gånger hos karaktär B och $Z$ gånger hos karaktär C får ett n-gram poängen $X/(Y+Z)$ för karaktär A, $Y/(X+Z)$ för karaktär B och så vidare.
+* Om ett visst n-gram förekommer $X$ gånger hos karaktär A, $Y$ gånger hos karaktär B och $Z$ gånger hos karaktär C får ett n-gram poängen $\frac{X}{(Y+Z)}$ för karaktär A, $\frac{Y}{(X+Z)}$ för karaktär B och så vidare.
 
 ====Klassificering====
 
