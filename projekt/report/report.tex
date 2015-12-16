@@ -1,8 +1,6 @@
-
 \documentclass[a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage[swedish]{babel}
-\usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{verbatim}
 \usepackage{listings}
@@ -11,14 +9,149 @@
 \usepackage{rotating}
 \usepackage{float}
 \usepackage{endnotes}
+\usepackage{alltt}
+\usepackage{listings}
 
-\author{Anton Kindestam antonki@kth.se\\Rasmus Ansin ransin@kth.se}  
-\title{<TITLE>}
+\author{Anton Kindestam antonki@kth.se\\Rasmus Ansin ransin@kth.se}
+\title{N-Gram The Simpsons super special extravaganza}
 
 \begin{document}
-
 \maketitle
+% Bedömningsgrunder:
+%    Avgränsning: att visa prov på förmåga att sätta ramarna för arbetet, bl.a. genom kontakter med handledare.
+%    Språkteknologisk höjd: att utgå ifrån andras arbete, där det är tillämpbart. Att inte upprepa kända misstag.
+%    Metodval: att kunna strukturera uppgiften, välja lämplig metod för varje delmoment.
+%    Nyhetsvärde: att visa förmåga till egen lösning samt att själva lösningen av uppgiften ger ett litet litet nyhetsvärde.
+%    För labbuppgiften: att leverera en fungerande prototyp, genomföra mindre test/utvärdering.
+%    För utvärderingsuppgiften: att kunna hantera olika utvärderingsbegrepp, välja lämpliga mätmetoder, lämpliga utvärderingsdata, ge resonemang om utvärderingens validitet.
+%    Teoretisk förståelse: att kunna hantera språkteknologiska begrepp och teori i viss utsträckning.
+%    Visa förståelse för kursens huvudpoänger: metoder som verkligen fungerar, fokus på program med hög användbarhet.
+%    Rapportens innehåll: finns alla väsentliga delar med: bakgrund, utgångspunkt/tanke, metod och resultat?
+%    Rapportens språk: språkligt flyt och grad av korrekturläsning.
+%    Explicita referenser: när andras verktyg, lexikon, teorier osv. används skall detta explicit redovisas.
 
+\section{Bakgrund}
+
+Vi har valt att analysera repliker av The Simpsons-avsnitt 
+
+\section{Utgångspunkt}
+
+Vi har utgått från en samling med manuskript från den amerikanska tv-serien The Simpsons som vi fann på webbsidan http://www.simpsoncrazy.com/scripts
+
+\section{Metod}
+
+\subsection{Parsning av data}
+Manuskripten från simpsonscrazy har följande form:
+
+\begin{verbatim}
+ACT ONE
+
+"The Simpsons Christmas Special" appears on screen. The episode begins with Homer,
+Marge and Maggie arriving at Springfield Elementary School.
+They are late for the schools' Christmas show.
+
+MARGE
+(Angry) Oh, careful, Homer!
+
+HOMER
+There's no time to be careful, we're late.
+
+They enter the hall. A class is singing "Oh, Little Town of Bethlehem".
+
+MARGE
+Sorry, excuse me, pardon me, sorry.
+\end{verbatim}
+
+Vi sparar dessa i ett råtextformat och gör en första filtrering av dessa rader genom att ta bort ACT-taggarna och radera ord och meningar som skrivs inom en parentes.
+
+Den något modifierade filen läses sedan in rad för rad till ett Pythonscript.
+Vi plockar ut de rader som följs av en rad bestående av enbart versaler (ett namn).
+
+Varje rad vi läser in filtreras ytterligare genom att alla tecken som inte är av typen \verb=[a-zA-Z']= tas bort. Resultatet är nu av det här slaget:
+
+\begin{verbatim}
+$ python read_lines_from_file.py 01_01_raw.txt
+repliker = {
+    "MARGE": ["oh careful homer"], ["sorry excuse me pardon me sorry"],
+    "HOMER": ["there's no time to be careful we're late"]
+}
+\end{verbatim}
+
+\subsection{Generering av N-Gram}
+Från replikerna genereras därefter n-grams för olika n-värden, vilket bildar vårt korpus.
+
+\begin{verbatim}
+ngrams = {
+  2:{
+    "MARGE": ["oh careful", "careful homer", "sorry excuse",
+              "excuse me", "me pardon", "pardon me", "me sorry"],
+    "HOMER": ["there's no", "no time", "time to", "to be",
+    		  "be careful", "careful we're", "we're late" 
+] }
+  3:{
+    "MARGE": ["oh careful homer", "sorry excuse me", "excuse me pardon",
+              "me pardon me", "pardon me sorry"],
+    "HOMER": ["there's no time", "no time to", "time to be",
+              "to be careful", "be careful we're", "careful we're late"]
+  }
+}
+\end{verbatim}
+
+\subsection{Intrinsisk/Extrinsisk evaluering}
+\subsection{Precision, Återkallning}
+\[\mathrm{precision}=\dfrac{\text{sanna positiva}}{\text{sanna positiva} + \text{falska positiva}}\]
+\[\text{återkallning}=\dfrac{\text{sanna positiva}}{\text{sanna positiva} + \text{falska positiva}}\]
+\[F_1 = 2 \cdot \dfrac{\text{precision} \cdot \text{återkallning}}{\text{precision} + \text{återkallning}}\]
+
+\subsection{Korsvalidering}
+Korsvalidering går ut på att man delar upp sitt dataset i ett testset och träningset.
+Man brukar dela upp det så att tränningssetet innehåller all data förutom den som tillhör testsetet.
+Man roterar sedan det som ingår i testsetet och träningssetet så att all data i det totala datasetet har klassificerats av klassificeraren,
+utan att det dataset man klassificerar ingår i träningsdatat när man klassificerar.
+
+I vårt projekt har vi gjort korsvalidering på avsnittsnivå.
+Vi tar bort ett avsnitt från alla avsnitt vi har och tränar klassificeraren på återstående data.
+Sen klassificerar vi det borttagna avsnittet och mäter hur väl klassificeraren kan hitta vem som sa vad i det borttagna avsnittet, jämfört med namnen som står i manuset.
+
+\subsection{Poängfunktioner}
+För att koppla en specifik mening till en viss karaktär så har en funktion som beräknar ett poängvärde för varje rad och karaktär skapats.
+Den karaktär som ger högst poäng för en viss rad kopplas ihop med den raden.
+
+%returnera alla-ngram[namn].räkna-antal(ngram)
+
+\begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
+function calculate_points_for_ngrams(all_ngrams, ngram, name):
+    return all_ngrams.count(ngram)
+
+function calculate_score_for_line(all_ngrams, line, name):
+    points $\leftarrow$ 0
+    for each ngram n in line:
+        points $\leftarrow$ points $+$ calculate_points_for_ngram(all_ngrams, n, name)
+    return points
+\end{lstlisting}
+
+Vi använder även en bättre variant, där vi tar hänsyn till hur "unikt" varje ngram är hos en karaktär.
+
+Om ett visst ngram förekommer X gånger hos karaktär A, Y gånger hos karaktär B och Z gånger hos karaktär C
+får ett ngram poängen X/(Y+Z) för karaktär A, Y/(X+Z) för karaktär B och Z/(X+Y) för karaktär C.
+
+\begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
+function calculate_score_for_line_improved(all_ngrams, line, name):
+    ngrams $\leftarrow$ all_ngrams without those associated with character name 
+    points $\leftarrow  \dfrac{\text{calculate\_score\_for\_line(all\_ngrams, line, name)}}{\text{calculate\_points\_for\_ngram(ngrams, n, name)}}$
+    return points
+\end{lstlisting}
+
+\section{Resultat}
+
+
+\section{Utvärdering}
+
+Vårt korpus är för litet för uppgiften.
+Det visar sig att det var svårare än vi räknat med att få tag i transkript av Simpsons-avsnitt på nätet.
+Det visar sig även att Homer har flest repliker (över hälften) så vårt korpus är snedbalanserat och tenderar att föredra Homer.
+\footnote{http://www.vikparuchuri.com/blog/figuring-out-which-simpsons-character-is-speaking/}
+Antalet korrekt klassificerade repliker är alltså ett dåligt mått, då en gissning på Homer för alla repliker kommer ge över 50\% korrekta svar. Vi kan dock trösta oss med att vår klassificerare i alla fall ger bättre resultat än att gissa slumpmässigt. 
 %Saker att diskutera:
 %allt på http://www.csc.kth.se/~jboye/teaching/sprakt/2015_Utvardering.pdf
 %Intrinsic/Extrinsic evaluation
@@ -29,3 +162,22 @@
 %F-Measure: F_1 = 2 * precision*recall / (precision + recall)
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
