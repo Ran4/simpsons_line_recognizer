@@ -11,7 +11,7 @@ usepackage=[utf8]{inputenc}
 [ autotemplate ]>
 
 <[nowiki]
-\renewcommand{\thefootnote}{\fnsymbol{footnote}} % A sequence of nine symbols (try it and see!) 
+\renewcommand{\thefootnote}{\fnsymbol{footnote}} % A sequence of nine symbols (try it and see!)
 [nowiki]>
 
 %==Replikidentifiering av karaktärer från tv-serien The Simpsons med N-Grams==
@@ -30,7 +30,16 @@ vilken denna n-gram-sekvens är sannolikast.
 
 
 ====Score-funktion====
+Vi bygger upp
 
+<[code][mathescape,basicstyle=\tiny]
+HOMER There's no time to be careful, we're late.
+$\downarrow$
+HOMER there's no time to be careful we're late
+$\downarrow$
+"HOMER": ["there's no", "no time", "time to", "to be",
+          "be careful", "careful we're", "we're late"]
+[code]>
 
 ====Korsvalidering====
 
@@ -90,4 +99,4 @@ BURNS:  0.168      0.225      0.192
 BART:   0.307      0.303      0.305      
 MARGE:  0.296      0.548      0.384      
 avg:    0.304      0.318      0.297      
-[code]>
+
