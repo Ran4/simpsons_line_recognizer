@@ -133,11 +133,19 @@ def calculateNGramsForCharacters(replik, n, verbose, overrideMinCount=None):
         
     return nGrams
 
+# def generateNGramsForLine(line, n):
+#     words = line.split(" ")
+#     for i in range(len(words) - n + 1):
+#         ngram = " ".join(words[i:i+n])
+#         yield ngram
+
 def generateNGramsForLine(line, n):
     words = line.split(" ")
+    yield "$ %s" % words[0]
     for i in range(len(words) - n + 1):
         ngram = " ".join(words[i:i+n])
         yield ngram
+    yield "%s $" % words[-1]
         
 if __name__ == "__main__":
     calculateNGrams(
