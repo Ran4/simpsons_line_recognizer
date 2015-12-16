@@ -31,12 +31,19 @@
 %    Explicita referenser: när andras verktyg, lexikon, teorier osv. används skall detta explicit redovisas.
 
 \section{Bakgrund}
-Vi har valt att analysera repliker av The Simpsons-avsnitt för att skapa en klassificerare som kan klassificera vilken yttring som tillhör vilken Simpsons-rollfigur. Vi gör detta genom att skapa en n-gram-databas över yttringar kopplade till rollfigurer. För en given mening generar vi dess n-gram, och sen väljer vi den rollfigur för vilken denna n-gram-sekvens är sannolikast.
+Vi har valt att analysera repliker av The Simpsons-avsnitt för att
+skapa en klassificerare som kan klassificera vilken yttring som
+tillhör vilken Simpsons-rollfigur. Vi gör detta genom att skapa en
+n-gram-databas över yttringar kopplade till rollfigurer. För en given
+mening generar vi dess n-gram, och sen väljer vi den rollfigur för
+vilken denna n-gram-sekvens är sannolikast.
 
 
 \section{Utgångspunkt}
 
-Vi har utgått från en samling med manuskript från den amerikanska tv-serien The Simpsons som vi fann på webbsidan \url{http://www.simpsoncrazy.com/scripts}
+Vi har utgått från en samling med manuskript från den amerikanska
+tv-serien The Simpsons som vi fann på webbsidan
+\url{http://www.simpsoncrazy.com/scripts}
 
 \section{Metod}
 
@@ -61,12 +68,17 @@ MARGE
 Sorry, excuse me, pardon me, sorry.
 \end{verbatim}
 
-Vi sparar dessa i ett råtextformat och gör en första filtrering av dessa rader genom att ta bort ACT-taggarna och radera ord och meningar som skrivs inom en parentes.
+Vi sparar dessa i ett råtextformat och gör en första filtrering av
+dessa rader genom att ta bort ACT-taggarna och radera ord och meningar
+som skrivs inom en parentes.
 
-Den något modifierade filen läses sedan in rad för rad till ett Pythonscript.
-Vi plockar ut de rader som följs av en rad bestående av enbart versaler (ett namn).
+Den något modifierade filen läses sedan in rad för rad till ett
+Pythonscript. Vi plockar ut de rader som följs av en rad bestående av
+enbart versaler (ett namn).
 
-Varje rad vi läser in filtreras ytterligare genom att alla tecken som inte är av typen \verb=[a-zA-Z']= tas bort. Resultatet är nu av det här slaget:
+Varje rad vi läser in filtreras ytterligare genom att alla tecken som
+inte är av typen \verb=[a-zA-Z']= tas bort. Resultatet är nu av det
+här slaget:
 
 \begin{verbatim}
 $ python read_lines_from_file.py 01_01_raw.txt
@@ -77,7 +89,8 @@ repliker = {
 \end{verbatim}
 
 \subsection{Generering av N-Gram}
-Från replikerna genereras därefter n-gram för olika n-värden, vilka bildar vårt korpus.
+Från replikerna genereras därefter n-gram för olika n-värden, vilka
+bildar vårt korpus.
 
 \begin{verbatim}
 grams = {
@@ -97,12 +110,15 @@ grams = {
 \end{verbatim}
 
 \subsection{Stopplistor}
-Vi är intresserade av n-gram som är särskiljande.
-För att vanligt förekommande n-gram inte ska räknas plockar vi bort dem med hjälp av en stopplista.
-Vi skapade en första stopplista genom att lista de vanligast förekommande n-grammen sett över alla karaktärers n-gram.
-Till denna stopplista lades sedan de 100 vanligaste engelska n-grammen till, från Corpus of Contemporary American English (COCA)
-\footnote{\url{http://www.ngrams.info/download_coca.asp}}.
-Med dessa n-gram så förväntar vi oss att få en bättre klassificering av nya meningar. 
+Vi är intresserade av n-gram som är särskiljande. För att vanligt
+förekommande n-gram inte ska räknas plockar vi bort dem med hjälp av
+en stopplista. Vi skapade en första stopplista genom att lista de
+vanligast förekommande n-grammen sett över alla karaktärers n-gram.
+Till denna stopplista lades sedan de 100 vanligaste engelska n-grammen
+till, från Corpus of Contemporary American English (COCA)
+\footnote{\url{http://www.ngrams.info/download_coca.asp}}. Genom att
+exkludera dess n-gram or n-gram-databasen och ur meningar innan
+klassificering hoppas vi förbättra precisionen hos klassificeraren.
 
 \subsection{Intrinsisk/Extrinsisk evaluering}
 \subsection{Precision, Återkallning}
@@ -111,18 +127,25 @@ Med dessa n-gram så förväntar vi oss att få en bättre klassificering av nya
 \[F_1 = 2 \cdot \dfrac{\text{precision} \cdot \text{återkallning}}{\text{precision} + \text{återkallning}}\]
 
 \subsection{Korsvalidering}
-Korsvalidering går ut på att man delar upp sitt dataset i ett testset och träningsset.
-Man brukar dela upp det så att träningssetet innehåller all data förutom den som tillhör testsetet.
-Man roterar sedan det som ingår i testsetet och träningssetet så att all data i det totala datasetet har klassificerats av klassificeraren,
-utan att det dataset man klassificerar ingår i träningsdatan när man klassificerar.
+Korsvalidering går ut på att man delar upp sitt dataset i ett testset
+och träningsset. Man brukar dela upp det så att träningssetet
+innehåller all data förutom den som tillhör testsetet. Man roterar
+sedan det som ingår i testsetet och träningssetet så att all data i
+det totala datasetet har klassificerats av klassificeraren, utan att
+det dataset man klassificerar ingår i träningsdatan när man
+klassificerar.
 
-I vårt projekt har vi gjort korsvalidering på avsnittsnivå.
-Vi tar bort ett avsnitt från alla avsnitt vi har och tränar klassificeraren på återstående data.
-Sen klassificerar vi det borttagna avsnittet och mäter hur väl klassificeraren kan hitta vem som sa vad i det borttagna avsnittet, jämfört med namnen som står i manuset.
+I vårt projekt har vi gjort korsvalidering på avsnittsnivå. Vi tar
+bort ett avsnitt från alla avsnitt vi har och tränar klassificeraren
+på återstående data. Sen klassificerar vi det borttagna avsnittet och
+mäter hur väl klassificeraren kan hitta vem som sa vad i det borttagna
+avsnittet, jämfört med namnen som står i manuset.
 
 \subsection{Poängfunktioner}
-För att koppla en specifik mening till en viss karaktär så har en funktion som beräknar ett poängvärde för varje rad och karaktär skapats.
-Den karaktär som ger högst poäng för en viss rad kopplas ihop med den raden.
+För att koppla en specifik mening till en viss karaktär så har en
+funktion som beräknar ett poängvärde för varje rad och karaktär
+skapats. Den karaktär som ger högst poäng för en viss rad kopplas ihop
+med den raden.
 
 \begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
 function calculate_points_for_ngrams(all_ngrams, ngram, name):
@@ -135,10 +158,12 @@ function calculate_score_for_line(all_ngrams, line, name):
     return points
 \end{lstlisting}
 
-Vi använder även en bättre variant, där vi tar hänsyn till hur "unikt" varje n-gram är hos en karaktär.
+Vi använder även en bättre variant, där vi tar hänsyn till hur "unikt"
+varje n-gram är hos en karaktär.
 
-Om ett visst n-gram förekommer X gånger hos karaktär A, Y gånger hos karaktär B och Z gånger hos karaktär C
-får ett n-gram poängen X/(Y+Z) för karaktär A, Y/(X+Z) för karaktär B och Z/(X+Y) för karaktär C.
+Om ett visst n-gram förekommer X gånger hos karaktär A, Y gånger hos
+karaktär B och Z gånger hos karaktär C får ett n-gram poängen X/(Y+Z)
+för karaktär A, Y/(X+Z) för karaktär B och Z/(X+Y) för karaktär C.
 
 \begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
 function calculate_score_for_line_improved(all_ngrams, line, name):
@@ -233,10 +258,17 @@ avg:    0.304      0.318      0.297
 
 \section{Utvärdering}
 
-Vårt korpus är för litet för uppgiften.
-Det visar sig att det var svårare än vi räknat med att få tag i avskrift av Simpsons-avsnitt på nätet.
-Det visar sig även att Homer har flest repliker (över hälften) så vårt korpus är snedbalanserat och tenderar att föredra Homer\footnote{\url{http://www.vikparuchuri.com/blog/figuring-out-which-simpsons-character-is-speaking/}}.
-Antalet korrekt klassificerade repliker är alltså ett dåligt mått, då en gissning på Homer för alla repliker kommer ge över 50\% korrekta svar. Vi kan dock trösta oss med att vår klassificerare i alla fall ger bättre resultat än att gissa slumpmässigt.  % TODO: vi behöver ev. slumpade resultat för att motivera detta
+Vårt korpus är för litet för uppgiften. Det visar sig att det var
+svårare än vi räknat med att få tag i avskrift av Simpsons-avsnitt på
+nätet. Det visar sig även att Homer har flest repliker (över hälften)
+så vårt korpus är snedbalanserat och tenderar att föredra
+Homer\footnote{\url{http://www.vikparuchuri.com/blog/figuring-out-which-simpsons-character-is-speaking/}}.
+Antalet korrekt klassificerade repliker är alltså ett dåligt mått, då
+en gissning på Homer för alla repliker kommer ge över 50\% korrekta
+svar. Vi kan dock trösta oss med att vår klassificerare i alla fall
+ger bättre resultat än att gissa slumpmässigt.
+% TODO: vi behöver ev. ta med några slumpade resultat i rapporten för att motivera detta
+
 %Saker att diskutera:
 %allt på http://www.csc.kth.se/~jboye/teaching/sprakt/2015_Utvardering.pdf
 %Intrinsic/Extrinsic evaluation

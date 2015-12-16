@@ -1,0 +1,95 @@
+
+\documentclass{beamer}
+\usepackage{mathptmx}
+\usepackage{wasysym}
+\usepackage[11pt]{moresize}
+\usepackage[swedish]{babel}
+\usepackage{synttree}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\date{\today}
+\lstdefinestyle{basic}{
+    captionpos=t,%
+    basicstyle=\footnotesize\ttfamily,%
+    numberstyle=\tiny,%
+    numbers=left,%
+    stepnumber=1,%
+    frame=single,%
+    showspaces=false,%
+    showstringspaces=false,%
+    showtabs=false,%
+    %
+    keywordstyle=\color{blue},%
+    identifierstyle=,%
+    commentstyle=\color{gray},%
+    stringstyle=\color{magenta}%
+}
+\title{Replikidentifiering av karaktärer från tv-serien The Simpsons med N-Grams}
+\author{Anton Kindestam antonki@kth.se\\Rasmus Ansin ransin@kth.se}
+\lstset{basicstyle=\small,breaklines=true, breakatwhitespace=false, showspaces=false, showstringspaces=false}
+
+\begin{document}
+
+
+\frame{\titlepage}
+
+
+
+
+
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}} % A sequence of nine symbols (try it and see!)
+
+
+%==Replikidentifiering av karaktärer från tv-serien The Simpsons med N-Grams==
+
+\section{Dyker den här texten ens upp?}
+
+
+
+\begin{frame}
+ \frametitle{Bakgrund}
+  
+
+
+Vi har valt att analysera repliker av The Simpsons-avsnitt för att
+skapa en klassificerare som kan klassificera vilken yttring som
+tillhör vilken Simpsons-rollfigur. Vi gör detta genom att skapa en
+n-gram-databas över yttringar kopplade till rollfigurer. För en given
+mening generar vi dess n-gram, och sen väljer vi den rollfigur för
+vilken denna n-gram-sekvens är sannolikast.
+
+  
+\end{frame}
+\begin{frame}
+ \frametitle{Parsning av Data}
+  
+
+
+\begin{itemize}
+  \item Blah1
+\begin{itemize}
+  \item Blah1.1
+\end{itemize}
+  \item Blah2
+\end{itemize}
+
+
+  
+\end{frame}
+\begin{frame}
+ \frametitle{Vår Modell}
+  
+
+
+
+
+
+  
+\end{frame}
+
+
+\end{document}
+
