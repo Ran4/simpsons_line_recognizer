@@ -98,7 +98,7 @@ grams = {
     "MARGE": ["oh careful", "careful homer", "sorry excuse",
               "excuse me", "me pardon", "pardon me", "me sorry"],
     "HOMER": ["there's no", "no time", "time to", "to be",
-    		  "be careful", "careful we're", "we're late" 
+    		  "be careful", "careful we're", "we're late"
 ] }
   3:{
     "MARGE": ["oh careful homer", "sorry excuse me", "excuse me pardon",
@@ -121,9 +121,17 @@ exkludera dess n-gram or n-gram-databasen och ur meningar innan
 klassificering hoppas vi förbättra precisionen hos klassificeraren.
 
 
-\subsection{Precision, Återkallning, $F_1$-Värde}
-För att 
-Precision: hur stor andel av de fall som klassificerades positivt var rätt?
+\subsection{Precision, Återkallning, $F_1$-mått}
+För att kunna utvärdera hur väl vår klassificerare fungerar så använder vi
+måtten precision, återkallning och beräknar ett $F1$-värde.
+
+Precision är den andel av de fall som klassificerades positivt som var rätt.
+Återkallning är den andel av de positiva exemplen i våra data som fångades av
+vår klassificerare.
+$F_1$-mått/$F_1$-poängen är det harmoniska medelvärdet av precision och
+återkallning, och används eftersom det är svårt att jämföra två olika
+utvärderingsmått.
+
 \[\mathrm{precision}=\dfrac{\text{sanna positiva}}{\text{sanna positiva} + \text{falska positiva}}\]
 \[\text{återkallning}=\dfrac{\text{sanna positiva}}{\text{sanna positiva} + \text{falska positiva}}\]
 \[F_1 = 2 \cdot \dfrac{\text{precision} \cdot \text{återkallning}}{\text{precision} + \text{återkallning}}\]
