@@ -110,14 +110,14 @@ grams = {
 \end{verbatim}
 
 \subsection{Stopplistor}
-Vi är intresserade av n-gram som är särskiljande. För att vanligt
-förekommande n-gram inte ska räknas plockar vi bort dem med hjälp av
-en stopplista. Vi skapade en första stopplista genom att lista de
-vanligast förekommande n-grammen sett över alla karaktärers n-gram.
-Till denna stopplista lades sedan de 100 vanligaste engelska n-grammen
-till, från Corpus of Contemporary American English (COCA)\footnote{\url{http://www.ngrams.info/download_coca.asp}}.
-Genom att exkludera dess n-gram or n-gram-databasen och ur meningar innan
-klassificering hoppas vi förbättra precisionen hos klassificeraren.
+Vi är intresserade av n-gram som är särskiljande. För att vanligt förekommande
+n-gram inte ska räknas plockar vi bort dem med hjälp av en stopplista. Vi
+skapade en första stopplista genom att lista de vanligast förekommande n-grammen
+sett över alla karaktärers n-gram. Till denna stopplista lades sedan de 100
+vanligaste engelska n-grammen till, från Corpus of Contemporary American English
+(COCA)\footnote{\url{http://www.ngrams.info/download_coca.asp}}. Genom att
+exkludera dess n-gram ur n-gram-databasen och ur meningar innan klassificering
+hoppas vi förbättra precisionen hos klassificeraren.
 
 
 \subsection{Precision, Återkallning, $F_1$-mått}
