@@ -120,32 +120,32 @@ till, från Corpus of Contemporary American English (COCA)
 exkludera dess n-gram or n-gram-databasen och ur meningar innan
 klassificering hoppas vi förbättra precisionen hos klassificeraren.
 
-\subsection{Intrinsisk/Extrinsisk evaluering}
-\subsection{Precision, Återkallning}
+
+\subsection{Precision, Återkallning, $F_1$-Värde}
+För att 
+Precision: hur stor andel av de fall som klassificerades positivt var rätt?
 \[\mathrm{precision}=\dfrac{\text{sanna positiva}}{\text{sanna positiva} + \text{falska positiva}}\]
 \[\text{återkallning}=\dfrac{\text{sanna positiva}}{\text{sanna positiva} + \text{falska positiva}}\]
 \[F_1 = 2 \cdot \dfrac{\text{precision} \cdot \text{återkallning}}{\text{precision} + \text{återkallning}}\]
 
 \subsection{Korsvalidering}
-Korsvalidering går ut på att man delar upp sitt dataset i ett testset
-och träningsset. Man brukar dela upp det så att träningssetet
-innehåller all data förutom den som tillhör testsetet. Man roterar
-sedan det som ingår i testsetet och träningssetet så att all data i
-det totala datasetet har klassificerats av klassificeraren, utan att
-det dataset man klassificerar ingår i träningsdatan när man
-klassificerar.
+Korsvalidering går ut på att man delar upp sitt dataset i ett testset och
+träningsset. Man brukar dela upp det så att träningssetet innehåller all data
+förutom den som tillhör testsetet. Man roterar sedan det som ingår i testsetet
+och träningssetet så att all data i det totala datasetet har klassificerats av
+klassificeraren, utan att det dataset man klassificerar ingår i träningsdatan
+när man klassificerar.
 
-I vårt projekt har vi gjort korsvalidering på avsnittsnivå. Vi tar
-bort ett avsnitt från alla avsnitt vi har och tränar klassificeraren
-på återstående data. Sen klassificerar vi det borttagna avsnittet och
-mäter hur väl klassificeraren kan hitta vem som sa vad i det borttagna
-avsnittet, jämfört med namnen som står i manuset.
+I vårt projekt har vi gjort korsvalidering på avsnittsnivå. Vi tar bort ett
+avsnitt från alla avsnitt vi har och tränar klassificeraren på återstående data.
+Sen klassificerar vi det borttagna avsnittet och mäter hur väl klassificeraren
+kan hitta vem som sa vad i det borttagna avsnittet, jämfört med namnen som står
+i manuset.
 
 \subsection{Poängfunktioner}
-För att koppla en specifik mening till en viss karaktär så har en
-funktion som beräknar ett poängvärde för varje rad och karaktär
-skapats. Den karaktär som ger högst poäng för en viss rad kopplas ihop
-med den raden.
+För att koppla en specifik mening till en viss karaktär så har en funktion som
+beräknar ett poängvärde för varje rad och karaktär skapats. Den karaktär som ger
+högst poäng för en viss rad kopplas ihop med den raden.
 
 \begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
 function calculate_points_for_ngrams(all_ngrams, ngram, name):
@@ -158,12 +158,12 @@ function calculate_score_for_line(all_ngrams, line, name):
     return points
 \end{lstlisting}
 
-Vi använder även en bättre variant, där vi tar hänsyn till hur "unikt"
-varje n-gram är hos en karaktär.
+Vi använder även en bättre variant, där vi tar hänsyn till hur "unikt" varje
+n-gram är hos en karaktär.
 
-Om ett visst n-gram förekommer X gånger hos karaktär A, Y gånger hos
-karaktär B och Z gånger hos karaktär C får ett n-gram poängen X/(Y+Z)
-för karaktär A, Y/(X+Z) för karaktär B och Z/(X+Y) för karaktär C.
+Om ett visst n-gram förekommer X gånger hos karaktär A, Y gånger hos karaktär B
+och Z gånger hos karaktär C får ett n-gram poängen X/(Y+Z) för karaktär A,
+Y/(X+Z) för karaktär B och Z/(X+Y) för karaktär C.
 
 \begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
 function calculate_score_for_line_improved(all_ngrams, line, name):
@@ -257,15 +257,15 @@ avg:    0.304      0.318      0.297
 
 
 \section{Utvärdering}
-Vårt korpus är för litet för uppgiften. Det visar sig att det var
-svårare än vi räknat med att få tag i avskrift av Simpsons-avsnitt på
-nätet. Det visar sig även att Homer har flest repliker (över hälften)
-så vårt korpus är snedbalanserat och tenderar att föredra
+Vårt korpus är för litet för uppgiften. Det visar sig att det var svårare än vi
+räknat med att få tag i avskrift av Simpsons-avsnitt på nätet. Det visar sig
+även att Homer har flest repliker (över hälften) så vårt korpus är
+snedbalanserat och tenderar att föredra
 Homer\footnote{\url{http://www.vikparuchuri.com/blog/figuring-out-which-simpsons-character-is-speaking/}}.
-Antalet korrekt klassificerade repliker är alltså ett dåligt mått, då
-en gissning på Homer för alla repliker kommer ge över 50\% korrekta
-svar. Vi kan dock trösta oss med att vår klassificerare i alla fall
-ger bättre resultat än att gissa slumpmässigt.
+Antalet korrekt klassificerade repliker är alltså ett dåligt mått, då en
+gissning på Homer för alla repliker kommer ge över 50\% korrekta svar. Vi kan
+dock trösta oss med att vår klassificerare i alla fall ger bättre resultat än
+att gissa slumpmässigt.
 % TODO: vi behöver ev. ta med några slumpade resultat i rapporten för att motivera detta
 
 %Saker att diskutera:
