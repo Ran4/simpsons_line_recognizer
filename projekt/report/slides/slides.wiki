@@ -43,7 +43,7 @@ HOMER there's no time to be careful we're late
 ====Poängfunktion====
 %* För att koppla ihop en specifik mening till en specifik karaktär så har vi skapat en funktion som beräknar ett poängvärde för varje rad och karaktär. Den karaktär som ger högst poäng för en viss rad klassificerass som rätt karaktär.
 
-* Vi har även provat att vikta våra ngram med en metod inspirerad av tf*idf: $\text{term frequency} * \text{inverse document frequency}$
+* Utöver att bara räkna antal förekomster av n-gram har vi även provat att vikta våra n-gram med en metod inspirerad av tf*idf: $\text{term frequency} * \text{inverse document frequency}$
 
 * Om ett visst n-gram förekommer $X$ gånger hos karaktär A, $Y$ gånger hos karaktär B och $Z$ gånger hos karaktär C får ett n-gram poängen $X/(Y+Z)$ för karaktär A, $Y/(X+Z)$ för karaktär B och så vidare.
 
@@ -108,4 +108,4 @@ BURNS:  0.168      0.225      0.192
 BART:   0.307      0.303      0.305      
 MARGE:  0.296      0.548      0.384      
 avg:    0.304      0.318      0.297      
-
+[code]>
