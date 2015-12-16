@@ -29,7 +29,8 @@ vilken denna n-gram-sekvens är sannolikast.
 % ====Vår Modell====
 
 ====Inläsning av data====
-Vi bygger upp
+Vi läser in replikerna från ett råfilsformat, från dessa plockar
+vi bort och genererar n-grams.
 
 <[code][basicstyle=\tiny,escapechar=\&]
 HOMER There's no time to be careful, we're late.
