@@ -19,7 +19,12 @@ usepackage=[utf8]{inputenc}
 
 ====Bakgrund====
 
-Blah Blah
+Vi har valt att analysera repliker av The Simpsons-avsnitt för att
+skapa en klassificerare som kan klassificera vilken yttring som
+tillhör vilken Simpsons-rollfigur. Vi gör detta genom att skapa en
+n-gram-databas över yttringar kopplade till rollfigurer. För en given
+mening generar vi dess n-gram, och sen väljer vi den rollfigur för
+vilken denna n-gram-sekvens är sannolikast.
 
 ====Parsning av Data====
 
@@ -32,3 +37,4 @@ Blah Blah
 
 
 
+====Korsvalidering====
