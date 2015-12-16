@@ -1,3 +1,0 @@
-\beamer@endinputifotherversion {3.33pt}
-\select@language {swedish}
-\beamer@sectionintoc {1}{Dyker den h\IeC {\"a}r texten ens upp?}{2}{0}{1}
