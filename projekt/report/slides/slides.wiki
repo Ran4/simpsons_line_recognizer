@@ -1,0 +1,34 @@
+<[ autotemplate ]
+title={Replikidentifiering av karaktärer från tv-serien The Simpsons med N-Grams}
+author={Anton Kindestam antonki@kth.se\\Rasmus Ansin ransin@kth.se}
+lstset={basicstyle=\small,breaklines=true, breakatwhitespace=false, showspaces=false, showstringspaces=false}
+usepackage={synttree}
+usepackage={mathptmx}
+usepackage=[11pt]{moresize}
+usepackage=[T1]{fontenc}
+usepackage=[swedish]{babel}
+usepackage=[utf8]{inputenc}
+[ autotemplate ]>
+
+<[nowiki]
+\renewcommand{\thefootnote}{\fnsymbol{footnote}} % A sequence of nine symbols (try it and see!) 
+[nowiki]>
+
+%==Replikidentifiering av karaktärer från tv-serien The Simpsons med N-Grams==
+==Dyker den här texten ens upp?==
+
+====Bakgrund====
+
+Blah Blah
+
+====Parsning av Data====
+
+* Blah1
+** Blah1.1
+* Blah2
+
+
+====Vår Modell====
+
+
+
