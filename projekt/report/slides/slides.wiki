@@ -28,18 +28,20 @@ vilken denna n-gram-sekvens är sannolikast.
 
 ====Vår Modell====
 
-
-====Score-funktion====
+====Parsning====
 Vi bygger upp
 
-<[code][mathescape,basicstyle=\tiny]
+<[code][basicstyle=\tiny,escapechar=\&]
 HOMER There's no time to be careful, we're late.
-$\downarrow$
+&$\downarrow$&
 HOMER there's no time to be careful we're late
-$\downarrow$
-"HOMER": ["there's no", "no time", "time to", "to be",
-          "be careful", "careful we're", "we're late"]
+&$\downarrow$&
+"HOMER": \["&\$& there's", "there's no", "no time", "time to", "to be",
+          "be careful", "careful we're", "we're late", "late &\$&"\]
 [code]>
+
+====Score-funktion====
+
 
 ====Korsvalidering====
 
@@ -50,7 +52,7 @@ Man vill inte testa en klassificerare på samma data som det tränats på. Det �
 # Träna på träningssetet
 # Testa klassificeraren på det borttagna avsnittet
 # Upprepa från steg 1 för alla avsnitt
-
+n
 ====Resultat, utan score-funktion====
 
 * Utan Stopplista
