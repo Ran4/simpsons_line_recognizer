@@ -196,8 +196,8 @@ def addReplikerToDict(lines, replik, verbose=VERBOSE):
             replik[name] = replik.get(name, []) + [line]
             name = None
             
-def fixCharacterNames(repl, verbose=VERBOSE, printMerges=PRINT_MERGES):
-    replik = copy.copy(repl)
+def fixCharacterNames(replikIn, verbose=VERBOSE, printMerges=PRINT_MERGES):
+    replik = copy.copy(replikIn)
     
     fromToList = [
             ("REPORTER #2","REPORTER"), #{{{
