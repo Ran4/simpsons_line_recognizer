@@ -40,7 +40,7 @@ HOMER there's no time to be careful we're late
           "be careful", "careful we're", "we're late", "late &\$&"\]
 [code]>
 
-====Score-funktion====
+====Poängfunktion====
 
 
 
@@ -54,7 +54,7 @@ Man vill inte testa en klassificerare på samma data som det tränats på. Det �
 # Testa klassificeraren på det borttagna avsnittet
 # Upprepa från steg 1 för alla avsnitt
 
-====Resultat, utan score-funktion====
+====Resultat, utan poäng-funktion====
 
 * Utan Stopplista
 <[code][basicstyle=\footnotesize]
@@ -79,7 +79,7 @@ MARGE:  0.325      0.496      0.393
 avg:    0.327      0.345      0.315
 [code]>
 
-====Resultat, med score-funktion====
+====Resultat, med poäng-funktion====
 
 * Utan Stopplista
 <[code][basicstyle=\footnotesize]

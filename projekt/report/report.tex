@@ -123,18 +123,22 @@ klassificering hoppas vi förbättra precisionen hos klassificeraren.
 
 \subsection{Precision, Återkallning, $F_1$-mått}
 För att kunna utvärdera hur väl vår klassificerare fungerar så använder vi
-måtten precision, återkallning och beräknar ett $F1$-värde.
+måtten precision, återkallning och beräknar ett $F_1$-mått.
 
 Precision är den andel av de fall som klassificerades positivt som var rätt.
 Återkallning är den andel av de positiva exemplen i våra data som fångades av
-vår klassificerare.
-$F_1$-mått/$F_1$-poängen är det harmoniska medelvärdet av precision och
+vår klassificerare. $F_1$-mått är det harmoniska medelvärdet av precision och
 återkallning, och används eftersom det är svårt att jämföra två olika
 utvärderingsmått.
 
-\[\mathrm{precision}=\dfrac{\text{sanna positiva}}{\text{sanna positiva} + \text{falska positiva}}\]
-\[\text{återkallning}=\dfrac{\text{sanna positiva}}{\text{sanna positiva} + \text{falska positiva}}\]
-\[F_1 = 2 \cdot \dfrac{\text{precision} \cdot \text{återkallning}}{\text{precision} + \text{återkallning}}\]
+\begin{align*}
+\text{precision}&=\dfrac{\text{sanna positiva}}{\text{sanna positiva} + \text{falska positiva}}\\
+\text{återkallning}&=\dfrac{\text{sanna positiva}}{\text{sanna positiva} + \text{falska positiva}}\\
+F_1 &= 2 \cdot \dfrac{\text{precision} \cdot \text{återkallning}}{\text{precision} + \text{återkallning}}
+\end{align*}
+
+
+
 
 \subsection{Korsvalidering}
 Korsvalidering går ut på att man delar upp sitt dataset i ett testset och
@@ -169,9 +173,9 @@ function calculate_score_for_line(all_ngrams, line, name):
 Vi använder även en bättre variant, där vi tar hänsyn till hur "unikt" varje
 n-gram är hos en karaktär.
 
-Om ett visst n-gram förekommer X gånger hos karaktär A, Y gånger hos karaktär B
-och Z gånger hos karaktär C får ett n-gram poängen X/(Y+Z) för karaktär A,
-Y/(X+Z) för karaktär B och Z/(X+Y) för karaktär C.
+Om ett visst n-gram förekommer $X$ gånger hos karaktär A, $Y$ gånger hos karaktär B
+och $Z$ gånger hos karaktär C får ett n-gram poängen $X/(Y+Z)$ för karaktär A,
+$Y/(X+Z)$ för karaktär B och $Z/(X+Y)$ för karaktär C.
 
 \begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
 function calculate_score_for_line_improved(all_ngrams, line, name):
