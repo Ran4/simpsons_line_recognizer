@@ -34,7 +34,7 @@ Vi läser in replikerna från ett råfilsformat, från dessa plockar
 vi bort och genererar n-grams.
 
 <[code][basicstyle=\tiny,escapechar=\&]
-HOMER There's no time to be careful, we're late.
+HOMER (upset) There's no time to be careful, we're late.
 &$\downarrow$&
 HOMER there's no time to be careful we're late
 &$\downarrow$&
@@ -66,7 +66,7 @@ Man vill inte testa en klassificerare på samma data som det tränats på. Det �
 # Testa klassificeraren på det borttagna avsnittet
 # Upprepa från steg 1 för alla avsnitt
 
-====Resultat, utan poäng-funktion====
+====Resultat, med tf====
 
 * Utan Stopplista
 <[code][basicstyle=\footnotesize]
@@ -91,7 +91,7 @@ MARGE:  0.325      0.496      0.393
 avg:    0.327      0.345      0.315
 [code]>
 
-====Resultat, med poäng-funktion====
+====Resultat, med tf*idf====
 
 * Utan Stopplista
 <[code][basicstyle=\footnotesize]
@@ -115,3 +115,28 @@ BART:   0.307      0.303      0.305
 MARGE:  0.296      0.548      0.384      
 avg:    0.304      0.318      0.297      
 [code]>
+
+====Confusion Matrix, stopplista utan tf*idf====
+
+<[code]
+       HOMER  LISA BURNS  BART MARGE 
+HOMER   315   193   119   234   249 
+ LISA    53   106    41    75    97 
+BURNS    21    27    64    19    56 
+ BART    71   129    38   157    96 
+MARGE    46    88    45    65   240 
+[code]>
+
+* Raderna motsvarar den som repliken verkligen tillhörde.
+* Kolumnerna motsvarar vilken klass den klassificerats som.
+** Ex, LISA-raden: Lisa-repliker har 53 gånger klassificerats som Homer, 106 gånger som LISA, 64 gånger som burns etc.
+
+
+====Utvärdering====
+
+* Vi hade alldeles för få avsnitt för att få ett tillräckligt stort korpus.
+** Det fanns färre avskrifter av avsnitt på nätet än vad vi trodde i början av projektet.
+* Homer är kraftigt överrepresenterad i korpuset
+** Antal korrekta gissningar ett dåligt kvalitetsmått
+* tf*idf verkar ge sämre resultat
+%** (Fast bättre när vi istället för att välja den mest sannolika rollfiguren bara ackumulerar sannolikheterna till en confusion matrix)
