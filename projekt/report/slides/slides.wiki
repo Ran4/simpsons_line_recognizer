@@ -16,7 +16,7 @@ date={17 december 2015}
 [nowiki]>
 
 %==Replikidentifiering av karaktärer från tv-serien The Simpsons med N-Grams==
-==Dyker den här texten ens upp?==
+==Dyker den här texten ens upp? Nej, lolol.==
 
 ====Bakgrund====
 
@@ -135,9 +135,9 @@ MARGE    46    88    45    65   240
 ====Utvärdering====
 
 * Vi hade alldeles för få avsnitt för att få ett tillräckligt stort korpus.
-** Det fanns färre avskrifter av avsnitt på nätet än vad vi trodde i början av projektet. 
-* Homer är kraftigt överrepresenterad i korpuset
-** Antal korrekta gissningar ett dåligt kvalitetsmått
-* tf*idf verkar ge sämre resultat
+** Det fanns färre avskrifter av avsnitt på nätet än vad vi trodde i början av projektet.
+* Homer är kraftigt överrepresenterad i korpuset.
+** Antal korrekta gissningar ett dåligt kvalitetsmått.
+* tf*idf verkar ge sämre resultat.
 %** (Fast bättre när vi istället för att välja den mest sannolika rollfiguren bara ackumulerar sannolikheterna till en confusion matrix)
 * Vi testade trigram men det gav sämre resultat, sannolikt för hur litet vårt korpus är.
