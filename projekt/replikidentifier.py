@@ -431,6 +431,7 @@ def crossValidation(n=2, randomGuess=False, amount=5, verbose=True,
     fileNames = getFileNames("episodes")
 
     repliker = fixCharacterNames(loadFiles(fileNames))
+    
     mainChars = getMainChars(repliker, amount)  # need to determine who is main chars from all the data
     repliker = mainCharPruner(repliker, mainChars=mainChars)
 
@@ -704,6 +705,47 @@ if __name__ == "__main__":
                     use_float_confusion_matrix=use_float_confusion_matrix)
             
             ngram.noStopList()
+    elif "common" in sys.argv[1:]:
+        fileNames = getFileNames("episodes")
+        repliker = fixCharacterNames(loadFiles(fileNames))
+        
+        ngramDict = ngram.calculateNGrams(repliker, verbose=False,
+                globalMinCount=None, NValues=[2], scoreFunction=None)
+        nGrams = ngramDict[2]
+        
+        #print ngrams
+        for name in nGrams:
+            if len(nGrams[name]) < 1:
+                continue
+            
+            print name
+            items = nGrams[name].most_common()
+            itemsToShow = []
+            i = 0
+            for ngram, count in items:
+                if i == 15:
+                    break
+                
+                if "$" not in ngram:
+                    itemsToShow.append((ngram, count))
+                    #print count, ngram
+                    i += 1
+                
+            print ", ".join("%s (%s)" % item for item in itemsToShow)
+                    
+            print "---"
+
+            #print "%s: %s" % \
+                    #(name, ", ".join(nGrams[name].most_common(10)))
+        
+        """repItems = sorted(repliker.items(), key=lambda x: len(x[1]),
+                reverse=True)
+        repItems = filter(lambda x: len(x[1]) > 190, repItems)
+        for name, repliks in repItems:
+            print "name: %s, replik: %s, %s" % \
+                (name, len(repliks), "|||".join(repliks))
+            print
+        """
     else:
         print "usage: one of"
         print "%s -i" % sys.argv[0]
