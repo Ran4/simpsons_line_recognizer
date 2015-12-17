@@ -140,4 +140,4 @@ MARGE    46    88    45    65   240
 ** Antal korrekta gissningar ett dåligt kvalitetsmått.
 * tf*idf verkar ge sämre resultat.
 %** (Fast bättre när vi istället för att välja den mest sannolika rollfiguren bara ackumulerar sannolikheterna till en confusion matrix)
-* Vi testade trigram men det gav sämre resultat, sannolikt för hur litet vårt korpus är.
+* Vi testade även trigram men det gav sämre resultat.
