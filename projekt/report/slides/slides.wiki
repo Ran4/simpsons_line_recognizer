@@ -53,7 +53,7 @@ HOMER there's no time to be careful we're late
 
 # Läs in strängen för den replik vi vill klassificera
 # Generera n-gram från strängen
-# Jämför med databasen  och generera en vektor med sannolikheter hur sannolik vilken karaktär är
+# Jämför med databasen  och generera en vektor med sannolikheter som motsvarar hur sannolik vilken karaktär är
 # Välj den mest sannolika
 
 ====Korsvalidering====
@@ -135,8 +135,9 @@ MARGE    46    88    45    65   240
 ====Utvärdering====
 
 * Vi hade alldeles för få avsnitt för att få ett tillräckligt stort korpus.
-** Det fanns färre avskrifter av avsnitt på nätet än vad vi trodde i början av projektet.
+** Det fanns färre avskrifter av avsnitt på nätet än vad vi trodde i början av projektet. 
 * Homer är kraftigt överrepresenterad i korpuset
 ** Antal korrekta gissningar ett dåligt kvalitetsmått
 * tf*idf verkar ge sämre resultat
 %** (Fast bättre när vi istället för att välja den mest sannolika rollfiguren bara ackumulerar sannolikheterna till en confusion matrix)
+* Vi testade trigram men det gav sämre resultat, sannolikt för hur litet vårt korpus är.
