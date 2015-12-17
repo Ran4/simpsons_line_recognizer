@@ -17,6 +17,11 @@
 
 \date{17 december 2015}
 
+% TODO: baseline (Gissar pa bara homer?)
+% TODO: random gissningar
+% TODO: float_confusion_matrix?
+% TODO: trigram
+
 \begin{document}
 \maketitle
 % Bedömningsgrunder:
@@ -33,12 +38,11 @@
 %    Explicita referenser: när andras verktyg, lexikon, teorier osv. används skall detta explicit redovisas.
 
 \section{Bakgrund}
-Vi har valt att analysera repliker av The Simpsons-avsnitt för att
-skapa en klassificerare som kan klassificera vilken yttring som
-tillhör vilken Simpsons-rollfigur. Vi gör detta genom att skapa en
-n-gram-databas över yttringar kopplade till rollfigurer. För en given
-mening generar vi dess n-gram, och sen väljer vi den rollfigur för
-vilken denna n-gram-sekvens är sannolikast.
+Vi har valt att analysera repliker av The Simpsons-avsnitt för att skapa en
+klassificerare som kan klassificera vilken yttring som tillhör vilken
+Simpsons-rollfigur. Vi gör detta genom att skapa en n-gram-databas över
+yttringar kopplade till rollfigurer. För en given mening generar vi dess n-gram,
+och sen väljer vi den rollfigur för vilken denna n-gram-sekvens är sannolikast.
 
 
 \section{Utgångspunkt}
@@ -94,22 +98,44 @@ repliker = {
 Från replikerna genereras därefter n-gram för olika n-värden, vilka
 bildar vårt korpus.
 
+%% \begin{verbatim}
+%% grams = {
+%%   2:{
+%%     "MARGE": ["oh careful", "careful homer", "sorry excuse",
+%%               "excuse me", "me pardon", "pardon me", "me sorry"],
+%%     "HOMER": ["there's no", "no time", "time to", "to be",
+%%                   "be careful", "careful we're", "we're late"]
+%% ] }
+%%   3:{
+%%     "MARGE": ["oh careful homer", "sorry excuse me", "excuse me pardon",
+%%               "me pardon me", "pardon me sorry"],
+%%     "HOMER": ["there's no time", "no time to", "time to be",
+%%               "to be careful", "be careful we're", "careful we're late"]
+%%   }
+%% }
+%% \end{verbatim}
+
 \begin{verbatim}
 grams = {
   2:{
-    "MARGE": ["oh careful", "careful homer", "sorry excuse",
-              "excuse me", "me pardon", "pardon me", "me sorry"],
-    "HOMER": ["there's no", "no time", "time to", "to be",
-                  "be careful", "careful we're", "we're late"]
+    "MARGE": ["$ oh", "oh careful", "careful homer", "homer $", "$
+              sorry", "sorry excuse", "excuse me", "me pardon",
+              "pardon me", "me sorry", "sorry $"],
+    "HOMER": ["$ there's", "there's no", "no time", "time to", "to
+              be", "be careful", "careful we're", "we're late", "late $"]
 ] }
   3:{
-    "MARGE": ["oh careful homer", "sorry excuse me", "excuse me pardon",
-              "me pardon me", "pardon me sorry"],
-    "HOMER": ["there's no time", "no time to", "time to be",
-              "to be careful", "be careful we're", "careful we're late"]
+      "MARGE": ["$ oh careful", "oh careful homer", "careful homer $",
+                "$ sorry excuse", "sorry excuse me", "excuse me pardon",
+                "me pardon me", "pardon me sorry", "me sorry $"],
+      "HOMER": ["$ there's no", "there's no time", "no time to", "time
+                to be", "to be careful", "be careful we're", "careful we're late",
+                "we're late $"]
   }
 }
 \end{verbatim}
+Notera att vi använder tecknet \$ i n-gram för att signalera start och
+stopp av replik.
 
 \subsection{Stopplistor}
 Vi är intresserade av n-gram som är särskiljande. För att vanligt förekommande
@@ -186,6 +212,12 @@ function calculate_score_for_line_improved(all_ngrams, line, name):
 \end{lstlisting}
 
 \section{Resultat av korsvalidering}
+
+\subsection{Baseline}
+Ifall man bara gissar på Homer, som har flest repliker, får vi 42\% korrekta
+gissningar. 42\% av alla repliker tillhör alltså Homer.
+
+\subsection{$N=2$}
 \begin{verbatim}
 --------------------------------------------------
 without score function
@@ -268,6 +300,77 @@ MARGE:  0.296      0.548      0.384
 avg:    0.304      0.318      0.297      
 \end{verbatim}
 
+\subsection{$N=3$}
+Since we have no stoplist for trigrams we have no results for using a stoplist
+with trigrams.
+\begin{verbatim}
+--------------------------------------------------
+without score function!
+--------------------------------------------------
+Correct guesses: 951 (36.0%), incorrect guesses: 1693
+Diagonal Sum: 951 (0.359682), Non-Diagonal Sum: 1693 (0.640318)
+Rows: Correct name, Columns: Guessed name
+      HOMER  LISA BURNS  BART MARGE 
+HOMER   652   105    99   130   124 
+ LISA   189    71    16    49    47 
+BURNS    93    16    37    15    26 
+ BART   273    64    36    72    46 
+MARGE   236    45    43    41   119 
+
+        Precision  Recall     F1Score    
+HOMER:  0.452      0.587      0.511      
+LISA:   0.236      0.191      0.211      
+BURNS:  0.160      0.198      0.177      
+BART:   0.235      0.147      0.180      
+MARGE:  0.329      0.246      0.281      
+avg:    0.282      0.274      0.272      
+--------------------------------------------------
+with score function!
+--------------------------------------------------
+Correct guesses: 983 (37.2%), incorrect guesses: 1661
+Diagonal Sum: 983 (0.371785), Non-Diagonal Sum: 1661 (0.628215)
+Rows: Correct name, Columns: Guessed name
+      HOMER  LISA BURNS  BART MARGE 
+HOMER   690    84    63   132   141 
+ LISA   202    64    17    44    45 
+BURNS   101    16    28    10    32 
+ BART   298    42    24    70    57 
+MARGE   248    31    28    46   131 
+
+        Precision  Recall     F1Score    
+HOMER:  0.448      0.622      0.521      
+LISA:   0.270      0.172      0.210      
+BURNS:  0.175      0.150      0.161      
+BART:   0.232      0.143      0.177      
+MARGE:  0.323      0.271      0.294      
+avg:    0.290      0.272      0.273      
+\end{verbatim}
+
+\subsection{Slumpmässig gissning}
+Här har vi istället för att använda klassificeraren gissat slumpmässigt på en av
+de 5 rollfigurerna för varje gång där vi normalt hade anropat klassificeraren.
+Vi kan se att vår algoritm åtminstone har bättre resultat än slumpen.
+\begin{verbatim}
+Correct guesses: 550 (20.8%), incorrect guesses: 2094
+Rows: Correct name, Columns: Guessed name
+Confusion Matrix:
+      HOMER  LISA BURNS  BART MARGE 
+HOMER   233   216   222   218   221 
+ LISA    72    74    82    81    63 
+BURNS    40    26    43    44    34 
+ BART    81    95    86    97   132 
+MARGE    92    94    86   109   103 
+
+        Precision  Recall     F1Score    
+HOMER:  0.450      0.210      0.286      
+LISA:   0.147      0.199      0.169      
+BURNS:  0.083      0.230      0.122      
+BART:   0.177      0.198      0.187      
+MARGE:  0.186      0.213      0.199      
+avg:    0.209      0.210      0.193      
+\end{verbatim}
+
+
 
 \section{Utvärdering}
 Vårt korpus är för litet för uppgiften. Det visar sig att det var svårare än vi
@@ -291,28 +394,6 @@ att gissa slumpmässigt.
 %F-Measure: F_1 = 2 * precision*recall / (precision + recall)
 
 \end{document}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
