@@ -49,9 +49,18 @@ och sen väljer vi den rollfigur för vilken denna n-gram-sekvens är sannolikas
 
 \section{Utgångspunkt}
 
-Vi har utgått från en samling med manuskript från den amerikanska
-tv-serien The Simpsons som vi fann på webbsidan
-\url{http://www.simpsoncrazy.com/scripts}
+%% Vi har utgått från en samling med manuskript från den amerikanska
+%% tv-serien The Simpsons som vi fann på webbsidan
+%% \url{http://www.simpsoncrazy.com/scripts}
+Vårt korpus består av en samling med manuskript från den amerikanska
+tv-serien The Simpsons vilka vi fann på webbsidan
+\url{http://www.simpsoncrazy.com/scripts}. Vår plan är att använda
+detta korpus för att generera en n-gram-databas per rollfigur, med
+vilka vi kan förutspå sannolikheterna för att en viss yttring skulle
+tillhöra just en specifik rollfigur, genom summering av
+förekomstfrekvenserna av test-meningens n-gram för respektive
+rollfigurs n-gram-databas.
+
 
 \section{Metod}
 
@@ -97,8 +106,11 @@ repliker = {
 \end{verbatim}
 
 \subsection{Generering av N-Gram}
-Från replikerna genereras därefter n-gram för olika n-värden, vilka
-bildar vårt korpus.
+Från replikerna bildar vi en uppsättning n-gram, för olika n-värden,
+för varje rollfigur. I rapporten presenterar vi främst resultat för
+$n=2$ men även för $n=3$.
+%% Från replikerna genereras därefter n-gram för olika n-värden, vilka
+%% bildar vårt korpus.
 
 %% \begin{verbatim}
 %% grams = {
@@ -125,15 +137,16 @@ grams = {
               sorry", "sorry excuse", "excuse me", "me pardon",
               "pardon me", "me sorry", "sorry $"],
     "HOMER": ["$ there's", "there's no", "no time", "time to", "to
-              be", "be careful", "careful we're", "we're late", "late $"]
+              be", "be careful", "careful we're", "we're late",
+              "late $"]
 ] }
   3:{
       "MARGE": ["$ oh careful", "oh careful homer", "careful homer $",
                 "$ sorry excuse", "sorry excuse me", "excuse me pardon",
                 "me pardon me", "pardon me sorry", "me sorry $"],
       "HOMER": ["$ there's no", "there's no time", "no time to", "time
-                to be", "to be careful", "be careful we're", "careful we're late",
-                "we're late $"]
+                to be", "to be careful", "be careful we're",
+                "careful we're late", "we're late $"]
   }
 }
 \end{verbatim}
@@ -171,7 +184,7 @@ F_1 &= 2 \cdot \dfrac{\text{precision} \cdot \text{återkallning}}{\text{precisi
 
 
 \subsection{Korsvalidering}
-Korsvalidering går ut på att man delar upp sitt dataset i ett testset och
+Korsvalidering går ut på att man delar upp sitt dataset i ett testset och ett
 träningsset. Man brukar dela upp det så att träningssetet innehåller all data
 förutom den som tillhör testsetet. Man roterar sedan det som ingår i testsetet
 och träningssetet så att all data i det totala datasetet har klassificerats av
@@ -236,7 +249,7 @@ function calculate_score_for_line_improved(all_ngrams, line, name):
 Ifall man bara gissar på Homer, som har flest repliker, får vi 42\% korrekta
 gissningar. 42\% av alla repliker tillhör alltså Homer.
 
-\subsubsection{$N=2$}
+\subsubsection{$n=2$}
 \begin{verbatim}
 --------------------------------------------------
 without score function
@@ -319,9 +332,11 @@ MARGE:  0.296      0.548      0.384
 avg:    0.304      0.318      0.297      
 \end{verbatim}
 
-\subsubsection{$N=3$}
-Since we have no stoplist for trigrams we have no results for using a stoplist
-with trigrams.
+\subsubsection{$n=3$}
+%% Since we have no stop list for trigrams we have no results for using a stoplist
+%% with trigrams.
+Eftersom vi inte har någon stopplista för trigram så har vi inga resultat med
+stopplista att visa för $n=3$.
 \begin{verbatim}
 --------------------------------------------------
 without score function!
@@ -390,15 +405,14 @@ avg:    0.209      0.210      0.193
 \end{verbatim}
 
 
-
 \section{Utvärdering}
 Vårt korpus är för litet för uppgiften. Det visar sig att det var svårare än vi
 räknat med att få tag i avskrift av Simpsons-avsnitt på nätet. Det visar sig
-även att Homer har flest repliker (över hälften) så vårt korpus är
-snedbalanserat och tenderar att föredra
+även att Homer har flest repliker så vårt korpus är snedbalanserat och tenderar
+att föredra
 Homer\footnote{\url{http://www.vikparuchuri.com/blog/figuring-out-which-simpsons-character-is-speaking/}}.
 Antalet korrekt klassificerade repliker är alltså ett dåligt mått, då en
-gissning på Homer för alla repliker kommer ge över 50\% korrekta svar. Vi kan
+gissning på Homer för alla repliker kommer ge över ca 42\% korrekta svar. Vi kan
 dock trösta oss med att vår klassificerare i alla fall ger bättre resultat än
 att gissa slumpmässigt.
 % TODO: vi behöver ev. ta med några slumpade resultat i rapporten för att motivera detta
@@ -413,12 +427,3 @@ att gissa slumpmässigt.
 %F-Measure: F_1 = 2 * precision*recall / (precision + recall)
 
 \end{document}
-
-
-
-
-
-
-
-
-
