@@ -143,7 +143,7 @@ stopp av replik.
 Vi är intresserade av n-gram som är särskiljande. För att vanligt förekommande
 n-gram inte ska räknas plockar vi bort dem med hjälp av en stopplista. Vi
 skapade en första stopplista genom att lista de vanligast förekommande n-grammen
-sett över alla karaktärers n-gram. Till denna stopplista lades sedan de 100
+sett över alla rollfigurers n-gram. Till denna stopplista lades sedan de 100
 vanligaste engelska n-grammen till, från Corpus of Contemporary American English
 (COCA)\footnote{\url{http://www.ngrams.info/download_coca.asp}}. Genom att
 exkludera dess n-gram ur n-gram-databasen och ur meningar innan klassificering
@@ -184,8 +184,8 @@ kan hitta vem som sa vad i det borttagna avsnittet, jämfört med namnen som st�
 i manuset.
 
 \subsection{Poängfunktioner}
-För att koppla en specifik mening till en viss karaktär så har en funktion som
-beräknar ett poängvärde för varje rad och karaktär skapats. Den karaktär som ger
+För att koppla en specifik mening till en viss rollfigur så har en funktion som
+beräknar ett poängvärde för varje rad och rollfigur skapats. Den rollfigur som ger
 högst poäng för en viss rad kopplas ihop med den raden.
 
 \begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
@@ -200,11 +200,11 @@ function calculate_score_for_line(all_ngrams, line, name):
 \end{lstlisting}
 
 Vi använder även en bättre variant, där vi tar hänsyn till hur "unikt" varje
-n-gram är hos en karaktär.
+n-gram är hos en rollfigur.
 
-Om ett visst n-gram förekommer $X$ gånger hos karaktär A, $Y$ gånger hos karaktär B
-och $Z$ gånger hos karaktär C får ett n-gram poängen $\frac{X}{(Y+Z)}$ för karaktär A,
-$\frac{Y}{(X+Z)}$ för karaktär B och $\frac{Z}{(X+Y)}$ för karaktär C.
+Om ett visst n-gram förekommer $X$ gånger hos rollfigur A, $Y$ gånger hos rollfigur B
+och $Z$ gånger hos rollfigur C får ett n-gram poängen $\frac{X}{(Y+Z)}$ för rollfigur A,
+$\frac{Y}{(X+Z)}$ för rollfigur B och $\frac{Z}{(X+Y)}$ för rollfigur C.
 
 \begin{lstlisting}[mathescape, columns=fullflexible, basicstyle=\fontfamily{lmvtt}\selectfont]
 function calculate_score_for_line_improved(all_ngrams, line, name):
