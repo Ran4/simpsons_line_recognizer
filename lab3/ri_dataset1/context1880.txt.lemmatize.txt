@@ -1,1 +1,0 @@
-denna webbsida kräva en webbläsare som hantera ram ( frame ) . vänligen , installera sen version av microsoft internet . 

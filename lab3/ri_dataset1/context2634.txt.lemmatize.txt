@@ -1,1 +1,0 @@
-. hejsan . jag ha en liten fråga om hur man kunna göra en bildspel som växla mellan bild med en bestämd tidsintervall tillexempel 5sek . . 

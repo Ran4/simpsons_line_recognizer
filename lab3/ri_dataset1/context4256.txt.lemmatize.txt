@@ -1,1 +1,0 @@
-. utseende på promptern styra med hjälp av shell-variabeln prompt . se efter vad prompt ha för värde genom att skriva echo $ prompt . . 

@@ -1,1 +1,0 @@
-. turordning : högprioritera fel om tjänst vara otillgänglig för flertal användare . personal börja arbeta med fel snart . . 

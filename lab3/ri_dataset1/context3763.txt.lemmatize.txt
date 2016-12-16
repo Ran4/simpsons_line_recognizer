@@ -1,1 +1,0 @@
-. 5 , länkning ( nr ) , använda fn ej , 5 , sekvensnummer ( nr ) , 5 , underordnad institution / enhet ( r ) , libris-definierat delfält , huvudsakligen . 

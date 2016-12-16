@@ -1,1 +1,0 @@
-. page 5 . i2646-s 4711 statistik med hjälp av statistikfunktion kunna statistik över förbrukning av respektive media för angiven tidsintervall visa . . 

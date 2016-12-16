@@ -1,1 +1,0 @@
-. lfo modulera pitch eller filter med någon av den 5 vågform som finnas i lågfrekvensoscillatorn . justera frekvens med en dedicerad potentiometer . . 

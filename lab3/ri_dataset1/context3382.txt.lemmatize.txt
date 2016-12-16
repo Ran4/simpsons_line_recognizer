@@ -1,1 +1,0 @@
-. algoritm kunna bevara struktur i klartext , som avslöja nyckel ? man kunna kombinera denna svaghet uttömmande sökning ? all klartext utom . 

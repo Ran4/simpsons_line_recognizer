@@ -1,1 +1,0 @@
-planera och skissa en schema för en relationsdatabas som använda av en videouthyrnings-företag . databas ska innehålla . 

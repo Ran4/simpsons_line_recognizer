@@ -1,1 +1,0 @@
-. vidare finnas den två lfo:e r samt envelopes för filter , amplifier och en envelope som kunna modulera oscillator 1 , 5 , balans mellan oscillatorerna , fm , phase . 

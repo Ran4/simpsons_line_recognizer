@@ -1,1 +1,0 @@
-. denim : verktyg för att skissa webbplatser . denim vara en program för att skissa på prototyp på skärm , som om man göra det med penna och papper . . 

@@ -1,1 +1,0 @@
-. premiera en beteende som innebära att bank kostnad hålla nere . . denna modell använda ofta på konto där bank vilja premiera hög inlåningssaldon . . 

@@ -1,1 +1,0 @@
-webbsida för att bekräfta utbildningsplats . . personnummer , ( på form ååmmdd-xxxx ) . förnamn , efternamn , e-postadress , bekräfta ( ja / nej ) , 

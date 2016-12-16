@@ -1,1 +1,0 @@
-. robusthet : vad bli effekt om ingen hänsyn ta till kongruens ? . svår undantag för np - kongruens i svensk grammatik . dålig prestanda med kongruens i np . . 

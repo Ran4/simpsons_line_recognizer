@@ -1,1 +1,0 @@
-. konstruera en prototyp som kunna vara allmängiltig för flertal olik lösning med trådlös överföring för köbokning . . 

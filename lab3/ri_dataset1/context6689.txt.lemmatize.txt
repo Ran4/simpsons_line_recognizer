@@ -1,1 +1,0 @@
-. om du befinna du i en rum med 5 människa , men bara vilja visa meddelande från fyra vän i rum , kunna du markera vän . . 

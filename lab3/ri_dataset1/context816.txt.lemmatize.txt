@@ -1,1 +1,0 @@
-. av tillgänglig tid tillgänglighet beräkna enligt följande där all tid beräkna per kvartal : tillgänglighet = ( total tid ? otillgänglig tid ) total . 

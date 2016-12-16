@@ -1,1 +1,0 @@
-. denna kod använda för att modulera frekvens på följande sätt : vara bit en nolla inverteras signal , vara bit vara en etta förbli frekvens . 

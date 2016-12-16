@@ -1,1 +1,0 @@
-. sysselsättning ( boolean , default = false ) . - obeslutsamhet ( integer ) . . fråga 1 : skal _ regel : oro 5 , obeslutsamhet 5 , egen prestationskrav 5 , ångest . . 
