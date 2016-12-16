@@ -1,6 +1,6 @@
 TUI application that tries to identify a sentence with a The Simpsons character based on N-Grams.
 
-A report that explains the algoritm used (in Swedish) is available in [projekt/report](projekt/report).
+A report that explains the algoritm used (in Swedish) is available in [report](report).
 
 ## Installation
 
